@@ -1,0 +1,112 @@
+export LANG=en_US.UTF-8
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Path to your Oh My Zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
+
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time Oh My Zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+# ZSH_THEME="robbyrussell"
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
+plugins=(git)
+source $ZSH/oh-my-zsh.sh
+
+# Load Angular CLI autocompletion.
+# source <(ng completion script)
+
+# bun completions
+[ -s "/Users/sefat/.bun/_bun" ] && source "/Users/sefat/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# pnpm
+export PNPM_HOME="/Users/sefat/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm endexport 
+
+
+# export GOROOT=/opt/homebrew/Cellar/go/1.22.4/libexec
+# export GOROOT=$(brew --prefix go)/libexec
+export GOROOT=$(ls -d /opt/homebrew/Cellar/go/*/libexec | tail -n 1)
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+
+export DYLD_LIBRARY_PATH="$(brew --prefix)/lib:$DYLD_LIBRARY_PATH"
+
+# alias mysketch="canvas-sketch --template=/Users/sefat/Documents/Github/spotify-cover-generator/spotify-cover/src/scripts/sketch.js --html=/Users/sefat/Documents/Github/spotify-cover-generator/spotify-cover/src/scripts/sketch.html"
+# bit
+case ":$PATH:" in
+  *":/Users/sefat/bin:"*) ;;
+  *) export PATH="$PATH:/Users/sefat/bin" ;;
+esac
+# bit end
+eval $(thefuck --alias)
+# eval "$(fzf --bash)"
+cd_to_dir() {
+    local selected_dir
+    selected_dir=$(fd -t d . "$1" | fzf +m --height 50% --preview 'tree -C {}')
+    if [[ -n "$selected_dir" ]]; then
+        # Change to the selected directory
+        cd "$selected_dir" || return 1
+    fi
+}
+
+alias cdd='cd_to_dir ~/Documents/'
+alias cds='cd_to_dir'
+
+# alias ls='eza --long --total-size --color=always --group-directories-first --sort=name'
+# alias lf='eza -lF --color=always | grep -v /'
+# alias lh='eza -dl .* --group-directories-first'
+# alias ll='eza -al --group-directories-first'
+# alias lt='eza -al --sort=modified'
+# alias ls='eza -alF --color=always --sort=size | grep -v /'
+# Bind up-arrow but not ctrl-r
+eval "$(atuin init zsh --disable-ctrl-r)"
+alias n='nvim'
+alias g='lazygit'
+alias reload-zsh="source ~/.zshrc"
+alias edit-zsh="nvim ~/.zshrc"
+alias gs='git status'
+alias gp='git pull --rebase'
+alias gP='git push'
+alias gc='git commit -m'
+alias grh='git reset --hard'
+alias gts='git stash'
+alias gtp='git stash pop'
+alias gl='git log --oneline'
+alias gcl='git config --local user.name "sefatanam" && git config --local user.email "sefatanam@gmail.com"'
+
+source $ZSH_CUSTOM/themes/powerlevel10k/powerlevel10k.zsh-theme
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+
+# gpt() {
+#   python3 /path/to/your/prompt.py --models "deepseek-r1:7b" --temperature 0.8 "$1"
+# }
+#
+# alias gpt="python3 /Users/sefat/Documents/Github/gpt/prompt.py --models 'deepseek-r1:7b' --temperature 0.8"
+
+# tmux alias
+alias t='tmux'
+alias ta='tmux attach -t'
+alias tl='tmux ls'
+alias tk='tmux kill-session -t'
+alias tn='tmux new -s'
+alias ts='tmux switch -t'
+alias td='tmux detach'
+
+alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
