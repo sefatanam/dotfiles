@@ -1,0 +1,26 @@
+[user]
+	email = sefatanam@gmail.com
+	name = sefatanam
+	signingKey = ""
+[gpg]
+	program = gpg
+	format = openpgp
+[commit]
+	gpgSign = false
+[tag]
+	forceSignAnnotated = false
+[gpg "ssh"]
+	program = ssh-keygen
+	allowedSignersFile = ""
+[core]
+	autocrlf = input
+[init]
+	defaultBranch = main
+[diff]
+	tool = vscode
+[difftool "vscode"]
+	cmd = "code --wait --diff  "
+[rerere]
+	enabled = true
+[credential]
+	helper = store
