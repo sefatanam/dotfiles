@@ -4,9 +4,9 @@
 
 local map = vim.keymap.set
 
---map("n", ";", ":", { desc = "CMD enter command mode", unique = true })
+-- map("n", ":", ":", { desc = "CMD enter command mode", unique = true })
 
-map("i", "jk", "<ESC>")
+-- map("i", "jk", "<ESC>")
 
 -- TELESCOPE MAPPINGS AND REMOVE DEFAULT LSP KEY BINDINGS
 
@@ -93,3 +93,10 @@ vim.api.nvim_create_user_command("TOhtml", function()
     print("Error: Unable to save file.")
   end
 end, {})
+
+vim.keymap.set(
+  "n",
+  "<leader>dz",
+  require("telescope.builtin").resume,
+  { desc = "Resume last telescope", noremap = true, unique = true }
+)
