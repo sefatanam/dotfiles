@@ -49,7 +49,7 @@ return {
     -- fold_virt_text_handler = foldTextFormatter,
   },
   config = function()
-    require("ufo").setup {
+    require("ufo").setup({
       open_fold_hl_timeout = 150,
       close_fold_kinds_for_ft = {
         default = { "imports", "comment" },
@@ -80,7 +80,7 @@ return {
         return { "treesitter", "indent" }
         -- return { "lsp", "indent" }
       end,
-    }
+    })
     vim.keymap.set("n", "zR", require("ufo").openAllFolds)
     vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
     vim.keymap.set("n", "zr", require("ufo").openFoldsExceptKinds)
@@ -89,7 +89,7 @@ return {
       local winid = require("ufo").peekFoldedLinesUnderCursor()
       if not winid then
         -- choose one of coc.nvim and nvim lsp
-        vim.fn.CocActionAsync "definitionHover" -- coc.nvim
+        vim.fn.CocActionAsync("definitionHover") -- coc.nvim
         vim.lsp.buf.hover()
       end
     end)

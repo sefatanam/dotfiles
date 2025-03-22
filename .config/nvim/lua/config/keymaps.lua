@@ -94,6 +94,8 @@ vim.api.nvim_create_user_command("TOhtml", function()
   end
 end, {})
 
+map("n", "<C-w>", "<cmd>bdelete<cr>", { desc = "Delete Current Buffer", unique = true })
+
 vim.keymap.set(
   "n",
   "<leader>dz",
