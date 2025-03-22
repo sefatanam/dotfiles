@@ -1,9 +1,10 @@
-require "nvchad.mappings"
+-- Keymaps are automatically loaded on the VeryLazy event
+-- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
+-- Add any additional keymaps here
 
--- add yours here
 local map = vim.keymap.set
 
-map("n", ";", ":", { desc = "CMD enter command mode", unique = true })
+--map("n", ";", ":", { desc = "CMD enter command mode", unique = true })
 
 map("i", "jk", "<ESC>")
 
@@ -11,7 +12,12 @@ map("i", "jk", "<ESC>")
 
 -- Remove the default mapping (if needed)
 vim.keymap.del("n", "<leader>ds")
-vim.keymap.set("n", "<leader>ds", "<cmd>Telescope diagnostics<CR>", { noremap = true, silent = true,  unique=true, desc = "LSP diagnostics loclist (Telescope)" })
+vim.keymap.set(
+  "n",
+  "<leader>ds",
+  "<cmd>Telescope diagnostics<CR>",
+  { noremap = true, silent = true, unique = true, desc = "LSP diagnostics loclist (Telescope)" }
+)
 
 -- Define Telescope overrides
 vim.keymap.set("n", "<leader>gd", function()
@@ -36,13 +42,18 @@ map({ "n", "v" }, "<leader>ghb", "<cmd>Telescope git_branches<CR>", { unique = t
 map({ "n", "v" }, "<leader>ml", "<cmd>Telescope marks<CR>", { unique = true, desc = "Show all marks list" })
 map({ "n", "v" }, "<leader>mc", "<cmd>:delm! | delm A-Z0-9<CR>", { unique = true, desc = "Clear marks list" })
 
-vim.api.nvim_set_keymap('n', '<leader>de', ':lua vim.lsp.diagnostic.refresh()<CR>', { noremap = true, silent = true, unique=true })
+vim.api.nvim_set_keymap(
+  "n",
+  "<leader>drr",
+  ":lua vim.lsp.diagnostic.refresh()<CR>",
+  { noremap = true, silent = true, unique = true }
+)
 
 vim.keymap.set({ "n", "v", "i" }, "<leader>fs", function()
-  vim.lsp.buf.format {
+  vim.lsp.buf.format({
     async = false,
     timeout_ms = 500,
-  }
+  })
 end, { unique = true, desc = "Format file or range (in visual mode)" })
 
 -- vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
@@ -66,11 +77,11 @@ vim.keymap.set("n", "zR", require("ufo").openAllFolds)
 vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
 
 vim.api.nvim_create_user_command("TOhtml", function()
-  local tohtml = require "tohtml"
+  local tohtml = require("tohtml")
   local bufname = vim.api.nvim_buf_get_name(0)
-  local filename = bufname:match "^.+/(.+)$" or "Untitled"
+  local filename = bufname:match("^.+/(.+)$") or "Untitled"
   local final_filename = filename .. "-ShareBySefat.html"
-  local filepath = os.getenv "HOME" .. "/Downloads/" .. final_filename
+  local filepath = os.getenv("HOME") .. "/Downloads/" .. final_filename
   local output = tohtml.tohtml(0, { title = "My Code" })
 
   local file = io.open(filepath, "w")
@@ -79,6 +90,6 @@ vim.api.nvim_create_user_command("TOhtml", function()
     file:close()
     print("Yo! HTML saved to " .. filepath)
   else
-    print "Error: Unable to save file."
+    print("Error: Unable to save file.")
   end
 end, {})

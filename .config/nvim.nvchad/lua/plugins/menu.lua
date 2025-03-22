@@ -2,7 +2,7 @@ return {
   "nvzone/menu",
   dependencies = { "nvzone/volt" },
 
-  vim.keymap.set({ "n", "v" }, "<RightMouse>", function()
+  vim.keymap.set({ "n", "v", "i" }, "<RightMouse>", function()
     require("menu.utils").delete_old_menus()
     vim.cmd.exec '"normal! \\<RightMouse>"'
     -- clicked buf

@@ -18,6 +18,14 @@ lspconfig.ts_ls.setup {
   on_attach = nvlsp.on_attach,
   on_init = nvlsp.on_init,
   capabilities = nvlsp.capabilities,
+  filetypes = {
+    "javascript",
+    "javascriptreact",
+    "javascript.jsx",
+    "typescript",
+    "typescriptreact",
+    "typescript.tsx",
+  },
 }
 
 lspconfig.cssls.setup {
@@ -80,3 +88,41 @@ lspconfig.angularls.setup {
 
 -- For linting setup
 -- https://www.reddit.com/r/neovim/comments/le1duu/nvim_lsp_and_typescript_eslint_and_prettier/
+--
+-- lspconfig.vtsls.setup {
+--   filetypes = {
+--     "javascript",
+--     "javascriptreact",
+--     "javascript.jsx",
+--     "typescript",
+--     "typescriptreact",
+--     "typescript.tsx",
+--   },
+--   settings = {
+--     complete_function_calls = true,
+--     vtsls = {
+--       enableMoveToFileCodeAction = true,
+--       autoUseWorkspaceTsdk = true,
+--       experimental = {
+--         maxInlayHintLength = 30,
+--         completion = {
+--           enableServerSideFuzzyMatch = true,
+--         },
+--       },
+--     },
+--     typescript = {
+--       updateImportsOnFileMove = { enabled = "always" },
+--       suggest = {
+--         completeFunctionCalls = true,
+--       },
+--       inlayHints = {
+--         enumMemberValues = { enabled = true },
+--         functionLikeReturnTypes = { enabled = true },
+--         parameterNames = { enabled = "literals" },
+--         parameterTypes = { enabled = true },
+--         propertyDeclarationTypes = { enabled = true },
+--         variableTypes = { enabled = false },
+--       },
+--     },
+--   },
+-- }

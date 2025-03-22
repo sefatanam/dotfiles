@@ -1,0 +1,27 @@
+{
+  "extras": [
+    "lazyvim.plugins.extras.dap.core",
+    "lazyvim.plugins.extras.editor.fzf",
+    "lazyvim.plugins.extras.editor.snacks_picker",
+    "lazyvim.plugins.extras.formatting.biome",
+    "lazyvim.plugins.extras.lang.angular",
+    "lazyvim.plugins.extras.lang.docker",
+    "lazyvim.plugins.extras.lang.go",
+    "lazyvim.plugins.extras.lang.markdown",
+    "lazyvim.plugins.extras.lang.sql",
+    "lazyvim.plugins.extras.lang.tailwind",
+    "lazyvim.plugins.extras.lang.typescript",
+    "lazyvim.plugins.extras.linting.eslint",
+    "lazyvim.plugins.extras.lsp.none-ls",
+    "lazyvim.plugins.extras.ui.dashboard-nvim",
+    "lazyvim.plugins.extras.ui.indent-blankline",
+    "lazyvim.plugins.extras.util.dot",
+    "lazyvim.plugins.extras.util.startuptime",
+    "lazyvim.plugins.extras.vscode"
+  ],
+  "install_version": 8,
+  "news": {
+    "NEWS.md": "10960"
+  },
+  "version": 8
+}
