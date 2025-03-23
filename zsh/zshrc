@@ -108,5 +108,7 @@ alias tk='tmux kill-session -t'
 alias tn='tmux new -s'
 alias ts='tmux switch -t'
 alias td='tmux detach'
+alias ns="npm start"
+alias nd="npm run dev"
 
 alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
