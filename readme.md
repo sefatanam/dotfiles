@@ -29,7 +29,7 @@ git clone https://github.com/yourusername/dotfiles.git ~/.dotfiles
 3. Navigate to the dotfiles directory and install the required applications via Homebrew by running the following command:
 
 ```bash
-brew bundle --file=./Brewfile
+brew bundle --file= ~/.dotfiles/brew/Brewfile
 ```
 
 This will install the apps listed in the `Brewfile` (such as Neovim, Raycast, and Aerospace, if applicable).
@@ -41,23 +41,30 @@ After cloning the repository and installing the necessary software, you need to 
 To create the symlinks, use the following commands:
 
 ```bash
-# Link the .zshrc file for Zsh configuration
-ln -s ~/.dotfiles/.zshrc ~/.zshrc
-
-# Link the .zprofile file for Zsh profile settings
-ln -s ~/.dotfiles/.zprofile ~/.zprofile
+# Link the .zshrc file for Zsh configuration and Secret Variables
+ln -s ~/.dotfiles/zsh/zshrc ~/.zshrc
+ln -s ~/.dotfiles/zsh/zprofile ~/.zprofile
+ln -s ~/.dotfiles/zsh/private ~/.private
 
 # Link the .tmux.conf file for tmux configuration
-ln -s ~/.dotfiles/.tmux.conf ~/.tmux.conf
+ln -s ~/.dotfiles/tmux/tmux.conf ~/.tmux.conf
 
 # Link the .p10k.zsh file for Powerlevel10k prompt configuration
-ln -s ~/.dotfiles/.p10k.zsh ~/.p10k.zsh
+ln -s ~/.dotfiles/p10k/p10k.zsh ~/.p10k.zsh
 
 # Link the aerospace configuration folder
-ln -s ~/.dotfiles/.config/aerospace ~/.config/aerospace
+ln -s ~/.dotfiles/aerospace ~/.config/aerospace
 
 # Link the Neovim configuration folder
-ln -s ~/.dotfiles/.config/nvim ~/.config/nvim
+ln -s ~/.dotfiles/nvim ~/.config/nvim
+
+# Link to Git essentials
+ln -s ~/.dotfiles/git/gitconfig ~/.gitconfig
+ln -s ~/.dotfiles/git/gitconfig ~/.gitconfig
+
+ln -s ~/.dotfiles/git/hooks/post-commit .git/hooks // should run in ~/.dotfiles directory
+ln -s ~/.dotfiles/git/hooks/pre-commit .git/hooks  // should run in ~/.dotfiles directory
+ 
 ```
 
 These symlinks ensure that your system uses the custom configuration files from this repository.
