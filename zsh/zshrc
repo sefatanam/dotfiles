@@ -72,7 +72,7 @@ alias cds='cd_to_dir'
 # alias lh='eza -dl .* --group-directories-first'
 # alias ll='eza -al --group-directories-first'
 # alias lt='eza -al --sort=modified'
-# alias ls='eza -alF --color=always --sort=size | grep -v /'
+alias es='eza -alF --color=always --sort=size | grep -v /'
 # Bind up-arrow but not ctrl-r
 eval "$(atuin init zsh --disable-ctrl-r)"
 alias n='nvim'
@@ -110,5 +110,5 @@ alias ts='tmux switch -t'
 alias td='tmux detach'
 alias ns="npm start"
 alias nd="npm run dev"
-
+alias cat="glow"
 alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'

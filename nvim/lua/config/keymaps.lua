@@ -9,7 +9,6 @@ local map = vim.keymap.set
 -- map("i", "jk", "<ESC>")
 
 -- TELESCOPE MAPPINGS AND REMOVE DEFAULT LSP KEY BINDINGS
-
 -- Remove the default mapping (if needed)
 vim.keymap.del("n", "<leader>ds")
 vim.keymap.set(
