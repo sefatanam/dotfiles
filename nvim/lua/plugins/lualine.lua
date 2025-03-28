@@ -1,7 +1,6 @@
 return {
   {
     "nvim-lualine/lualine.nvim",
-    lazy = false,
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       -- Eviline config for lualine
@@ -86,7 +85,8 @@ return {
 
       ins_left({
         function()
-          return "▊"
+          -- return "▊"
+          return " 💀 "
         end,
         color = { fg = colors.blue }, -- Sets highlighting of component
         padding = { left = 0, right = 1 }, -- We don't need space before this
@@ -143,7 +143,7 @@ return {
             ["!"] = colors.red,
             t = colors.red,
           }
-          return { fg = mode_color[vim.fn.mode()] }
+          return { fg = mode_color[vim.fn.mode()], gui = "bold" }
         end,
         padding = { right = 1 },
       })
@@ -158,7 +158,7 @@ return {
         condition = function()
           return vim.fn.reg_recording() ~= "" -- Only show when recording
         end,
-        color = { fg = colors.cyan, gui = "bold" },
+        color = { fg = colors.cyan },
       })
 
       ins_left({
@@ -199,7 +199,7 @@ return {
       ins_left({
         -- Lsp server name .
         function()
-          local msg = "👀"
+          local msg = "No LSP found."
           local buf_ft = vim.api.nvim_get_option_value("filetype", { buf = 0 })
           local clients = vim.lsp.get_clients()
           if next(clients) == nil then
@@ -208,7 +208,7 @@ return {
           for _, client in ipairs(clients) do
             local filetypes = client.config.filetypes
             if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-              return client.name
+                return client.name
             end
           end
           return msg
@@ -222,14 +222,14 @@ return {
         "o:encoding", -- option component same as &encoding in viml
         fmt = string.upper, -- I'm not sure why it's upper case either ;)
         cond = conditions.hide_in_width,
-        color = { fg = colors.green, gui = "bold" },
+        color = { fg = colors.green },
       })
 
       ins_right({
         "fileformat",
         fmt = string.upper,
         icons_enabled = false, -- I think icons are cool but Eviline doesn't have them. sigh
-        color = { fg = colors.green, gui = "bold" },
+        color = { fg = colors.green },
       })
 
       ins_right({
@@ -252,7 +252,8 @@ return {
 
       ins_right({
         function()
-          return "▊"
+          -- return "▊"
+          return " 💚 "
         end,
         color = { fg = colors.blue },
         padding = { left = 1 },
