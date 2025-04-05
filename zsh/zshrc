@@ -118,3 +118,5 @@ alias cat="glow"
 
 # github alias
 alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
+
+[ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
