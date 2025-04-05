@@ -1,7 +1,10 @@
 return {
   "folke/snacks.nvim",
   opts = {
-    -- explorer = {},
+    explorer = {
+      open = true,
+      follow = true,
+    },
     -- picker = {
     --   sources = {
     --     explorer = {
@@ -11,5 +14,13 @@ return {
     --     },
     --   },
     -- },
+  },
+  keys = {
+    {
+      "<C-n>",
+      function()
+        Snacks.explorer()
+      end,
+    },
   },
 }

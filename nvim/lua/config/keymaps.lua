@@ -93,7 +93,7 @@ vim.api.nvim_create_user_command("TOhtml", function()
   end
 end, {})
 
-map("n", "<C-w>", "<cmd>bdelete<cr>", { desc = "Delete Current Buffer", unique = true })
+map("n", "<C-w>", ":bdelete<cr>", { desc = "Delete Current Buffer", silent = true, unique = true })
 
 vim.keymap.set(
   "n",
@@ -101,3 +101,8 @@ vim.keymap.set(
   require("telescope.builtin").resume,
   { desc = "Resume last telescope", noremap = true, unique = true }
 )
+
+-- Map H to previous buffer
+vim.keymap.set("n", "<S-Tab>", ":bprev<CR>", { desc = "Previous buffer", silent = true, unique = true })
+-- Map L to next buffer
+vim.keymap.set("n", "<Tab>", ":bnext<CR>", { desc = "Next buffer", silent = true, unique = true })
