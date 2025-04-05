@@ -18,3 +18,4 @@ vim.opt.listchars:append("space:.")
 vim.g.lazyvim_eslint_auto_format = false
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 vim.g.snacks_animate = false
+vim.cmd.colorscheme("default")
