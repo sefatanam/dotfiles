@@ -1,11 +1,7 @@
 return {
-  'rmagatti/auto-session',
+  "rmagatti/auto-session",
   lazy = false,
   opts = {
-    suppressed_dirs = { '~/nvim-session' },
+    suppressed_dirs = { "~/nvim-session" },
   },
-
-  config = function()
-    require('auto-session').setup {}
-  end
 }
