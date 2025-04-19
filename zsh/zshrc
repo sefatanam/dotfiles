@@ -140,3 +140,20 @@ alias cat="glow"
 alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
 
 [ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
+
+
+# optimize video with ffmpeg
+optimize() {
+  if [ -z "$1" ]; then
+    echo "Usage: optimize /path/to/video"
+    return 1
+  fi
+
+  local input_video="$1"
+  local filename_without_ext="${input_video%.*}"
+  local output_video="${filename_without_ext}_optimized.mov"
+
+  ffmpeg -i "$input_video" -vf scale=1280:720 "$output_video"
+
+  echo "✅ Optimized video saved as: $output_video"
+}
