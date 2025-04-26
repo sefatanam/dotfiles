@@ -157,3 +157,18 @@ optimize() {
 
   echo "✅ Optimized video saved as: $output_video"
 }
+
+
+# function for create angular app
+function ngnew() {
+  if [[ $# -eq 1 ]]; then
+    local app_name=$1
+    npx -p @angular/cli@latest ng new "$app_name" --package-manager=pnpm --skip-install --skip-tests
+  elif [[ $# -eq 2 ]]; then
+    local version=$1
+    local app_name=$2
+    npx -p @angular/cli@$version ng new "$app_name" --package-manager=pnpm --skip-install --skip-tests
+  else
+    echo "Usage: ngnew [app-name] or ngnew [version] [app-name]"
+  fi
+}
