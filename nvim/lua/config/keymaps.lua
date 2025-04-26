@@ -4,9 +4,10 @@
 
 local map = vim.keymap.set
 map("n", ";", ":", { desc = "CMD enter command mode", noremap = true })
+map("n", "D", '"_d$', { desc = "Delete to the vois register.", noremap = true })
 
 -- TELESCOPE MAPPINGS AND REMOVE DEFAULT LSP KEY BINDINGS
--- Remove the default mapping (if needed)
+-- Remove the default mapping (KEY BINDINGS
 vim.keymap.del("n", "<leader>ds")
 map(
   "n",
