@@ -115,6 +115,8 @@ alias gtp='git stash pop'
 alias gl='git log --oneline'
 alias gcn='git config --local user.name "$GIT_NAME"'
 alias gce='git config --local user.email "$GIT_EMAIL"'
+alias gcl='gce && gcn'
+alias gcll='git config --local --list'
 
 source $ZSH_CUSTOM/themes/powerlevel10k/powerlevel10k.zsh-theme
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
