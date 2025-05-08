@@ -1,0 +1,163 @@
+{
+  "workbench.colorTheme": "Rosé Pine",
+  "workbench.startupEditor": "none",
+  "workbench.editorAssociations": {
+    "*.vsix": "default",
+    "*.png": "editor.excalidraw"
+  },
+  "workbench.iconTheme": "catppuccin-macchiato",
+  "workbench.sideBar.location": "right",
+  "workbench.activityBar.location": "top",
+  "workbench.editor.languageDetection": true,
+  "workbench.list.smoothScrolling": true,
+  "workbench.tips.enabled": false,
+  "workbench.statusBar.visible": false,
+  "workbench.tree.indent": 20,
+  "diffEditor.renderIndicators": false,
+  "workbench.editor.enablePreview": false,
+  "search.useIgnoreFiles": false,
+  "window.density.editorTabHeight": "compact",
+  "window.zoomLevel": 0.5,
+  "editor.fontFamily": "'Operator Mono Lig', Monaco, 'Courier New', monospace",
+  "editor.fontLigatures": true,
+  "editor.mouseWheelZoom": true,
+  "editor.mouseWheelScrollSensitivity": 0.5,
+  "editor.cursorBlinking": "expand",
+  "editor.formatOnSave": false,
+  "editor.hover.enabled": true,
+  "editor.detectIndentation": true,
+  "editor.autoClosingComments": "always",
+  "editor.autoIndent": "advanced",
+  "editor.lineHeight": 1.8,
+  "editor.minimap.enabled": false,
+  "editor.fontSize": 16,
+  "editor.fontWeight": "600",
+  "editor.linkedEditing": true,
+  "editor.tabSize": 4,
+  "editor.codeLens": true,
+  "editor.suggest.insertMode": "replace",
+  "editor.trimAutoWhitespace": true,
+  "editor.folding": true,
+  "editor.cursorSurroundingLinesStyle": "all",
+  "editor.inlineCompletionsAccessibilityVerbose": true,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.scrollBeyondLastLine": true,
+  "editor.smoothScrolling": true,
+  "editor.renderWhitespace": "none",
+  "editor.lineNumbers": "on",
+  "editor.stickyScroll.enabled": false,
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.wrappingIndent": "same",
+  "explorer.confirmDelete": false,
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/bazel-out/**": true,
+    "**/dist/**": true,
+    "**/aio/src/generated/**": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/bazel-out": true,
+    "**/dist": true,
+    "**/aio/src/generated": true,
+    ".history": true
+  },
+  "files.exclude": {
+    "*.sublime-*": true,
+    "**/__pycache__": true,
+    "**/.DS_Store": true,
+    "**/.git": false,
+    "**/.gitx": true,
+    "**/.pytest_cache": true,
+    "**/node_modules": true,
+    "env*": true,
+    "node_modules": true,
+    "venv": true,
+    "dist": true,
+    "build": true
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "files.autoSave": "afterDelay",
+  "breadcrumbs.enabled": false,
+  "git.autofetch": true,
+  "git.enableSmartCommit": true,
+  "git.confirmSync": true,
+  "git.openRepositoryInParentFolders": "always",
+  "github.copilot.enable": {
+    "*": false,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false,
+    "typescript": true
+  },
+  "terminal.integrated.fontSize": 16,
+  "terminal.integrated.fontFamily": "'MesloLGS NF'",
+  "terminal.integrated.fontLigatures.enabled": true,
+  "angular.enable-strict-mode-prompt": true,
+  "angular.suggest.includeAutomaticOptionalChainCompletions": true,
+  "angular.trace.server": "verbose",
+  "angular.suggest.includeCompletionsWithSnippetText": true,
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[json]": {
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.suggest.insertMode": "replace",
+    "editor.formatOnSave": false,
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features",
+    "files.autoSaveWorkspaceFilesOnly": true,
+    "javascript.preferences.importModuleSpecifier": "shortest",
+    "javascript.preferences.quoteStyle": "double",
+    "javascript.suggest.completeJSDocs": true,
+    "javascript.suggest.enabled": true,
+    "typescript.preferences.importModuleSpecifierEnding": "minimal",
+    "typescript.preferences.quoteStyle": "double"
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features",
+    "javascript.preferences.importModuleSpecifier": "shortest",
+    "javascript.preferences.quoteStyle": "double",
+    "javascript.suggest.completeJSDocs": true,
+    "javascript.suggest.enabled": true
+  },
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "css.completion.triggerPropertyValueCompletion": true,
+  "scss.completion.completePropertyWithSemicolon": true,
+  "[css]": {
+    "editor.defaultFormatter": "MikeBovenlander.formate"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "MikeBovenlander.formate"
+  },
+  "prettyHome.showOnStartup": false,
+  "auto-rename-tag.activationOnLanguage": [
+    "html"
+  ],
+  "mcp": {
+    "servers": {
+      "Context7": {
+        "type": "stdio",
+        "command": "npx",
+        "args": [
+          "-y",
+          "@upstash/context7-mcp@latest"
+        ]
+      }
+    }
+  }
+}

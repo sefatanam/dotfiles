@@ -1,0 +1,68 @@
+{
+    "workbench.colorTheme": "Default Dark Modern",
+    "workbench.startupEditor": "none",
+    "workbench.editorAssociations": {
+        "*.vsix": "default"
+    },
+    "workbench.sideBar.location": "right",
+    "workbench.activityBar.location": "top",
+    "workbench.editor.languageDetection": true,
+    "window.density.editorTabHeight": "compact",
+    "editor.fontFamily": "'Operator Mono Lig', Monaco, 'Courier New', monospace",
+    "editor.fontLigatures": true,
+    "editor.mouseWheelZoom": true,
+    "editor.mouseWheelScrollSensitivity": 0.5,
+    "editor.cursorBlinking": "expand",
+    "editor.formatOnSave": false,
+    "editor.hover.enabled": true,
+    "editor.detectIndentation": true,
+    "editor.autoClosingComments": "always",
+    "editor.autoIndent": "advanced",
+    "editor.lineHeight": 1.7,
+    "editor.minimap.enabled": false,
+    "editor.fontSize": 18,
+    "editor.fontWeight": "600",
+    "editor.linkedEditing": true,
+    "editor.tabSize": 4,
+    "editor.codeLens": true,
+    "editor.suggest.insertMode": "replace",
+    "editor.trimAutoWhitespace": true,
+    "editor.folding": true,
+    "editor.cursorSurroundingLinesStyle": "all",
+    "editor.inlineCompletionsAccessibilityVerbose": true,
+    "editor.bracketPairColorization.enabled": true,
+    "terminal.integrated.fontFamily": "MesloLGS NF",
+    "terminal.integrated.fontSize": 16,
+    "gopls": {
+        "ui.semanticTokens": true,
+        "gopls.completeUnimported": true,
+        "gopls.staticcheck": true
+    },
+    "[go]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "golang.go"
+    },
+    "go.toolsManagement.autoUpdate": true,
+    "git.confirmSync": true,
+    "git.autofetch": true,
+    "git.enableSmartCommit": true,
+    "git.openRepositoryInParentFolders": "never",
+    "github.copilot.enable": {
+        "*": false,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false
+    },
+    "mcp": {
+        "servers": {
+            "Context7": {
+                "type": "stdio",
+                "command": "npx",
+                "args": [
+                    "-y",
+                    "@upstash/context7-mcp@latest"
+                ]
+            }
+        }
+    }
+}
