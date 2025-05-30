@@ -98,3 +98,8 @@ map("n", "<C-w>", ":bdelete<cr>", { desc = "Delete Current Buffer", silent = tru
 map("n", "<S-Tab>", ":bprev<CR>", { desc = "Previous buffer", silent = true, unique = true })
 -- Map L to next buffer
 map("n", "<Tab>", ":bnext<CR>", { desc = "Next buffer", silent = true, unique = true })
+-- New tab
+map("n", "te", ":tabedit")
+-- Split window
+map("n", "hs", ":split<Return>", { desc = "Horizontal Split", silent = true, unique = true })
+map("n", "vs", ":vsplit<Return>", { desc = "Verticle Split", silent = true, unique = true })
