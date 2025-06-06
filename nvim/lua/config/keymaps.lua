@@ -70,9 +70,11 @@ map("n", "<leader>jt", "<cmd>/template:<cr><cmd>nohl<cr>", { unique = true, desc
 map("n", "<leader>js", "<cmd>/style.:<cr><cmd>nohl<cr>", { unique = true, desc = "Jump to styles" })
 map("n", "<leader>jc", "<cmd>/Component {<cr><cmd>nohl<cr>", { unique = true, desc = "Jump to component" })
 
--- ufo
-map("n", "zR", require("ufo").openAllFolds)
-map("n", "zM", require("ufo").closeAllFolds)
+if not vim.g.vscode then
+  -- ufo
+  map("n", "zR", require("ufo").openAllFolds)
+  map("n", "zM", require("ufo").closeAllFolds)
+end
 
 vim.api.nvim_create_user_command("TOhtml", function()
   local tohtml = require("tohtml")
@@ -93,13 +95,14 @@ vim.api.nvim_create_user_command("TOhtml", function()
 end, {})
 
 map("n", "<C-w>", ":bdelete<cr>", { desc = "Delete Current Buffer", silent = true, unique = true })
-
--- Map H to previous buffer
-map("n", "<S-Tab>", ":bprev<CR>", { desc = "Previous buffer", silent = true, unique = true })
--- Map L to next buffer
-map("n", "<Tab>", ":bnext<CR>", { desc = "Next buffer", silent = true, unique = true })
--- New tab
-map("n", "te", ":tabedit")
--- Split window
-map("n", "hs", ":split<Return>", { desc = "Horizontal Split", silent = true, unique = true })
-map("n", "vs", ":vsplit<Return>", { desc = "Verticle Split", silent = true, unique = true })
+if not vim.g.vscode then
+  -- Map H to previous buffer
+  map("n", "<S-Tab>", ":bprev<CR>", { desc = "Previous buffer", silent = true, unique = true })
+  -- Map L to next buffer
+  map("n", "<Tab>", ":bnext<CR>", { desc = "Next buffer", silent = true, unique = true })
+  -- New tab
+  map("n", "te", ":tabedit")
+  -- Split window
+  map("n", "hs", ":split<Return>", { desc = "Horizontal Split", silent = true, unique = true })
+  map("n", "vs", ":vsplit<Return>", { desc = "Verticle Split", silent = true, unique = true })
+end
