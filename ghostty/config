@@ -35,5 +35,5 @@ clipboard-write = allow
 copy-on-select = false
 unfocused-split-opacity = 0.8
 
-cursor-style = bar
-shell-integration-features = no-cursor
+cursor-style = block
+mouse-hide-while-typing = true
