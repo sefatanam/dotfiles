@@ -1,8 +1,10 @@
+tap "brewforge/extras"
 tap "homebrew/bundle"
 tap "homebrew/services"
 tap "jakehilborn/jakehilborn"
 tap "mohamedelashri/free-mac"
 tap "nikitabobko/tap"
+tap "oven-sh/bun"
 # Download with resuming and segmented downloading
 brew "aria2"
 # Improved shell history for zsh, bash, fish and nushell
@@ -63,6 +65,8 @@ brew "resvg"
 brew "ripgrep"
 # 7-Zip is a file archiver with a high compression ratio
 brew "sevenzip"
+# Command-line interface for https://speedtest.net bandwidth tests
+brew "speedtest-cli"
 # Organize software neatly under a single directory tree (e.g. /usr/local)
 brew "stow"
 # Code-search similar to ack
@@ -77,6 +81,8 @@ brew "tmux"
 brew "tokei"
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
+# Extremely fast Python package installer and resolver, written in Rust
+brew "uv"
 # Executes a program periodically, showing output fullscreen
 brew "watch"
 # Blazing fast terminal file manager written in Rust, based on async I/O
@@ -85,16 +91,14 @@ brew "yazi"
 brew "yt-dlp"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
-# macOS command line utility to configure multi-display resolutions and arrangements. Essentially XRandR for macOS.
-brew "jakehilborn/jakehilborn/displayplacer"
+# Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
+brew "oven-sh/bun/bun"
 # AeroSpace is an i3-like tiling window manager for macOS
 cask "aerospace"
 # CPU management application
 cask "app-tamer"
 # Application uninstaller
 cask "appcleaner"
-# Display management tool
-cask "betterdisplay"
 # Desktop password and login vault
 cask "bitwarden"
 # Send any size file between devices
@@ -107,12 +111,17 @@ cask "chatgpt"
 cask "claude"
 # Image, video and clipboard optimiser
 cask "clop"
+# Write, edit, and chat about your code with AI
+cask "cursor"
 # Disk space visualiser
 cask "daisydisk"
 # Voice and text chat software
 cask "discord"
+# Window peeking utility app
+cask "dockdoor"
+# Collaborative team software
+cask "figma"
 cask "font-hack-nerd-font"
-cask "font-sf-pro"
 cask "font-symbols-only-nerd-font"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
@@ -120,18 +129,16 @@ cask "ghostty"
 cask "google-chrome"
 # Free and open-source media player
 cask "iina"
-# Screen and video recording software
-cask "loom"
 # Adaptive brightness for external displays
 cask "lunar"
 # Native desktop app for Messenger (formerly Facebook Messenger)
 cask "messenger"
+# Run LLMs locally
+cask "msty"
 # App to write, plan, collaborate, and get organised
 cask "notion"
 # Open-source software for live streaming and screen recording
 cask "obs"
-# Get up and running with large language models locally
-cask "ollama"
 # Verify system files structure, run miscellaneous maintenance and more
 cask "onyx"
 # Replacement for Docker Desktop
@@ -140,17 +147,18 @@ cask "orbstack"
 cask "rar"
 # Control your tools with a few keystrokes
 cask "raycast"
+# Music streaming service
+cask "spotify"
 # System monitor for the menu bar
 cask "stats"
-# Open-source code editor
-cask "visual-studio-code"
 # Native desktop client for WhatsApp
 cask "whatsapp"
-# Gecko based web browser
-cask "zen-browser"
-vscode "analogjs.vscode-analog"
-vscode "bierner.markdown-mermaid"
-vscode "github.copilot"
-vscode "github.copilot-chat"
-vscode "pomdtr.excalidraw-editor"
-vscode "sefatanam.pretty-home"
+vscode "alefragnani.bookmarks"
+vscode "angular.ng-template"
+vscode "asvetliakov.vscode-neovim"
+vscode "dbaeumer.vscode-eslint"
+vscode "eamodio.gitlens"
+vscode "helgardrichard.helium-icon-theme"
+vscode "jdinhlife.gruvbox"
+vscode "tomwhite007.rename-angular-component"
+vscode "vercel.turbo-vsc"
