@@ -141,6 +141,16 @@ alias cat="glow"
 # github alias
 alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
 
+# reduandant alias
+alias c='clear'
+alias e='exit'
+
+# github copilot extension aliasa
+alias ghca="gh extension install github/gh-copilot"
+alias ghcs="gh copilot suggest"
+alias ghce="gh copilot explain"
+alias ghcup="gh extension upgrade gh-copilot"
+
 [ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
 
 
