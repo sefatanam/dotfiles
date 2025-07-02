@@ -184,3 +184,6 @@ function ngnew() {
     echo "Usage: ngnew [app-name] or ngnew [version] [app-name]"
   fi
 }
+
+# opencode
+export PATH=/Users/sefat/.opencode/bin:$PATH
