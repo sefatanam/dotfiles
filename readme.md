@@ -36,7 +36,7 @@ This will install the apps listed in the `Brewfile` (such as Neovim, Raycast, an
 
 ## How to Configure
 
-After cloning the repository and installing the necessary software, you need to create symlinks for the configuration files. This step ensures that your system uses the dotfiles from the repository rather than the default configuration files. 
+After cloning the repository and installing the necessary software, you need to create symlinks for the configuration files. This step ensures that your system uses the dotfiles from the repository rather than the default configuration files.
 
 To create the symlinks, use the following commands:
 
@@ -64,7 +64,10 @@ ln -s ~/.dotfiles/git/gitconfig ~/.gitconfig
 
 ln -s ~/.dotfiles/git/hooks/post-commit .git/hooks // should run in ~/.dotfiles directory
 ln -s ~/.dotfiles/git/hooks/pre-commit .git/hooks  // should run in ~/.dotfiles directory
- 
+
+# Link Starship configuration
+ln -s ~/.dotfiles/starship/starship.toml ~/.config/starship.toml
+
 ```
 
 These symlinks ensure that your system uses the custom configuration files from this repository.

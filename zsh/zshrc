@@ -95,6 +95,7 @@ alias es='eza -alF --color=always --sort=size | grep -v /'
 
 # Bind up-arrow but not ctrl-r
 eval "$(atuin init zsh --disable-ctrl-r)"
+eval "$(starship init zsh)"
 
 # apps alias
 alias n='nvim'

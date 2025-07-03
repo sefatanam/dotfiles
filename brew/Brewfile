@@ -5,6 +5,7 @@ tap "jakehilborn/jakehilborn"
 tap "mohamedelashri/free-mac"
 tap "nikitabobko/tap"
 tap "oven-sh/bun"
+tap "sst/tap"
 # Download with resuming and segmented downloading
 brew "aria2"
 # Improved shell history for zsh, bash, fish and nushell
@@ -67,6 +68,8 @@ brew "ripgrep"
 brew "sevenzip"
 # Command-line interface for https://speedtest.net bandwidth tests
 brew "speedtest-cli"
+# Cross-shell prompt for astronauts
+brew "starship"
 # Organize software neatly under a single directory tree (e.g. /usr/local)
 brew "stow"
 # Code-search similar to ack
@@ -93,6 +96,8 @@ brew "yt-dlp"
 brew "zoxide"
 # Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
 brew "oven-sh/bun/bun"
+# The AI coding agent built for the terminal.
+brew "sst/tap/opencode"
 # AeroSpace is an i3-like tiling window manager for macOS
 cask "aerospace"
 # CPU management application
@@ -107,22 +112,19 @@ cask "blip"
 cask "bruno"
 # OpenAI's official ChatGPT desktop app
 cask "chatgpt"
-# Anthropic's official Claude AI desktop app
-cask "claude"
 # Image, video and clipboard optimiser
 cask "clop"
 # Write, edit, and chat about your code with AI
 cask "cursor"
 # Disk space visualiser
 cask "daisydisk"
-# Voice and text chat software
-cask "discord"
 # Window peeking utility app
 cask "dockdoor"
 # Collaborative team software
 cask "figma"
-cask "font-hack-nerd-font"
-cask "font-symbols-only-nerd-font"
+cask "font-cascadia-code"
+cask "font-iosevka-nerd-font"
+cask "font-jetbrains-mono-nerd-font"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
 # Web browser
@@ -151,6 +153,8 @@ cask "raycast"
 cask "spotify"
 # System monitor for the menu bar
 cask "stats"
+# Rust-based terminal
+cask "warp"
 # Native desktop client for WhatsApp
 cask "whatsapp"
 vscode "alefragnani.bookmarks"
@@ -160,5 +164,6 @@ vscode "dbaeumer.vscode-eslint"
 vscode "eamodio.gitlens"
 vscode "helgardrichard.helium-icon-theme"
 vscode "jdinhlife.gruvbox"
+vscode "sndst00m.vscode-native-svg-preview"
 vscode "tomwhite007.rename-angular-component"
 vscode "vercel.turbo-vsc"
