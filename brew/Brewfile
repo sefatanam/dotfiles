@@ -6,6 +6,8 @@ tap "mohamedelashri/free-mac"
 tap "nikitabobko/tap"
 tap "oven-sh/bun"
 tap "sst/tap"
+# Run your GitHub Actions locally
+brew "act"
 # Download with resuming and segmented downloading
 brew "aria2"
 # Improved shell history for zsh, bash, fish and nushell
@@ -22,8 +24,6 @@ brew "deno"
 brew "exiftool"
 # Modern, maintained replacement for ls
 brew "eza"
-# Like neofetch, but much faster because written mostly in C
-brew "fastfetch"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
 # Play, record, convert, and stream audio and video
@@ -32,6 +32,8 @@ brew "ffmpeg"
 brew "fzf"
 # GitHub command-line tool
 brew "gh"
+# Highest-quality GIF encoder based on pngquant
+brew "gifski"
 # Distributed revision control system
 brew "git"
 # Render markdown on the CLI
@@ -68,14 +70,8 @@ brew "ripgrep"
 brew "sevenzip"
 # Command-line interface for https://speedtest.net bandwidth tests
 brew "speedtest-cli"
-# Cross-shell prompt for astronauts
-brew "starship"
-# Organize software neatly under a single directory tree (e.g. /usr/local)
-brew "stow"
 # Code-search similar to ack
 brew "the_silver_searcher"
-# Programmatically correct mistyped console commands
-brew "thefuck"
 # Official tldr client written in Rust
 brew "tlrc"
 # Terminal multiplexer
@@ -120,10 +116,9 @@ cask "cursor"
 cask "daisydisk"
 # Window peeking utility app
 cask "dockdoor"
-# Collaborative team software
-cask "figma"
+# Excalidraw client
+cask "excalidrawz"
 cask "font-cascadia-code"
-cask "font-iosevka-nerd-font"
 cask "font-jetbrains-mono-nerd-font"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
@@ -160,6 +155,7 @@ cask "whatsapp"
 vscode "alefragnani.bookmarks"
 vscode "angular.ng-template"
 vscode "asvetliakov.vscode-neovim"
+vscode "bradlc.vscode-tailwindcss"
 vscode "dbaeumer.vscode-eslint"
 vscode "eamodio.gitlens"
 vscode "helgardrichard.helium-icon-theme"
