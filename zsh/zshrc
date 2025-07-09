@@ -50,7 +50,7 @@ case ":$PATH:" in
   *) export PATH="$PATH:/Users/sefat/bin" ;;
 esac
 # bit end
-eval $(thefuck --alias)
+eval "$(zoxide init zsh)"
 # eval "$(fzf --bash)"
 cd_to_dir() {
     local selected_dir
@@ -71,14 +71,21 @@ cd_to_dir() {
 # 	rm -f -- "$tmp"
 # }
 
+# function y() {
+#     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+#     yazi "$@" --cwd-file="$tmp"
+#     if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+#         builtin cd -- "$cwd"
+#         nvim .
+#     fi
+#     rm -f -- "$tmp"
+#}
 function y() {
-    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-    yazi "$@" --cwd-file="$tmp"
-    if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-        builtin cd -- "$cwd"
-        nvim .
-    fi
-    rm -f -- "$tmp"
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
 }
 
 # alias to navigate documents directory 
@@ -95,7 +102,7 @@ alias es='eza -alF --color=always --sort=size | grep -v /'
 
 # Bind up-arrow but not ctrl-r
 eval "$(atuin init zsh --disable-ctrl-r)"
-eval "$(starship init zsh)"
+# eval "$(starship init zsh)"
 
 # apps alias
 alias n='nvim'
