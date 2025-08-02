@@ -33,6 +33,10 @@ case ":$PATH:" in
 esac
 # pnpm endexport 
 
+# nvm setup
+export NVM_DIR=~/.nvm
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+nvm use default
 
 # export GOROOT=/opt/homebrew/Cellar/go/1.22.4/libexec
 # export GOROOT=$(brew --prefix go)/libexec
@@ -125,7 +129,7 @@ alias gcn='git config --local user.name "$GIT_NAME"'
 alias gce='git config --local user.email "$GIT_EMAIL"'
 alias gcl='gce && gcn'
 alias gcll='git config --local --list'
-
+alias grp="git remote prune origin"
 source $ZSH_CUSTOM/themes/powerlevel10k/powerlevel10k.zsh-theme
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -195,3 +199,5 @@ function ngnew() {
 
 # opencode
 export PATH=/Users/sefat/.opencode/bin:$PATH
+
+export PATH="$PATH:$HOME/.local/bin"
