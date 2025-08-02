@@ -24,3 +24,5 @@ vim.cmd.colorscheme("default")
 
 vim.o.viewoptions = "cursor,slash,unix" -- remove 'folds' from view options
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+
+vim.g.autoformat = false
