@@ -1,1 +1,0 @@
-stow-packages/shell/.zshrc

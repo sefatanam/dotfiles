@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # post-commit hook
-FILE_PATH="zsh/.local/share/zsh/.private"
+FILE_PATH="zsh/private"
 ORIGINAL_FILE_PATH="private.original"
 
 if [ -f "$ORIGINAL_FILE_PATH" ]; then
