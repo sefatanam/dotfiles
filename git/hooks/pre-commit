@@ -2,7 +2,7 @@
 
 # pre-commit hook
 # Set the path to the file you want to process
-FILE_PATH="zsh/private"
+FILE_PATH="zsh/.local/share/zsh/.private"
 
 # Check if the file exists
 if [ ! -f "$FILE_PATH" ]; then

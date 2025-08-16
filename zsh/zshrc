@@ -1,205 +1,29 @@
+#!/bin/zsh
+# .zshrc - Main zsh configuration (sources modular components)
+
 export LANG=en_US.UTF-8
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+
+# Enable Powerlevel10k instant prompt
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-# Path to your Oh My Zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
-source ~/.private
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time Oh My Zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-# ZSH_THEME="robbyrussell"
-ZSH_THEME="powerlevel10k/powerlevel10k"
 
+# Oh My Zsh configuration
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
-# bun completions
-[ -s "/Users/sefat/.bun/_bun" ] && source "/Users/sefat/.bun/_bun"
+# Source modular configuration files
+ZSH_CONFIG_DIR="$HOME/.local/share/zsh"
+[[ -f "$ZSH_CONFIG_DIR/exports.zsh" ]] && source "$ZSH_CONFIG_DIR/exports.zsh"
+[[ -f "$ZSH_CONFIG_DIR/aliases.zsh" ]] && source "$ZSH_CONFIG_DIR/aliases.zsh"
+[[ -f "$ZSH_CONFIG_DIR/functions.zsh" ]] && source "$ZSH_CONFIG_DIR/functions.zsh"
+[[ -f "$ZSH_CONFIG_DIR/completions.zsh" ]] && source "$ZSH_CONFIG_DIR/completions.zsh"
 
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+# Source private configuration if it exists
+[[ -f ~/.private ]] && source ~/.private
 
-# pnpm
-export PNPM_HOME="/Users/sefat/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm endexport 
-
-# nvm setup
-export NVM_DIR=~/.nvm
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-if [[ $- == *i* ]]; then
-  nvm use default > /dev/null
-fi
-
-# export GOROOT=/opt/homebrew/Cellar/go/1.22.4/libexec
-# export GOROOT=$(brew --prefix go)/libexec
-
-# dynamically set GOROOT versions and more
-export GOROOT=$(ls -d /opt/homebrew/Cellar/go/*/libexec | tail -n 1)
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
-
-export DYLD_LIBRARY_PATH="$(brew --prefix)/lib:$DYLD_LIBRARY_PATH"
-
-# bit
-case ":$PATH:" in
-  *":/Users/sefat/bin:"*) ;;
-  *) export PATH="$PATH:/Users/sefat/bin" ;;
-esac
-# bit end
-eval "$(zoxide init zsh)"
-# eval "$(fzf --bash)"
-cd_to_dir() {
-    local selected_dir
-    selected_dir=$(fd -t d . "$1" | fzf +m --height 50% --preview 'tree -C {}')
-    if [[ -n "$selected_dir" ]]; then
-        # Change to the selected directory
-        cd "$selected_dir" || return 1
-    fi
-}
-
-
-# function y() {
-# 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-# 	yazi "$@" --cwd-file="$tmp"
-# 	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-# 		builtin cd -- "$cwd"
-# 	fi
-# 	rm -f -- "$tmp"
-# }
-
-# function y() {
-#     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-#     yazi "$@" --cwd-file="$tmp"
-#     if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-#         builtin cd -- "$cwd"
-#         nvim .
-#     fi
-#     rm -f -- "$tmp"
-#}
-function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	IFS= read -r -d '' cwd < "$tmp"
-	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
-	rm -f -- "$tmp"
-}
-
-# alias to navigate documents directory 
-alias cdd='cd_to_dir ~/Documents/'
-alias cds='cd_to_dir'
-
-# beautify ls
-# alias ls='eza --long --total-size --color=always --group-directories-first --sort=name'
-# alias lf='eza -lF --color=always | grep -v /'
-# alias lh='eza -dl .* --group-directories-first'
-# alias ll='eza -al --group-directories-first'
-# alias lt='eza -al --sort=modified'
-alias es='eza -alF --color=always --sort=size | grep -v /'
-
-# Bind up-arrow but not ctrl-r
-eval "$(atuin init zsh --disable-ctrl-r)"
-# eval "$(starship init zsh)"
-
-# apps alias
-alias n='nvim'
-alias g='lazygit'
-
-# zsh alias
-alias reload-zsh="source ~/.zshrc"
-alias edit-zsh="nvim ~/.zshrc"
-
-#git alias
-alias gs='git status'
-alias gp='git pull --rebase'
-alias gP='git push'
-alias gc='git commit -m'
-alias grh='git reset --hard'
-alias gts='git stash'
-alias gtp='git stash pop'
-alias gl='git log --oneline'
-alias gcn='git config --local user.name "$GIT_NAME"'
-alias gce='git config --local user.email "$GIT_EMAIL"'
-alias gcl='gce && gcn'
-alias gcll='git config --local --list'
-alias grp="git remote prune origin"
+# Source Powerlevel10k theme and configuration
 source $ZSH_CUSTOM/themes/powerlevel10k/powerlevel10k.zsh-theme
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# tmux alias
-alias t='tmux'
-alias ta='tmux attach -t'
-alias tl='tmux ls'
-alias tk='tmux kill-session -t'
-alias tn='tmux new -s'
-alias ts='tmux switch -t'
-alias td='tmux detach'
-
-# npm alias
-alias ns="npm start"
-alias nd="npm run dev"
-
-# cat command remap with glow
-alias cat="glow"
-
-# github alias
-alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
-
-# reduandant alias
-alias c='clear'
-alias e='exit'
-
-# github copilot extension aliasa
-alias ghca="gh extension install github/gh-copilot"
-alias ghcs="gh copilot suggest"
-alias ghce="gh copilot explain"
-alias ghcup="gh extension upgrade gh-copilot"
-
-[ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
-
-
-# optimize video with ffmpeg
-optimize() {
-  if [ -z "$1" ]; then
-    echo "Usage: optimize /path/to/video"
-    return 1
-  fi
-
-  local input_video="$1"
-  local filename_without_ext="${input_video%.*}"
-  local output_video="${filename_without_ext}_optimized.mov"
-
-  ffmpeg -i "$input_video" -vf scale=1280:720 "$output_video"
-
-  echo "✅ Optimized video saved as: $output_video"
-}
-
-
-# function for create angular app
-function ngnew() {
-  if [[ $# -eq 1 ]]; then
-    local app_name=$1
-    npx -p @angular/cli@latest ng new "$app_name" --package-manager=pnpm --skip-install --skip-tests
-  elif [[ $# -eq 2 ]]; then
-    local version=$1
-    local app_name=$2
-    npx -p @angular/cli@$version ng new "$app_name" --package-manager=pnpm --skip-install --skip-tests
-  else
-    echo "Usage: ngnew [app-name] or ngnew [version] [app-name]"
-  fi
-}
-
-# opencode
-export PATH=/Users/sefat/.opencode/bin:$PATH
-export EDITOR="nvim"
-# export PATH="$PATH:$HOME/.local/bin"
