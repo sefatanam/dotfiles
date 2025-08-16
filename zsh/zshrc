@@ -36,7 +36,9 @@ esac
 # nvm setup
 export NVM_DIR=~/.nvm
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-nvm use default
+if [[ $- == *i* ]]; then
+  nvm use default > /dev/null
+fi
 
 # export GOROOT=/opt/homebrew/Cellar/go/1.22.4/libexec
 # export GOROOT=$(brew --prefix go)/libexec
@@ -199,5 +201,5 @@ function ngnew() {
 
 # opencode
 export PATH=/Users/sefat/.opencode/bin:$PATH
-
-export PATH="$PATH:$HOME/.local/bin"
+export EDITOR="nvim"
+# export PATH="$PATH:$HOME/.local/bin"
