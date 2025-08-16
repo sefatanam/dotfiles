@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# post-commit hook
+FILE_PATH="zsh/private"
+ORIGINAL_FILE_PATH="private.original"
+
+if [ -f "$ORIGINAL_FILE_PATH" ]; then
+    # Replace instead of concat
+    cat "$ORIGINAL_FILE_PATH" > "$FILE_PATH"
+    echo "Original private file restored after commit."
+else
+    echo "Original private file backup not found. Skipping restore."
+fi
+
+exit 0
+
+# Copyright https://thearyanahmed.substack.com/p/managing-dotfiles-and-sensitive-environment
