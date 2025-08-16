@@ -131,3 +131,7 @@ if vim.g.vscode then
   keymap({ "n", "v" }, "<leader>pr", "<cmd>lua require('vscode').action('code-runner.run')<CR>")
   keymap({ "n", "v" }, "<leader>fd", "<cmd>lua require('vscode').action('editor.action.formatDocument')<CR>")
 end
+
+
+vim.keymap.set("n", "<leader>\\", ":Copilot disable<CR>", { noremap = true, silent = true })
+vim.keymap.set({"n","v"}, "<leader>p","\",_dP", { noremap = true, silent = true, desc = "Paste without replacing the default register" })
