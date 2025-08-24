@@ -9,6 +9,30 @@ cd_to_dir() {
     fi
 }
 
+_directory_suggestion_widget() {
+    local selected_dir
+    
+    # Get directories in current location
+    selected_dir=$(fd -t d . . 2>/dev/null | fzf \
+        --height 40% \
+        --layout=reverse \
+        --border \
+        --prompt="📁 Select directory: " \
+        --preview 'ls -la {}' \
+        --preview-window=right:50%:wrap \
+        +m)
+    
+    if [[ -n "$selected_dir" ]]; then
+        # Insert the selected directory at cursor position
+        LBUFFER="${LBUFFER}${selected_dir}"
+    fi
+    
+    # Refresh the prompt
+    zle redisplay
+}
+
+zle -N _directory_suggestion_widget
+
 # Yazi file manager integration
 function y() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd

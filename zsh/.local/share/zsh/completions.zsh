@@ -11,3 +11,6 @@ eval "$(atuin init zsh --disable-ctrl-r)"
 
 # X-cmd initialization
 [ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X"
+
+# @REVIEW: Bind Ctrl+I to directory suggestion widget
+bindkey '^I' _directory_suggestion_widget
