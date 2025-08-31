@@ -70,6 +70,8 @@ brew "ripgrep"
 brew "sevenzip"
 # Command-line interface for https://speedtest.net bandwidth tests
 brew "speedtest-cli"
+# Organize software neatly under a single directory tree (e.g. /usr/local)
+brew "stow"
 # Code-search similar to ack
 brew "the_silver_searcher"
 # Official tldr client written in Rust
@@ -100,6 +102,8 @@ cask "aerospace"
 cask "app-tamer"
 # Application uninstaller
 cask "appcleaner"
+# Display management tool
+cask "betterdisplay"
 # Desktop password and login vault
 cask "bitwarden"
 # Send any size file between devices
@@ -130,8 +134,6 @@ cask "iina"
 cask "lunar"
 # Native desktop app for Messenger (formerly Facebook Messenger)
 cask "messenger"
-# Run LLMs locally
-cask "msty"
 # App to write, plan, collaborate, and get organised
 cask "notion"
 # Open-source software for live streaming and screen recording
@@ -144,22 +146,20 @@ cask "orbstack"
 cask "rar"
 # Control your tools with a few keystrokes
 cask "raycast"
-# Music streaming service
-cask "spotify"
 # System monitor for the menu bar
 cask "stats"
+# Open-source code editor
+cask "visual-studio-code"
 # Rust-based terminal
 cask "warp"
 # Native desktop client for WhatsApp
 cask "whatsapp"
-vscode "alefragnani.bookmarks"
+# Gecko based web browser
+cask "zen"
 vscode "angular.ng-template"
-vscode "asvetliakov.vscode-neovim"
-vscode "bradlc.vscode-tailwindcss"
-vscode "dbaeumer.vscode-eslint"
 vscode "eamodio.gitlens"
-vscode "helgardrichard.helium-icon-theme"
-vscode "jdinhlife.gruvbox"
-vscode "sndst00m.vscode-native-svg-preview"
-vscode "tomwhite007.rename-angular-component"
-vscode "vercel.turbo-vsc"
+vscode "github.copilot"
+vscode "github.copilot-chat"
+vscode "tal7aouy.icons"
+vscode "webhooked.kanso-theme"
+vscode "yoavbls.pretty-ts-errors"
