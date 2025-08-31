@@ -1,21 +1,42 @@
 # Dotfiles
 
-macOS development environment using GNU Stow.
+My development environment using GNU Stow.
 
-## Setup
+## Dependencies
+
+**Required:**
+- Homebrew
+- GNU Stow
+- Git
+
+**Auto-installed:**
+- Oh My Zsh + Powerlevel10k
+- 80+ CLI tools (see Brewfile)
+- All configurations
+
+## Quick Setup
+
+```bash
+# Clone repository
+git clone <your-repo> ~/.dotfiles
+
+# Run automated setup script
+cd ~/.dotfiles && ./setup.sh
+```
+
+## Manual Setup
 
 ```bash
 # Install dependencies
 brew bundle --file=~/.dotfiles/brew/Brewfile
 
-# Clone and setup
-git clone <your-repo> ~/.dotfiles
-cd ~/.dotfiles/stow-packages
-stow -t ~ shell editor
-
 # Install Oh My Zsh + Powerlevel10k
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+
+# Setup dotfiles
+cd ~/.dotfiles/stow-packages
+stow -t ~ shell editor
 ```
 
 ## Usage
