@@ -1,6 +1,5 @@
 #!/bin/zsh
 # .zshrc - Main zsh configuration (sources modular components)
-
 export LANG=en_US.UTF-8
 
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
@@ -32,11 +31,13 @@ _source_compiled "$ZSH_CONFIG_DIR/aliases.zsh"
 _source_compiled "$ZSH_CONFIG_DIR/functions.zsh"
 _source_compiled "$ZSH_CONFIG_DIR/completions.zsh"
 
-source ~/.private
+[[ -f ~/.private ]] && _source_compiled ~/.private
+[[ -f "$HOME/.dotfiles/zsh/private" ]] && _source_compiled "$HOME/.dotfiles/zsh/private"
 
 _compile_zsh_file ~/.zshrc
 
 source $ZSH_CUSTOM/themes/powerlevel10k/powerlevel10k.zsh-theme
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# @REVIEW: Clean up helper functions
 unset -f _compile_zsh_file _source_compiled
