@@ -18,7 +18,7 @@ My development environment using GNU Stow.
 
 ```bash
 # Clone repository
-git clone <your-repo> ~/.dotfiles
+git clone https://github.com/sefatanam/dotfiles ~/.dotfiles
 
 # Run automated setup script
 cd ~/.dotfiles && ./setup.sh
