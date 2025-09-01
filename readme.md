@@ -52,21 +52,6 @@ stow -R shell editor
 stow -D shell editor
 ```
 
-## What's Included
-
-**Shell**: Zsh + Oh My Zsh + Powerlevel10k, Git config, Tmux
-**Editor**: Neovim (LazyVim)
-**WM**: AeroSpace tiling window manager  
-**Terminal**: Ghostty
-**Tools**: 80+ CLI tools via Homebrew
-
-## Key Features
-
-- **Modular zsh config** with separate files for exports, aliases, functions
-- **Tiling window management** with AeroSpace (Alt+hjkl navigation)
-- **Modern CLI tools** (bat, eza, ripgrep, fzf, lazygit, etc.)
-- **Development ready** (Node.js, Python, Go, Docker alternatives)
-
 ## After Setup
 
 1. Run `p10k configure` for prompt customization
