@@ -4,3 +4,8 @@
 .DS_Store
 .vscode/settings.json
 backup-manual-20250816-173504/current-symlinks.txt
+
+# @REVIEW: Zsh compiled bytecode files
+*.zwc
+.cache/
+cache/

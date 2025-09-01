@@ -2,38 +2,34 @@
 
 export LANG=en_US.UTF-8
 
-# Homebrew
-export DYLD_LIBRARY_PATH="$(brew --prefix)/lib:$DYLD_LIBRARY_PATH"
-
-# Go configuration
-export GOROOT=$(ls -d /opt/homebrew/Cellar/go/*/libexec | tail -n 1)
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
-
-# Bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-# PNPM
-export PNPM_HOME="/Users/sefat/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-
-# NVM setup
-export NVM_DIR=~/.nvm
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-if [[ $- == *i* ]]; then
-  nvm use default > /dev/null
+# Cache PATH modifications for ultra-fast startup
+if [[ ! -f "$HOME/.cache/zsh-path.cache" ]] || [[ "$HOME/.cache/zsh-path.cache" -ot "$0" ]]; then
+    mkdir -p "$HOME/.cache"
+    {
+        echo "#Cached PATH configuration"
+        echo "export DYLD_LIBRARY_PATH=\"/opt/homebrew/lib:\$DYLD_LIBRARY_PATH\""
+        echo "export GOROOT=\"/opt/homebrew/lib/go\""
+        echo "export GOPATH=\$HOME/go"
+        echo "export BUN_INSTALL=\"\$HOME/.bun\""
+        echo "export PNPM_HOME=\"/Users/sefat/Library/pnpm\""
+        echo "export NVM_DIR=~/.nvm"
+        echo "export EDITOR=\"nvim\""
+        
+        # Build optimized PATH
+        local NEW_PATH="/opt/homebrew/lib/go/bin:\$HOME/go/bin:\$HOME/.bun/bin:/Users/sefat/Library/pnpm:/Users/sefat/bin:/Users/sefat/.opencode/bin:\$PATH"
+        echo "export PATH=\"$NEW_PATH\""
+    } > "$HOME/.cache/zsh-path.cache"
 fi
+source "$HOME/.cache/zsh-path.cache"
 
-# Bit
-case ":$PATH:" in
-  *":/Users/sefat/bin:"*) ;;
-  *) export PATH="$PATH:/Users/sefat/bin" ;;
-esac
+# Ultra-fast lazy loading functions
+nvm() {
+    unset -f nvm npm node npx
+    [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+    nvm "$@"
+}
 
-# OpenCode
-export PATH=/Users/sefat/.opencode/bin:$PATH
-export EDITOR="nvim"
+# Single lazy loader for all Node tools
+for cmd in npm node npx; do
+    eval "$cmd() { nvm > /dev/null; $cmd \"\$@\"; }"
+done

@@ -54,6 +54,8 @@ brew "lsd"
 brew "neovim"
 # Manage multiple Node.js versions
 brew "nvm"
+# Smart, Fast and Extensible Build System
+brew "nx"
 # Fast, disk space efficient package manager
 brew "pnpm"
 # PDF rendering library (based on the xpdf-3.0 code base)
@@ -114,12 +116,8 @@ cask "bruno"
 cask "chatgpt"
 # Image, video and clipboard optimiser
 cask "clop"
-# Write, edit, and chat about your code with AI
-cask "cursor"
 # Disk space visualiser
 cask "daisydisk"
-# Window peeking utility app
-cask "dockdoor"
 # Excalidraw client
 cask "excalidrawz"
 cask "font-cascadia-code"
@@ -130,8 +128,6 @@ cask "ghostty"
 cask "google-chrome"
 # Free and open-source media player
 cask "iina"
-# Adaptive brightness for external displays
-cask "lunar"
 # Native desktop app for Messenger (formerly Facebook Messenger)
 cask "messenger"
 # App to write, plan, collaborate, and get organised
@@ -160,6 +156,7 @@ vscode "angular.ng-template"
 vscode "eamodio.gitlens"
 vscode "github.copilot"
 vscode "github.copilot-chat"
+vscode "nrwl.angular-console"
 vscode "tal7aouy.icons"
 vscode "webhooked.kanso-theme"
 vscode "yoavbls.pretty-ts-errors"
