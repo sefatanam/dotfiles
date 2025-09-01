@@ -3,27 +3,40 @@
 
 export LANG=en_US.UTF-8
 
-# Enable Powerlevel10k instant prompt
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Oh My Zsh configuration
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
-# Source modular configuration files
 ZSH_CONFIG_DIR="$HOME/.local/share/zsh"
-[[ -f "$ZSH_CONFIG_DIR/exports.zsh" ]] && source "$ZSH_CONFIG_DIR/exports.zsh"
-[[ -f "$ZSH_CONFIG_DIR/aliases.zsh" ]] && source "$ZSH_CONFIG_DIR/aliases.zsh"
-[[ -f "$ZSH_CONFIG_DIR/functions.zsh" ]] && source "$ZSH_CONFIG_DIR/functions.zsh"
-[[ -f "$ZSH_CONFIG_DIR/completions.zsh" ]] && source "$ZSH_CONFIG_DIR/completions.zsh"
 
-# Source private configuration if it exists
-[[ -f ~/.private ]] && source ~/.private
+_compile_zsh_file() {
+    local file="$1"
+    [[ -f "$file" && ( ! -f "${file}.zwc" || "$file" -nt "${file}.zwc" ) ]] && zcompile "$file"
+}
 
-# Source Powerlevel10k theme and configuration
+_source_compiled() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        _compile_zsh_file "$file"
+        source "$file"
+    fi
+}
+
+_source_compiled "$ZSH_CONFIG_DIR/exports.zsh"
+_source_compiled "$ZSH_CONFIG_DIR/aliases.zsh"
+_source_compiled "$ZSH_CONFIG_DIR/functions.zsh"
+_source_compiled "$ZSH_CONFIG_DIR/completions.zsh"
+
+source ~/.private
+
+_compile_zsh_file ~/.zshrc
+
 source $ZSH_CUSTOM/themes/powerlevel10k/powerlevel10k.zsh-theme
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+unset -f _compile_zsh_file _source_compiled
