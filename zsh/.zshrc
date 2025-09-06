@@ -2,14 +2,16 @@
 # .zshrc - Main zsh configuration (sources modular components)
 export LANG=en_US.UTF-8
 
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+# @NOT-NEED: p10k instant prompt (disabled for starship migration)
+# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# fi
 
-export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="powerlevel10k/powerlevel10k"
-plugins=(git)
-source $ZSH/oh-my-zsh.sh
+# @NOT-NEED: oh-my-zsh configuration (disabled for starship migration)
+# export ZSH="$HOME/.oh-my-zsh"
+# ZSH_THEME="powerlevel10k/powerlevel10k"
+# plugins=(git)
+# source $ZSH/oh-my-zsh.sh
 
 ZSH_CONFIG_DIR="$HOME/.local/share/zsh"
 
@@ -36,10 +38,18 @@ _source_compiled "$ZSH_CONFIG_DIR/completions.zsh"
 
 _compile_zsh_file ~/.zshrc
 
-source $ZSH_CUSTOM/themes/powerlevel10k/powerlevel10k.zsh-theme
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# @NOT-NEED: powerlevel10k theme loading (disabled for starship migration)
+# source $ZSH_CUSTOM/themes/powerlevel10k/powerlevel10k.zsh-theme
+# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# @REVIEW: Clean up helper functions
+
+# zsh plugins
 unset -f _compile_zsh_file _source_compiled
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# OpenJDK 21
+export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
+
+# Starship prompt
+eval "$(starship init zsh)"
