@@ -1,6 +1,4 @@
 tap "brewforge/extras"
-tap "homebrew/bundle"
-tap "homebrew/services"
 tap "jakehilborn/jakehilborn"
 tap "mohamedelashri/free-mac"
 tap "nikitabobko/tap"
@@ -11,7 +9,7 @@ brew "act"
 # Download with resuming and segmented downloading
 brew "aria2"
 # Improved shell history for zsh, bash, fish and nushell
-brew "atuin", restart_service: :changed
+brew "atuin"
 # Bourne-Again SHell, a UNIX command interpreter
 brew "bash"
 # Clone of cat(1) with syntax highlighting and Git integration
@@ -60,12 +58,14 @@ brew "maven"
 brew "neovim"
 # Manage multiple Node.js versions
 brew "nvm"
-# Smart, Fast and Extensible Build System
-brew "nx"
+# Open Fortinet client for PPP+TLS VPN tunnel services
+brew "openfortivpn"
 # Development kit for the Java programming language
 brew "openjdk@21"
 # Fast, disk space efficient package manager
 brew "pnpm"
+# Tool for managing OCI containers and pods
+brew "podman"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
 # Interpreted, interactive, object-oriented programming language
@@ -120,6 +120,8 @@ cask "app-tamer"
 cask "appcleaner"
 # Compact TeX distribution as alternative to the full TeX Live / MacTeX
 cask "basictex"
+# App for managing battery charging
+cask "batfi"
 # Display management tool
 cask "betterdisplay"
 # Desktop password and login vault
@@ -140,8 +142,6 @@ cask "cloudflare-warp"
 cask "daisydisk"
 # UI to create reproducible developer environments based on a devcontainer.json
 cask "devpod"
-# Excalidraw client
-cask "excalidrawz"
 cask "font-cascadia-code"
 cask "font-jetbrains-mono-nerd-font"
 cask "font-meslo-lg-nerd-font"
@@ -153,20 +153,24 @@ cask "google-chrome"
 cask "iina"
 # Native desktop app for Messenger (formerly Facebook Messenger)
 cask "messenger"
+# Provides updates to various Microsoft products
+cask "microsoft-auto-update"
+# Meet, chat, call, and collaborate in just one place
+cask "microsoft-teams"
 # App to write, plan, collaborate, and get organised
 cask "notion"
 # Open-source software for live streaming and screen recording
 cask "obs"
 # Verify system files structure, run miscellaneous maintenance and more
 cask "onyx"
-# Replacement for Docker Desktop
-cask "orbstack"
 # Archive manager for data compression and backups
 cask "rar"
 # Control your tools with a few keystrokes
 cask "raycast"
 # System monitor for the menu bar
 cask "stats"
+# Virtual machines UI using QEMU
+cask "utm"
 # Open-source code editor
 cask "visual-studio-code"
 # GPU-accelerated cross-platform terminal emulator and multiplexer
@@ -175,6 +179,8 @@ cask "wezterm"
 cask "whatsapp"
 # Gecko based web browser
 cask "zen"
+vscode "adpyke.codesnap"
+vscode "alefragnani.bookmarks"
 vscode "angular.ng-template"
 vscode "eamodio.gitlens"
 vscode "github.copilot"
