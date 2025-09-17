@@ -56,3 +56,6 @@ alias ghca="gh extension install github/gh-copilot"
 alias ghcs="gh copilot suggest"
 alias ghce="gh copilot explain"
 alias ghcup="gh extension upgrade gh-copilot"
+
+# Forticlient VPN connect
+alias fvpn="sudo openfortivpn -c ~/.openfortivpn/config"
