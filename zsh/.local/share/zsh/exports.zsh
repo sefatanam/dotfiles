@@ -33,3 +33,8 @@ nvm() {
 for cmd in npm node npx; do
     eval "$cmd() { nvm > /dev/null; $cmd \"\$@\"; }"
 done
+
+# dynamically set GOROOT versions and more
+export GOROOT=$(ls -d /opt/homebrew/Cellar/go/*/libexec | tail -n 1)
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin

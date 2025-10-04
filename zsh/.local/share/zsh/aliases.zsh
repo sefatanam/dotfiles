@@ -3,9 +3,11 @@
 # Directory navigation
 alias cdd='cd_to_dir ~/Documents/'
 alias cds='cd_to_dir'
+alias cd="z"
 
 # Enhanced ls
 alias es='eza -alF --color=always --sort=size | grep -v /'
+alias ls="eza --icons=always"
 
 # Applications
 alias n='nvim'
@@ -59,3 +61,17 @@ alias ghcup="gh extension upgrade gh-copilot"
 
 # Forticlient VPN connect
 alias fvpn="sudo openfortivpn -c ~/.openfortivpn/config"
+
+# Video conversion aliases
+alias v2g='vid2gif'
+
+# YouTube download aliases
+alias ytd-audio='_ytd_audio'
+alias ytd-playlist='_ytd_playlist'
+alias ytd-fast='_ytd_fast'
+alias ytd-best='_ytd_best'
+
+# homebrew
+alias bru="brew upgrade --greedy"
+alias brc="brew cleanup --prune=all"
+alias bro="brew outdated"
