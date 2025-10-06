@@ -23,3 +23,30 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     if mark[1] > 0 then vim.api.nvim_win_set_cursor(0, mark) end
   end,
 })
+
+-- treat the htmlangular filetype like html to trigger the html-lsp
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "htmlangular",
+  callback = function()
+    vim.bo.filetype = "html"
+  end,
+  desc = "Treat htmlangular as html"
+})
+
+-- Ultra-responsive completion
+-- vim.api.nvim_create_autocmd({"InsertEnter", "TextChangedI"}, {
+--   callback = function()
+--     local cmp = require('cmp')
+--     if not cmp.visible() then
+--       cmp.complete({
+--         config = {
+--           sources = {
+--             { name = 'nvim_lsp' },
+--             { name = 'buffer' },
+--             { name = 'path' },
+--           }
+--         }
+--       })
+--     end
+--   end,
+-- })
