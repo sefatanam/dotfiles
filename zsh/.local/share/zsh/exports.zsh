@@ -33,3 +33,8 @@ nvm() {
 for cmd in npm node npx; do
     eval "$cmd() { nvm > /dev/null; $cmd \"\$@\"; }"
 done
+
+# @REVIEW: Dynamic Go configuration using Homebrew prefix
+export GOROOT="$(brew --prefix go)/libexec"
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin

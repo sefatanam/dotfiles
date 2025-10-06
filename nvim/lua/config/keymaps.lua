@@ -6,43 +6,6 @@ local map = vim.keymap.set
 map("n", ";", ":", { desc = "CMD enter command mode", noremap = true })
 map("n", "D", '"_d$', { desc = "Delete to the vois register.", noremap = true })
 
--- TELESCOPE MAPPINGS AND REMOVE DEFAULT LSP KEY BINDINGS
--- Remove the default mapping (KEY BINDINGS
--- vim.keymap.del("n", "<leader>ds")
--- map(
---   "n",
---   "<leader>ds",
---   "<cmd>Telescope diagnostics<CR>",
---   { noremap = true, silent = true, unique = true, desc = "LSP diagnostics loclist (Telescope)" }
--- )
-
--- Define Telescope overrides
--- map("n", "<leader>gd", function()
---   require("telescope.builtin").lsp_definitions()
--- end, { noremap = true, silent = true, desc = "Telescope LSP definitions" })
---
--- map("n", "<leader>gD", function()
---   require("telescope.builtin").lsp_declarations()
--- end, { noremap = true, silent = true, desc = "Telescope LSP declarations" })
---
--- map("n", "<leader>gi", function()
---   require("telescope.builtin").lsp_implementations()
--- end, { noremap = true, silent = true, desc = "Telescope LSP implementations" })
---
--- map("n", "<leader>gr", function()
---   require("telescope.builtin").lsp_references()
--- end, { noremap = true, silent = true, desc = "Telescope LSP references" })
---
--- map({ "n", "v" }, "<leader>ghc", "<cmd>Telescope git_commits<CR>", { unique = true, desc = "Commits" })
--- map({ "n", "v" }, "<leader>ghb", "<cmd>Telescope git_branches<CR>", { unique = true, desc = "Git branch list" })
--- map({ "n", "v" }, "<leader>ml", "<cmd>Telescope marks<CR>", { unique = true, desc = "Show all marks list" })
--- map({ "n", "v" }, "<leader>mc", "<cmd>:delm! | delm A-Z0-9<CR>", { unique = true, desc = "Clear marks list" })
--- map(
---   "n",
---   "<leader>dz",
---   require("telescope.builtin").resume,
---   { desc = "Resume last telescope", noremap = true, unique = true }
--- )
 
 vim.api.nvim_set_keymap(
   "n",
@@ -94,7 +57,6 @@ vim.api.nvim_create_user_command("TOhtml", function()
   end
 end, {})
 
-map("n", "<C-w>", ":bdelete<cr>", { desc = "Delete Current Buffer", silent = true, unique = true })
 if not vim.g.vscode then
   -- Map H to previous buffer
   map("n", "<S-Tab>", ":bprev<CR>", { desc = "Previous buffer", silent = true, unique = true })
@@ -132,6 +94,5 @@ if vim.g.vscode then
   keymap({ "n", "v" }, "<leader>fd", "<cmd>lua require('vscode').action('editor.action.formatDocument')<CR>")
 end
 
-
-vim.keymap.set("n", "<leader>\\", ":Copilot disable<CR>", { noremap = true, silent = true })
+-- ref theprimeagen
 vim.keymap.set({"n","v"}, "<leader>p","\",_dP", { noremap = true, silent = true, desc = "Paste without replacing the default register" })

@@ -1,8 +1,6 @@
 return {
   {
     "webhooked/kanso.nvim",
-    lazy = false,
-    priority = 1000,
     config = function()
       require("kanso").setup({
         compile = false,
@@ -12,29 +10,45 @@ return {
         keywordStyle = { italic = true },
         statementStyle = {},
         typeStyle = {},
-        transparent = false,
+        transparent = true,
         dimInactive = false,
         terminalColors = true,
-        colors = {
-          palette = {},
-          theme = { zen = {}, pearl = {}, ink = {}, all = {} },
-        },
-        overrides = function(colors)
-          return {}
-        end,
-        background = {
-          dark = "zen", -- Use zen theme for dark mode
-          light = "zen" -- Use zen theme for light mode
+        styles = {
+          sidebars = "transparent",
+          floats = "transparent",
         },
       })
-      -- @REVIEW: Load zen variant directly using kanso's load function
-      require("kanso").load("zen")
+    end,
+  },
+  {
+    "EdenEast/nightfox.nvim",
+    config = function()
+      require('nightfox').setup({
+        options = {
+          transparent = true
+        }
+      })
+    end
+  },
+  {
+    'projekt0n/github-nvim-theme',
+    name = 'github-theme',
+    lazy = false,    -- make sure we load this during startup if it is your main colorscheme
+    priority = 1000, -- make sure to load this before all the other start plugins
+    config = function()
+      require('github-theme').setup({
+        options = {
+          transparent = true
+        }
+      })
+
     end,
   },
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "kanso",
+      -- colorscheme = "kanso-zen",
+      colorscheme = "Terafox",
     },
   },
 }
