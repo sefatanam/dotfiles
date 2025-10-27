@@ -44,6 +44,9 @@ alias td='tmux detach'
 # NPM aliases
 alias ns="npm start"
 alias nd="npm run dev"
+alias nf="npm run format"
+alias nl="npm run lint"
+alias nlf="nl && nf"
 
 # Utility aliases
 alias cat="glow"
@@ -75,3 +78,6 @@ alias ytd-best='_ytd_best'
 alias bru="brew upgrade --greedy"
 alias brc="brew cleanup --prune=all"
 alias bro="brew outdated"
+
+# MISC - Project Specific
+alias mvn="mvn spring-boot:run '-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'"
