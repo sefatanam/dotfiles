@@ -67,6 +67,7 @@ alias fvpn="sudo openfortivpn -c ~/.openfortivpn/config"
 
 # Video conversion aliases
 alias v2g='vid2gif'
+alias ff='ffwd' # @REVIEW
 
 # YouTube download aliases
 alias ytd-audio='_ytd_audio'

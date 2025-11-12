@@ -159,6 +159,120 @@ vid2gif() {
     echo "GIF created: $output_gif"
 }
 
+# Fast-forward video (speed up playback) @REVIEW
+ffwd() {
+    if ! command -v ffmpeg >/dev/null 2>&1; then
+        echo "❌ ffmpeg not found. Install with: brew install ffmpeg"
+        return 1
+    fi
+
+    if [ $# -eq 0 ]; then
+        echo "⚡ Fast Forward Video"
+        echo "Usage: ffwd <video_path> [speed_multiplier] [output_file]"
+        echo ""
+        echo "Supported speed multipliers:"
+        echo "  1.5 - 50% faster (default)"
+        echo "  2   - 2x speed"
+        echo "  3   - 3x speed"
+        echo "  4   - 4x speed"
+        echo "  Or any custom value (e.g., 1.25, 2.5)"
+        echo ""
+        echo "Examples:"
+        echo "  ffwd video.mp4           # 1.5x speed, auto-named output"
+        echo "  ffwd video.mp4 2         # 2x speed"
+        echo "  ffwd video.mp4 3 fast.mp4 # 3x speed with custom output name"
+        return 1
+    fi
+
+    local input_video="$1"
+    local speed="${2:-1.5}"  # Default to 1.5x speed
+    local output_file="$3"
+
+    if [ ! -f "$input_video" ]; then
+        echo "❌ Error: Video file '$input_video' not found"
+        return 1
+    fi
+
+    # Validate speed is a positive number
+    if ! [[ "$speed" =~ ^[0-9]+(\.[0-9]+)?$ ]] || [ "$(echo "$speed <= 0" | bc)" -eq 1 ]; then
+        echo "❌ Error: Speed multiplier must be a positive number"
+        return 1
+    fi
+
+    # Auto-generate output filename if not provided
+    if [ -z "$output_file" ]; then
+        local filename_without_ext="${input_video%.*}"
+        local extension="${input_video##*.}"
+        output_file="${filename_without_ext}_${speed}x.${extension}"
+    fi
+
+    echo "⚡ Fast-forwarding video at ${speed}x speed..."
+    echo "📁 Input: $input_video"
+    echo "📁 Output: $output_file"
+
+    # Calculate video PTS (presentation timestamp) divisor
+    local video_pts=$(echo "scale=10; 1/$speed" | bc)
+
+    # Check if video has audio stream
+    local has_audio=$(ffprobe -v error -select_streams a:0 -show_entries stream=codec_type -of default=noprint_wrappers=1:nokey=1 "$input_video" 2>/dev/null)
+
+    if [ -n "$has_audio" ]; then
+        echo "🎵 Processing video with audio..."
+
+        # Build audio filter chain for atempo
+        # atempo filter is limited to 0.5-2.0 range, so we need to chain multiple filters for speeds >2x
+        local atempo_chain=""
+        local remaining_speed=$speed
+
+        # Chain atempo filters to achieve the desired speed
+        while [ "$(echo "$remaining_speed > 2.0" | bc)" -eq 1 ]; do
+            if [ -z "$atempo_chain" ]; then
+                atempo_chain="atempo=2.0"
+            else
+                atempo_chain="${atempo_chain},atempo=2.0"
+            fi
+            remaining_speed=$(echo "scale=10; $remaining_speed/2.0" | bc)
+        done
+
+        # Add the final atempo filter for the remaining speed
+        if [ -z "$atempo_chain" ]; then
+            atempo_chain="atempo=${remaining_speed}"
+        else
+            atempo_chain="${atempo_chain},atempo=${remaining_speed}"
+        fi
+
+        # Build and execute ffmpeg command with audio
+        ffmpeg -i "$input_video" \
+            -filter_complex "[0:v]setpts=${video_pts}*PTS[v];[0:a]${atempo_chain}[a]" \
+            -map "[v]" -map "[a]" \
+            -c:v libx264 -preset medium -crf 23 \
+            -c:a aac -b:a 192k \
+            -y "$output_file"
+    else
+        echo "🎬 Processing video without audio..."
+
+        # Build and execute ffmpeg command without audio
+        ffmpeg -i "$input_video" \
+            -filter:v "setpts=${video_pts}*PTS" \
+            -c:v libx264 -preset medium -crf 23 \
+            -an \
+            -y "$output_file"
+    fi
+
+    if [ $? -eq 0 ]; then
+        echo "✅ Video fast-forwarded successfully!"
+        echo "📁 Saved as: $output_file"
+
+        # Show file size comparison
+        local input_size=$(du -h "$input_video" | cut -f1)
+        local output_size=$(du -h "$output_file" | cut -f1)
+        echo "📊 Size: $input_size → $output_size"
+    else
+        echo "❌ Fast-forward failed. Please check the input file and try again."
+        return 1
+    fi
+}
+
 # YouTube video downloader with yt-dlp
 ytd() {
     if ! command -v yt-dlp >/dev/null 2>&1; then
