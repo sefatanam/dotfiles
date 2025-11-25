@@ -8,7 +8,7 @@ if [[ ! -f "$HOME/.cache/zsh-path.cache" ]] || [[ "$HOME/.cache/zsh-path.cache" 
     {
         echo "#Cached PATH configuration"
         echo "export DYLD_LIBRARY_PATH=\"/opt/homebrew/lib:\$DYLD_LIBRARY_PATH\""
-        echo "export GOROOT=\"/opt/homebrew/lib/go\""
+        echo "export GOROOT=\"/opt/homebrew/opt/go/libexec\""
         echo "export GOPATH=\$HOME/go"
         echo "export BUN_INSTALL=\"\$HOME/.bun\""
         echo "export PNPM_HOME=\"/Users/sefat/Library/pnpm\""
@@ -16,7 +16,7 @@ if [[ ! -f "$HOME/.cache/zsh-path.cache" ]] || [[ "$HOME/.cache/zsh-path.cache" 
         echo "export EDITOR=\"nvim\""
         
         # Build optimized PATH
-        local NEW_PATH="/opt/homebrew/lib/go/bin:\$HOME/go/bin:\$HOME/.bun/bin:/Users/sefat/Library/pnpm:/Users/sefat/bin:/Users/sefat/.opencode/bin:\$PATH"
+        local NEW_PATH="/opt/homebrew/opt/go/libexec/bin:\$HOME/go/bin:\$HOME/.bun/bin:/Users/sefat/Library/pnpm:/Users/sefat/bin:/Users/sefat/.opencode/bin:\$PATH"
         echo "export PATH=\"$NEW_PATH\""
     } > "$HOME/.cache/zsh-path.cache"
 fi
@@ -33,11 +33,6 @@ nvm() {
 for cmd in npm node npx; do
     eval "$cmd() { nvm > /dev/null; $cmd \"\$@\"; }"
 done
-
-# @REVIEW: Dynamic Go configuration using Homebrew prefix
-export GOROOT="$(brew --prefix go)/libexec"
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 # OpenJDK 21
 export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
