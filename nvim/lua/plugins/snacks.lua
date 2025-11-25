@@ -1,6 +1,9 @@
 return {
   "folke/snacks.nvim",
   opts = {
+    image = { enabled = true, force = true, env = { SNACKS_GHOSTTY = true }, },
+    scroll = { enabled = true },
+    statuscolumn = { enabled = true },
     explorer = {
       open = true,
       follow = true,
@@ -15,6 +18,10 @@ return {
       },
     },
   },
+  config = function(_, opts)
+    require("snacks").setup(opts)
+    vim.ui.select = require("snacks").picker.select
+  end,
   keys = {
     {
       "<C-n>",
