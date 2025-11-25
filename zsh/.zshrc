@@ -48,8 +48,5 @@ unset -f _compile_zsh_file _source_compiled
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# OpenJDK 21
-export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
-
 # Starship prompt
 eval "$(starship init zsh)"

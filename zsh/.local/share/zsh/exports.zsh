@@ -38,3 +38,15 @@ done
 export GOROOT="$(brew --prefix go)/libexec"
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+
+# OpenJDK 21
+export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
+
+# Valdi configuration begin
+export ANDROID_HOME="$HOME/.valdi/android_home"
+# export ANDROID_NDK_HOME="$ANDROID_HOME/ndk-bundle"
+export ANDROID_NDK_HOME=/Users/sefat/.valdi/android_home/ndk/25.2.9519653
+export CPPFLAGS="-I/opt/homebrew/opt/openjdk@17/include"
+export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
+export JAVA_HOME="/usr/libexec/java_home -v 17"
+# Valdi configuration end
