@@ -1,3 +1,0 @@
-return {
-  { "joeveiga/ng.nvim" },
-}

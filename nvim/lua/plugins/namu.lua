@@ -15,7 +15,6 @@ return {
             write_shada = false, -- If you open multiple nvim instances, then probably you need to enable this
           },
         },
-        ui_select = { enable = true }, -- vim.ui.select() wrapper
       })
 
       vim.keymap.set("n", "<leader>ns", ":Namu symbols<cr>", {
