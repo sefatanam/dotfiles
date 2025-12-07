@@ -18,17 +18,16 @@ alias reload-zsh="source ~/.zshrc"
 alias edit-zsh="nvim ~/.zshrc"
 
 # Git aliases
-alias gs='git status'
-alias gp='git pull --rebase'
-alias gP='git push'
-alias gc='git commit -m'
-alias grh='git reset --hard'
-alias gts='git stash'
-alias gtp='git stash pop'
-alias gl='git log --oneline'
+# alias gs='git status'
+# alias gp='git pull --rebase'
+# alias gP='git push'
+# alias gc='git commit -m'
+# alias grh='git reset --hard'
+# alias gts='git stash'
+# alias gtp='git stash pop'
+# alias gl='git log --oneline'
 alias gcn='git config --local user.name "$GIT_NAME"'
 alias gce='git config --local user.email "$GIT_EMAIL"'
-alias gcl='gce && gcn'
 alias gcll='git config --local --list'
 alias grp="git remote prune origin"
 
@@ -50,8 +49,6 @@ alias nlf="nl && nf"
 
 # Utility aliases
 alias cat="glow"
-alias c='clear'
-alias e='exit'
 
 # GitHub aliases
 alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
@@ -76,9 +73,9 @@ alias ytd-fast='_ytd_fast'
 alias ytd-best='_ytd_best'
 
 # homebrew
+# alias bru="brew upgrade --greedy"
 alias bru="brew upgrade --greedy"
 alias brc="brew cleanup --prune=all"
-alias bro="brew outdated"
 
 # MISC - Project Specific
-alias mvn="mvn spring-boot:run '-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'"
+alias rca="mvn spring-boot:run '-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'"
