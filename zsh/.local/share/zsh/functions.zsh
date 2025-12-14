@@ -290,9 +290,12 @@ ytd() {
         echo "  2k     - 2560x1440"
         echo "  4k     - 3840x2160 (default)"
         echo ""
-        echo "Default download location: ~/Downloads/"
-        echo ""
-        echo "Examples:"
+    echo "Default download location: ~/Downloads/"
+    echo ""
+    echo "Note: Uses Safari cookies for YouTube authentication"
+    echo "      Make sure you're signed into YouTube in Safari"
+    echo ""
+    echo "Examples:"
         echo "  ytd https://youtube.com/watch?v=..."
         echo "  ytd https://youtube.com/watch?v=... 1080p"
         echo "  ytd https://youtube.com/watch?v=... 720p ~/Videos/"
@@ -321,6 +324,7 @@ ytd() {
     esac
 
     echo "🎥 Downloading YouTube video in ${resolution}..."
+    echo "🔐 Using Safari cookies for authentication..."
     echo "📁 Output directory: $download_dir"
 
     # Format selection with fallbacks
@@ -345,8 +349,11 @@ ytd() {
     local output_template="$download_dir/[%(height)sp] %(title)s.%(ext)s"
     local expected_file="$download_dir/[*] *.mp4"
 
-    # Download with yt-dlp
+    # @REVIEW: Added Safari cookie authentication for YouTube bot detection bypass
     yt-dlp \
+        --cookies-from-browser safari \
+        --extractor-retries 3 \
+        --retry-sleep 5 \
         --format "$format_selector" \
         --output "$output_template" \
         --embed-chapters \
@@ -359,14 +366,19 @@ ytd() {
     if [ $? -eq 0 ]; then
         echo "✅ Download completed successfully!"
         # Find and show the actual downloaded file
-        local downloaded_file=$(ls -t "$download_dir"/[*]*.mp4 2>/dev/null | head -1)
+        local downloaded_file=$(ls -t "$download_dir"/*.mp4 2>/dev/null | head -1)
         if [ -n "$downloaded_file" ]; then
             echo "📁 File saved: $downloaded_file"
         else
             echo "📂 Files saved to: $download_dir"
         fi
     else
-        echo "❌ Download failed. Please check the URL and try again."
+        echo "❌ Download failed."
+        echo ""
+        echo "💡 Troubleshooting:"
+        echo "   1. Sign into YouTube in Safari (youtube.com)"
+        echo "   2. Update yt-dlp: brew upgrade yt-dlp"
+        echo "   3. Check video availability and region restrictions"
         return 1
     fi
 }
@@ -383,6 +395,7 @@ _ytd_audio() {
         echo "Usage: ytd-audio <youtube_url> [output_dir]"
         echo "Downloads best quality audio (usually 128-320kbps)"
         echo "Default download location: ~/Downloads/"
+        echo "Note: Requires YouTube sign-in via Safari"
         return 1
     fi
 
@@ -392,9 +405,14 @@ _ytd_audio() {
     mkdir -p "$download_dir"
 
     echo "🎵 Downloading audio from YouTube..."
+    echo "🔐 Using Safari cookies for authentication..."
     echo "📁 Output directory: $download_dir"
 
+    # @REVIEW: Added Safari cookie authentication
     yt-dlp \
+        --cookies-from-browser safari \
+        --extractor-retries 3 \
+        --retry-sleep 5 \
         --extract-audio \
         --audio-format mp3 \
         --audio-quality 0 \
@@ -413,6 +431,7 @@ _ytd_audio() {
         fi
     else
         echo "❌ Audio download failed."
+        echo "💡 Make sure you're signed into YouTube in Safari"
         return 1
     fi
 }
@@ -440,6 +459,7 @@ _ytd_playlist() {
     mkdir -p "$playlist_dir"
 
     echo "📋 Downloading playlist in ${resolution}..."
+    echo "🔐 Using Safari cookies for authentication..."
     echo "📁 Output directory: $playlist_dir"
 
     # Get playlist title for subdirectory
@@ -464,7 +484,11 @@ _ytd_playlist() {
 
     local format_selector="bestvideo[height<=${height}]+bestaudio/best"
 
+    # @REVIEW: Added Safari cookie authentication
     yt-dlp \
+        --cookies-from-browser safari \
+        --extractor-retries 3 \
+        --retry-sleep 5 \
         --format "$format_selector" \
         --output "$playlist_dir/%(playlist_index)02d - %(title)s.%(ext)s" \
         --embed-chapters \
@@ -479,6 +503,7 @@ _ytd_playlist() {
         echo "📁 Downloaded $file_count videos"
     else
         echo "❌ Playlist download failed."
+        echo "💡 Make sure you're signed into YouTube in Safari"
         return 1
     fi
 }
@@ -504,9 +529,13 @@ _ytd_fast() {
     mkdir -p "$download_dir"
 
     echo "⚡ Fast downloading from YouTube..."
+    echo "🔐 Using Safari cookies for authentication..."
     echo "📁 Output directory: $download_dir"
 
+    # @REVIEW: Added Safari cookie authentication
     yt-dlp \
+        --cookies-from-browser safari \
+        --extractor-retries 3 \
         --format "best[height<=1080]" \
         --output "$download_dir/[FAST] %(title)s.%(ext)s" \
         "$url"
@@ -522,6 +551,7 @@ _ytd_fast() {
         fi
     else
         echo "❌ Fast download failed."
+        echo "💡 Make sure you're signed into YouTube in Safari"
         return 1
     fi
 }
@@ -547,9 +577,14 @@ _ytd_best() {
     mkdir -p "$download_dir"
 
     echo "🏆 Downloading best quality from YouTube..."
+    echo "🔐 Using Safari cookies for authentication..."
     echo "📁 Output directory: $download_dir"
 
+    # @REVIEW: Added Safari cookie authentication
     yt-dlp \
+        --cookies-from-browser safari \
+        --extractor-retries 3 \
+        --retry-sleep 5 \
         --format "bestvideo+bestaudio/best" \
         --output "$download_dir/[BEST] %(title)s.%(ext)s" \
         --embed-chapters \
@@ -571,6 +606,7 @@ _ytd_best() {
         fi
     else
         echo "❌ Best quality download failed."
+        echo "💡 Make sure you're signed into YouTube in Safari"
         return 1
     fi
 }
