@@ -48,5 +48,23 @@ unset -f _compile_zsh_file _source_compiled
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+# OpenJDK 21
+export JAVA_HOME="/opt/homebrew/opt/openjdk"
+export PATH="$JAVA_HOME/bin:$PATH"
+
+# export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
+# export CPPFLAGS="-I/opt/homebrew/opt/openjdk@21/include"
+
 # Starship prompt
 eval "$(starship init zsh)"
+
+# # Valdi configuration begin
+# export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
+# export JAVA_HOME=`/usr/libexec/java_home -v 11`
+# export ANDROID_HOME="$HOME/.valdi/android_home"
+# export ANDROID_NDK_HOME="$ANDROID_HOME/ndk-bundle"
+# # Valdi configuration end
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/sefat/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
