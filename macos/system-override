@@ -9,3 +9,7 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 # Set a blazingly fast keyboard repeat rate
 defaults write NSGlobalDomain KeyRepeat -int 1
 defaults write NSGlobalDomain InitialKeyRepeat -int 10
+
+# Moving a macOS window by clicking anywhere on it (like on Linux)
+# https://mmazzarolo.com/blog/2022-04-16-drag-window-by-clicking-anywhere-on-macos/
+defaults write -g NSWindowShouldDragOnGesture -bool true
