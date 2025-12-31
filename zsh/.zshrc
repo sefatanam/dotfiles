@@ -68,3 +68,8 @@ eval "$(starship init zsh)"
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
 export PATH="/Users/sefat/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/sefat/.lmstudio/bin"
+# End of LM Studio CLI section
+
