@@ -1,39 +1,56 @@
-
 theme = "kanso-zen"
 
-custom-shader-animation = true
+# ─── CLIPBOARD ───
 clipboard-read = allow
 clipboard-write = allow
-copy-on-select = false
-background-blur-radius = 10
-unfocused-split-opacity = 0.8
+copy-on-select = true
 
-#macos-titlebar-style = hidden
-font-size = 15
+# ─── CURSOR (Optimized for Neovim) ───
+cursor-style = block
+cursor-style-blink = false
 
-# font-family = "JetBrainsMono NF"
-# font-family = "FiraCode Nerd Font"
-font-family = "Comic Sans"
+# ─── FONT (Performance + Readability) ───
+font-size = 16
+font-family = "JetBrainsMono Nerd Font Propo"
+font-thicken = false
+adjust-cell-height = 0%
 
-mouse-hide-while-typing = true
-
-window-padding-balance = true
-window-save-state = always
-
-window-colorspace = display-p3
-window-save-state = always
-window-padding-x = 4
-window-padding-y = 4
+# ─── WINDOW (Maximize Screen Real Estate) ───
+window-padding-x = 2
+window-padding-y = 2
 window-padding-balance = true
 window-padding-color = background
-window-height = 170
-window-width = 200
+window-save-state = always
+window-colorspace = display-p3
+window-height = 180
+window-width = 220
 window-step-resize = true
+macos-titlebar-style = hidden
+macos-non-native-fullscreen = true
+adjust-cell-height = 15 
+confirm-close-surface = false
 
-clipboard-read = allow
-clipboard-write = allow
-copy-on-select = false
-unfocused-split-opacity = 0.8
+# ─── PERFORMANCE SETTINGS ───
+background-blur-radius = 0
+background-opacity = 1.0
+custom-shader-animation = false
+unfocused-split-opacity = 1.0
 
-cursor-style = block
+# ─── INPUT LATENCY ───
 mouse-hide-while-typing = true
+keybind = super+c=copy_to_clipboard
+keybind = super+v=paste_from_clipboard
+
+# ─── LINKS ───
+link-url = true
+
+# ─── AI AGENT SUPPORT (Claude, etc.) ───
+scrollback-limit = 50000
+mouse-scroll-multiplier = 3
+
+# ─── TMUX INTEGRATION ───
+# Disable shell integration (tmux handles this)
+shell-integration = none
+# Proper TERM for true colors in tmux
+term = xterm-ghostty
+
