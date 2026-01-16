@@ -36,22 +36,27 @@ return {
   -- Only load nvim-ufo when NOT running inside VSCode
   cond = not vim.g.vscode,
 
-  -- You can choose an event or key-based lazy-loading.
-  -- Here we load on VimEnter so folds are ready when buffer opens:
-  event = "VimEnter",
+  -- @REVIEW: Changed to BufReadPost for lazy loading
+  event = "BufReadPost",
 
   config = function()
-    -- At this point, both nvim-ufo and promise-async are on runtimepath
-    local ufo = require("ufo") -- [oai_citation:10‡ericapisani.dev](https://www.ericapisani.dev/how-to-install-nvim-ufo-in-lazyvim-to-enable-foldable-code-blocks/?utm_source=chatgpt.com)
+    -- @REVIEW: Skip setup for large files
+    if vim.b.large_file then
+      return
+    end
 
-    -- Optional: configure provider selector, fold handlers, etc.
+    -- At this point, both nvim-ufo and promise-async are on runtimepath
+    local ufo = require("ufo")
+
+    -- @REVIEW: Optimized ufo setup with performance tweaks
     ufo.setup({
       close_fold_kinds_for_ft = {
         default = { "imports", "comment" },
-        json = { "array" },
+        json = { "imports", "comment", "region", "marker" },
         c = { "comment", "region" },
       },
-      open_fold_hl_timeout = 150,
+      -- @REVIEW: Reduced highlight timeout for snappier feel
+      open_fold_hl_timeout = 100,
       preview = {
         win_config = {
           border = { "", "─", "", "", "", "─", "", "" },
@@ -65,7 +70,14 @@ return {
           jumpBot = "]",
         },
       },
-      provider_selector = function(_, ft, _)
+      -- @REVIEW: Use indent-based folding for better performance (treesitter is expensive)
+      provider_selector = function(bufnr, ft, _)
+        -- Skip for large files
+        local line_count = vim.api.nvim_buf_line_count(bufnr)
+        if line_count > 500 then
+          return { "indent" }
+        end
+
         local lsp_exceptions = {
           "markdown",
           "md",
@@ -80,8 +92,8 @@ return {
         if vim.tbl_contains(lsp_exceptions, ft) then
           return { "treesitter", "indent" }
         end
-        return { "treesitter", "indent" }
-        -- return { "lsp", "indent" }
+        -- @REVIEW: Default to indent for performance, treesitter as fallback
+        return { "indent" }
       end,
     })
 
@@ -97,7 +109,7 @@ return {
       if not winid then
         -- If no folded lines, fall back to LSP hover or Coc action
         vim.fn.CocActionAsync("definitionHover") -- if using Coc.nvim
-        vim.lsp.buf.hover() -- if using built-in LSP
+        vim.lsp.buf.hover()                      -- if using built-in LSP
       end
     end, { desc = "Peek Folded Lines / Hover" })
   end,

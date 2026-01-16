@@ -96,3 +96,36 @@ end
 
 -- ref theprimeagen
 vim.keymap.set({"n","v"}, "<leader>p","\",_dP", { noremap = true, silent = true, desc = "Paste without replacing the default register" })
+
+-- @REVIEW: Toggle performance mode for large files
+map("n", "<leader>up", function()
+  vim.b.large_file = not vim.b.large_file
+  if vim.b.large_file then
+    -- Enable performance mode
+    vim.opt_local.relativenumber = false
+    vim.opt_local.cursorline = false
+    vim.opt_local.foldmethod = "manual"
+    vim.opt_local.list = false
+
+    local ok, ts_context = pcall(require, "treesitter-context")
+    if ok then ts_context.disable() end
+
+    local ufo_ok, ufo = pcall(require, "ufo")
+    if ufo_ok then ufo.detach() end
+
+    vim.notify("Performance mode: ON", vim.log.levels.INFO)
+  else
+    -- Disable performance mode
+    vim.opt_local.relativenumber = true
+    vim.opt_local.cursorline = true
+    vim.opt_local.list = true
+
+    local ok, ts_context = pcall(require, "treesitter-context")
+    if ok then ts_context.enable() end
+
+    local ufo_ok, ufo = pcall(require, "ufo")
+    if ufo_ok then ufo.attach() end
+
+    vim.notify("Performance mode: OFF", vim.log.levels.INFO)
+  end
+end, { desc = "Toggle performance mode" })

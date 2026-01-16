@@ -1,35 +1,49 @@
 return {
-  -- {
-  --   "webhooked/kanso.nvim",
-  --   config = function()
-  --     require("kanso").setup({
-  --       compile = false,
-  --       undercurl = true,
-  --       commentStyle = { italic = true },
-  --       functionStyle = {},
-  --       keywordStyle = { italic = true },
-  --       statementStyle = {},
-  --       typeStyle = {},
-  --       transparent = true,
-  --       dimInactive = false,
-  --       terminalColors = true,
-  --       styles = {
-  --         sidebars = "transparent",
-  --         floats = "transparent",
-  --       },
-  --     })
-  --   end,
-  -- },
+  {
+    "webhooked/kanso.nvim",
+    config = function()
+      require("kanso").setup({
+        compile = false,
+        undercurl = true,
+        commentStyle = { italic = true },
+        functionStyle = {},
+        keywordStyle = { italic = true },
+        statementStyle = {},
+        typeStyle = {},
+        -- transparent = true,
+        -- dimInactive = false,
+        terminalColors = true,
+        -- styles = {
+        --   sidebars = "transparent",
+        --   floats = "transparent",
+        -- },
+      })
+    end,
+  },
   {
     "EdenEast/nightfox.nvim",
-    config = function()
-      require('nightfox').setup({
-        options = {
-          transparent = true
-        }
-      })
-    end
+    -- config = function()
+    --   require('nightfox').setup({
+    --     options = {
+    --       transparent = true
+    --     }
+    --   })
+    -- end
   },
+  { "ellisonleao/gruvbox.nvim" },
+  { "metalelf0/black-metal-theme-neovim", },
+  { "sainnhe/gruvbox-material" },
+  { "sainnhe/everforest" },
+  { "olimorris/onedarkpro.nvim" },
+  { "olivercederborg/poimandres.nvim" },
+  {
+    "rockyzhang24/arctic.nvim",
+    dependencies = { "rktjmp/lush.nvim" },
+    name = "arctic",
+    branch = "main",
+    priority = 1000,
+  },
+  { "Yazeed1s/oh-lucy.nvim" },
   -- {
   --   'projekt0n/github-nvim-theme',
   --   name = 'github-theme',
@@ -48,7 +62,8 @@ return {
     "LazyVim/LazyVim",
     opts = {
       -- colorscheme = "kanso-zen",
-      colorscheme = "Terafox",
+      -- colorscheme = "Terafox",
+      colorscheme = "gruvbox",
     },
   },
 }

@@ -10,7 +10,18 @@ return {
         padding = 0,
         margin = { horizontal = 0, vertical = 0 },
       },
+      -- @REVIEW: Debounce to reduce render frequency
+      debounce_threshold = {
+        falling = 50,
+        rising = 10,
+      },
       render = function(props)
+        -- @REVIEW: Skip rendering for large files
+        if vim.b[props.buf] and vim.b[props.buf].large_file then
+          local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
+          return { " ", filename, " ", guibg = "#44406e" }
+        end
+
         local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
         if filename == "" then
           filename = "[No Name]"
@@ -23,13 +34,21 @@ return {
           { filename, gui = modified and "bold,italic" or "bold" },
           guibg = "#44406e",
         }
+        -- @REVIEW: Only show navic breadcrumbs when focused (reduces LSP queries)
         if props.focused then
-          for _, item in ipairs(navic.get_data(props.buf) or {}) do
-            table.insert(res, {
-              { " > ", group = "NavicSeparator" },
-              { item.icon, group = "NavicIcons" .. item.type },
-              { item.name, group = "NavicText" },
-            })
+          local navic_data = navic.get_data(props.buf)
+          -- @REVIEW: Limit breadcrumb depth for performance
+          if navic_data then
+            local max_items = 3
+            local start_idx = math.max(1, #navic_data - max_items + 1)
+            for i = start_idx, #navic_data do
+              local item = navic_data[i]
+              table.insert(res, {
+                { " > ", group = "NavicSeparator" },
+                { item.icon, group = "NavicIcons" .. item.type },
+                { item.name, group = "NavicText" },
+              })
+            end
           end
         end
         table.insert(res, " ")

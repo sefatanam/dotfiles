@@ -23,12 +23,14 @@ vim.opt.listchars = {
 
 vim.opt.updatetime = 100
 vim.opt.timeoutlen = 300
-vim.opt.synmaxcol = 250
+-- @REVIEW: Increased synmaxcol limit slightly but still reasonable
+vim.opt.synmaxcol = 300
 vim.opt.smartindent = true
 vim.opt.termguicolors = true -- Enable 24-bit RGB colors
 vim.opt.signcolumn = "yes"
 
-vim.opt.listchars:append("space:.")
+-- @NOT-NEED: Space dots cause rendering overhead on every line
+-- vim.opt.listchars:append("space:.")
 -- Set to false to disable auto format
 vim.g.lazyvim_eslint_auto_format = false
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
@@ -49,4 +51,9 @@ vim.opt.sidescrolloff = 8
 vim.opt.completeopt = { "menuone", "noselect" }
 vim.opt.shortmess:append("c")
 vim.opt.pumheight = 10
+
+-- @REVIEW: Performance optimizations
+vim.opt.lazyredraw = false -- Keep false for modern Neovim (breaks some UI)
+vim.opt.redrawtime = 1500 -- Time for syntax highlighting (ms)
+vim.opt.maxmempattern = 5000 -- Max memory for pattern matching
 

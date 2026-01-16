@@ -13,7 +13,7 @@ return {
     },
     formatters = {
       prettier = {
-        prepend_args = function(self, ctx)
+        prepend_args = function(_, ctx)
           -- Add tailwind plugin for files that might use Tailwind
           print("Formatting with prettier, filetype:", ctx.filetype)
           local tailwind_filetypes = { "html", "vue", "svelte", "astro" }

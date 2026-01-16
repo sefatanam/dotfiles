@@ -2,8 +2,12 @@ return {
   "folke/snacks.nvim",
   opts = {
     image = { enabled = true, force = true, env = { SNACKS_GHOSTTY = true }, },
-    scroll = { enabled = true },
-    statuscolumn = { enabled = true },
+    -- @NOT-NEED: scroll animation causes major lag on large files
+    -- scroll = { enabled = true },
+    scroll = { enabled = false },
+    -- @NOT-NEED: statuscolumn redraws on every scroll
+    -- statuscolumn = { enabled = true },
+    statuscolumn = { enabled = false },
     explorer = {
       open = true,
       follow = true,

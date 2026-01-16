@@ -16,6 +16,68 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   end,
 })
 
+-- @REVIEW: Large file performance optimization
+-- Automatically disable heavy features for files > 500 lines or > 100KB
+vim.g.large_file_threshold_lines = 500
+vim.g.large_file_threshold_bytes = 100 * 1024 -- 100KB
+
+local large_file_group = vim.api.nvim_create_augroup("LargeFileOptimization", { clear = true })
+
+vim.api.nvim_create_autocmd("BufReadPre", {
+  group = large_file_group,
+  callback = function(args)
+    local file_size = vim.fn.getfsize(args.file)
+    if file_size > vim.g.large_file_threshold_bytes or file_size == -2 then
+      vim.b.large_file = true
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd("BufReadPost", {
+  group = large_file_group,
+  callback = function(args)
+    local line_count = vim.api.nvim_buf_line_count(args.buf)
+    if line_count > vim.g.large_file_threshold_lines then
+      vim.b.large_file = true
+    end
+
+    if vim.b.large_file then
+      -- Disable expensive features for large files
+      vim.opt_local.relativenumber = false
+      vim.opt_local.cursorline = false
+      vim.opt_local.foldmethod = "manual"
+      vim.opt_local.spell = false
+      vim.opt_local.list = false -- Disable listchars (space dots, etc.)
+
+      -- Disable treesitter highlighting for very large files
+      if line_count > 2000 then
+        vim.cmd("TSBufDisable highlight")
+        vim.cmd("TSBufDisable indent")
+      end
+
+      -- Disable treesitter-context
+      local ok, ts_context = pcall(require, "treesitter-context")
+      if ok then
+        ts_context.disable()
+      end
+
+      -- Disable nvim-ufo folding
+      local ufo_ok, ufo = pcall(require, "ufo")
+      if ufo_ok then
+        ufo.detach()
+      end
+
+      -- Disable incline breadcrumbs
+      local incline_ok, incline = pcall(require, "incline")
+      if incline_ok then
+        incline.disable()
+      end
+
+      vim.notify("Large file detected: Performance mode enabled", vim.log.levels.INFO)
+    end
+  end,
+})
+
 vim.api.nvim_create_autocmd("BufReadPost", {
   group = vim.api.nvim_create_augroup("RestoreCursor", { clear = true }),
   callback = function()
