@@ -1,0 +1,63 @@
+# alacritty.toml
+[general]
+import = [
+    "~/.config/alacritty/themes/themes/gruvbox_material.toml"
+]
+
+[env]
+TERM = "xterm-256color"
+
+[window]
+opacity = 1.0
+blur = false
+dynamic_title = true
+decorations = "Buttonless"  # macOS: hides titlebar
+
+[window.dimensions]
+columns = 220
+lines = 180
+
+[window.padding]
+x = 2
+y = 2
+
+[scrolling]
+history = 50000
+multiplier = 3
+
+[font]
+size = 18.0
+
+[font.normal]
+# family = "Space Mono"
+family = "JetBrainsMono Nerd Font Propo"
+style = "Regular"
+
+[font.bold]
+# family = "Space Mono"
+family = "JetBrainsMono Nerd Font Propo"
+style = "Bold"
+
+[font.offset]
+x = 0
+y = 16
+
+[cursor.style]
+shape = "Block"
+blinking = "Never"
+
+[mouse]
+hide_when_typing = true
+
+[selection]
+save_to_clipboard = true
+
+[[keyboard.bindings]]
+key = "C"
+mods = "Command"
+action = "Copy"
+
+[[keyboard.bindings]]
+key = "V"
+mods = "Command"
+action = "Paste"
