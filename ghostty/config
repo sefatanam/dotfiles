@@ -1,4 +1,5 @@
-theme = "kanso-zen"
+#theme = "kanso-zen"
+theme = "Black Metal (Bathory)"
 
 # ─── CLIPBOARD ───
 clipboard-read = allow
@@ -10,10 +11,25 @@ cursor-style = block
 cursor-style-blink = false
 
 # ─── FONT (Performance + Readability) ───
-font-size = 16
-font-family = "JetBrainsMono Nerd Font Propo"
-font-thicken = false
-adjust-cell-height = 0%
+font-size = 18
+
+# ─── JetBrainsMono Font Settings ───
+# font-thicken = false
+# font-family = "JetBrainsMono Nerd Font Propo"
+# adjust-cell-height = 15
+
+
+# ─── Fantasque Font Settings ───
+# font-family = "Fantasque Sans Mono"
+# font-thicken = false
+# adjust-cell-height = 0%
+# adjust-cell-height = 15
+
+# ─── SpaceMono Font Settings ───
+font-family = "Space Mono"
+# font-family = "JetBrains Mono"
+font-thicken = true
+adjust-cell-height = 16
 
 # ─── WINDOW (Maximize Screen Real Estate) ───
 window-padding-x = 2
@@ -27,7 +43,6 @@ window-width = 220
 window-step-resize = true
 macos-titlebar-style = hidden
 macos-non-native-fullscreen = true
-adjust-cell-height = 15 
 confirm-close-surface = false
 
 # ─── PERFORMANCE SETTINGS ───
