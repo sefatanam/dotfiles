@@ -6,6 +6,7 @@
     "lazyvim.plugins.extras.editor.fzf",
     "lazyvim.plugins.extras.editor.outline",
     "lazyvim.plugins.extras.editor.telescope",
+    "lazyvim.plugins.extras.formatting.prettier",
     "lazyvim.plugins.extras.lang.angular",
     "lazyvim.plugins.extras.lang.go",
     "lazyvim.plugins.extras.lang.json",
@@ -16,6 +17,7 @@
     "lazyvim.plugins.extras.ui.dashboard-nvim",
     "lazyvim.plugins.extras.ui.treesitter-context",
     "lazyvim.plugins.extras.util.dot",
+    "lazyvim.plugins.extras.util.mini-hipatterns",
     "lazyvim.plugins.extras.util.octo"
   ],
   "install_version": 8,

@@ -63,7 +63,7 @@ return {
     opts = {
       -- colorscheme = "kanso-zen",
       -- colorscheme = "Terafox",
-      colorscheme = "gruvbox",
+      colorscheme = "gruvbox-material",
     },
   },
 }

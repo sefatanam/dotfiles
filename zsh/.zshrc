@@ -2,17 +2,6 @@
 # .zshrc - Main zsh configuration (sources modular components)
 export LANG=en_US.UTF-8
 
-# @NOT-NEED: p10k instant prompt (disabled for starship migration)
-# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# fi
-
-# @NOT-NEED: oh-my-zsh configuration (disabled for starship migration)
-# export ZSH="$HOME/.oh-my-zsh"
-# ZSH_THEME="powerlevel10k/powerlevel10k"
-# plugins=(git)
-# source $ZSH/oh-my-zsh.sh
-
 ZSH_CONFIG_DIR="$HOME/.local/share/zsh"
 
 _compile_zsh_file() {
@@ -38,15 +27,23 @@ _source_compiled "$ZSH_CONFIG_DIR/completions.zsh"
 
 _compile_zsh_file ~/.zshrc
 
-# @NOT-NEED: powerlevel10k theme loading (disabled for starship migration)
-# source $ZSH_CUSTOM/themes/powerlevel10k/powerlevel10k.zsh-theme
-# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-
 # zsh plugins
 unset -f _compile_zsh_file _source_compiled
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+_load_syntax_highlighting() {
+    source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    unset -f _load_syntax_highlighting
+}
+# Load after first prompt using precmd hook
+_first_prompt_hook() {
+    _load_syntax_highlighting
+    # Remove this hook after first run
+    add-zsh-hook -d precmd _first_prompt_hook
+    unset -f _first_prompt_hook
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd _first_prompt_hook
 
 # OpenJDK 21
 export JAVA_HOME="/opt/homebrew/opt/openjdk"
@@ -55,8 +52,14 @@ export PATH="$JAVA_HOME/bin:$PATH"
 # export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
 # export CPPFLAGS="-I/opt/homebrew/opt/openjdk@21/include"
 
-# Starship prompt
-eval "$(starship init zsh)"
+# @REVIEW: Cached starship init for faster startup (like zoxide/atuin)
+_starship_cache="$HOME/.cache/zsh-init/starship-init.zsh"
+if [[ ! -f "$_starship_cache" ]] || [[ "$_starship_cache" -ot $(command -v starship) ]]; then
+    mkdir -p "$HOME/.cache/zsh-init"
+    starship init zsh > "$_starship_cache"
+fi
+source "$_starship_cache"
+unset _starship_cache
 
 # # Valdi configuration begin
 # export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
@@ -73,3 +76,4 @@ export PATH="/Users/sefat/.rd/bin:$PATH"
 export PATH="$PATH:/Users/sefat/.lmstudio/bin"
 # End of LM Studio CLI section
 
+export PATH="$HOME/.local/bin:$PATH"

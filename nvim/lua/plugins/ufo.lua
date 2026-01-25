@@ -72,9 +72,9 @@ return {
       },
       -- @REVIEW: Use indent-based folding for better performance (treesitter is expensive)
       provider_selector = function(bufnr, ft, _)
-        -- Skip for large files
+        -- Skip treesitter for large files (>1500 lines), use indent only
         local line_count = vim.api.nvim_buf_line_count(bufnr)
-        if line_count > 500 then
+        if line_count > 1500 then
           return { "indent" }
         end
 

@@ -1,7 +1,5 @@
 # exports.zsh - Environment variables and PATH modifications
 
-export LANG=en_US.UTF-8
-
 # Cache PATH modifications for ultra-fast startup
 if [[ ! -f "$HOME/.cache/zsh-path.cache" ]] || [[ "$HOME/.cache/zsh-path.cache" -ot "$0" ]]; then
     mkdir -p "$HOME/.cache"

@@ -16,9 +16,11 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   end,
 })
 
--- @REVIEW: Large file performance optimization
--- Automatically disable heavy features for files > 500 lines or > 100KB
-vim.g.large_file_threshold_lines = 500
+-- Automatically disable heavy features for large files
+-- NOTE: Adjust these thresholds based on your machine's performance
+--   - Lower values (500 lines / 50KB) = more aggressive, better for slow machines
+--   - Higher values (2000 lines / 500KB) = less aggressive, keeps more features
+vim.g.large_file_threshold_lines = 1500
 vim.g.large_file_threshold_bytes = 100 * 1024 -- 100KB
 
 local large_file_group = vim.api.nvim_create_augroup("LargeFileOptimization", { clear = true })
@@ -94,21 +96,3 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
   desc = "Treat htmlangular as html"
 })
-
--- Ultra-responsive completion
--- vim.api.nvim_create_autocmd({"InsertEnter", "TextChangedI"}, {
---   callback = function()
---     local cmp = require('cmp')
---     if not cmp.visible() then
---       cmp.complete({
---         config = {
---           sources = {
---             { name = 'nvim_lsp' },
---             { name = 'buffer' },
---             { name = 'path' },
---           }
---         }
---       })
---     end
---   end,
--- })
