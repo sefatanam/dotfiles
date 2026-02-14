@@ -1,5 +1,8 @@
 return {
   {
+    "dgox16/oldworld.nvim",
+  },
+  {
     "webhooked/kanso.nvim",
     config = function()
       require("kanso").setup({
@@ -64,6 +67,7 @@ return {
       -- colorscheme = "kanso-zen",
       -- colorscheme = "Terafox",
       colorscheme = "gruvbox-material",
+      -- colorscheme = "everforest",
     },
   },
 }

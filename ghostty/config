@@ -1,5 +1,5 @@
 #theme = "kanso-zen"
-theme = "Black Metal (Bathory)"
+theme = "Gruvbox Material Dark"
 
 # ─── CLIPBOARD ───
 clipboard-read = allow
@@ -11,12 +11,13 @@ cursor-style = block
 cursor-style-blink = false
 
 # ─── FONT (Performance + Readability) ───
-font-size = 18
+font-size = 16
 
 # ─── JetBrainsMono Font Settings ───
-# font-thicken = false
-# font-family = "JetBrainsMono Nerd Font Propo"
-# adjust-cell-height = 15
+font-thicken = false
+#font-family = "JetBrainsMono Nerd Font Propo"
+font-family = "Maple Mono NF"
+adjust-cell-height = 15
 
 
 # ─── Fantasque Font Settings ───
@@ -26,10 +27,10 @@ font-size = 18
 # adjust-cell-height = 15
 
 # ─── SpaceMono Font Settings ───
-font-family = "Space Mono"
-# font-family = "JetBrains Mono"
-font-thicken = true
-adjust-cell-height = 16
+# font-family = "Space Mono"
+# font-family = "JetBrainsMono Nerd Font Propo"
+# font-thicken = true
+# adjust-cell-height = 16
 
 # ─── WINDOW (Maximize Screen Real Estate) ───
 window-padding-x = 2

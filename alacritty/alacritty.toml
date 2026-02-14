@@ -1,7 +1,7 @@
 # alacritty.toml
 [general]
 import = [
-    "~/.config/alacritty/themes/themes/gruvbox_material.toml"
+    "~/.config/alacritty/themes/themes/gruvbox_material_medium_dark.toml"
 ]
 
 [env]
@@ -26,21 +26,25 @@ history = 50000
 multiplier = 3
 
 [font]
-size = 18.0
+size = 16.0
 
 [font.normal]
 # family = "Space Mono"
 family = "JetBrainsMono Nerd Font Propo"
+# family = "Maple Mono NF"
+# family = "MonoLisaVariable Nerd Font"
 style = "Regular"
 
 [font.bold]
-# family = "Space Mono"
+# # family = "Space Mono"
 family = "JetBrainsMono Nerd Font Propo"
+# family = "Maple Mono NF"
+# family = "MonoLisaVariable Nerd Font"
 style = "Bold"
 
 [font.offset]
 x = 0
-y = 16
+y = 12
 
 [cursor.style]
 shape = "Block"

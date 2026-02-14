@@ -1,5 +1,20 @@
 # functions.zsh - Custom shell functions
 
+# Force recompile all zsh config files
+zsh-recompile() {
+    local files=(
+        "$HOME/.zshrc"
+        "$HOME/.local/share/zsh/exports.zsh"
+        "$HOME/.local/share/zsh/aliases.zsh"
+        "$HOME/.local/share/zsh/functions.zsh"
+        "$HOME/.local/share/zsh/completions.zsh"
+        "$HOME/.dotfiles/zsh/private"
+    )
+    for file in "${files[@]}"; do
+        [[ -f "$file" ]] && zcompile "$file" && echo "Compiled: $file"
+    done
+}
+
 # Lightweight directory navigation (no fzf dependency at startup)
 cd_to_dir() {
     if ! command -v fzf >/dev/null 2>&1; then

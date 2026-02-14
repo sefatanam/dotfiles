@@ -4,31 +4,26 @@ export LANG=en_US.UTF-8
 
 ZSH_CONFIG_DIR="$HOME/.local/share/zsh"
 
-_compile_zsh_file() {
-    local file="$1"
-    [[ -f "$file" && ( ! -f "${file}.zwc" || "$file" -nt "${file}.zwc" ) ]] && zcompile "$file"
+# @DISABLED: Auto-compilation - use zsh-recompile manually if needed
+# _compile_zsh_file() {
+#     local file="$1"
+#     [[ -f "$file" && ( ! -f "${file}.zwc" || "$file" -nt "${file}.zwc" ) ]] && zcompile "$file"
+# }
+
+_source_if_exists() {
+    [[ -f "$1" ]] && source "$1"
 }
 
-_source_compiled() {
-    local file="$1"
-    if [[ -f "$file" ]]; then
-        _compile_zsh_file "$file"
-        source "$file"
-    fi
-}
+_source_if_exists "$ZSH_CONFIG_DIR/exports.zsh"
+_source_if_exists "$ZSH_CONFIG_DIR/aliases.zsh"
+_source_if_exists "$ZSH_CONFIG_DIR/functions.zsh"
+_source_if_exists "$ZSH_CONFIG_DIR/completions.zsh"
 
-_source_compiled "$ZSH_CONFIG_DIR/exports.zsh"
-_source_compiled "$ZSH_CONFIG_DIR/aliases.zsh"
-_source_compiled "$ZSH_CONFIG_DIR/functions.zsh"
-_source_compiled "$ZSH_CONFIG_DIR/completions.zsh"
-
-[[ -f ~/.private ]] && _source_compiled ~/.private
-[[ -f "$HOME/.dotfiles/zsh/private" ]] && _source_compiled "$HOME/.dotfiles/zsh/private"
-
-_compile_zsh_file ~/.zshrc
+[[ -f ~/.private ]] && source ~/.private
+[[ -f "$HOME/.dotfiles/zsh/private" ]] && source "$HOME/.dotfiles/zsh/private"
 
 # zsh plugins
-unset -f _compile_zsh_file _source_compiled
+unset -f _source_if_exists
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 _load_syntax_highlighting() {

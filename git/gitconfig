@@ -126,6 +126,7 @@
   whitespace = nowarn
 [branch]
   autosetupmerge = true
+	sort = -committerdate
 [push]
   # 'git push' will push the current branch to its tracking branch
   # the usual default is to push all branches
@@ -147,3 +148,15 @@
   enabled = true
 # [include]
 #  path = .gitconfig.user
+[user]
+	name = Sefat Anam
+	email = sefatanam@gmail.com
+[pull]
+	rebase = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[column]
+	ui = auto

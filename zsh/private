@@ -1,6 +1,5 @@
 export GIT_NAME=""
 export GIT_EMAIL=""
-export GEMINI_API_KEY=""
 export TWEENTY_FIRST_UI_API_KEY=""
 export NOTION_API_TOKEN=""
 export FIGMA_API_KEY=""
