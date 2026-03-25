@@ -21,7 +21,7 @@ vim.opt.listchars = {
   nbsp = "␣",
 }
 
-vim.opt.updatetime = 100
+vim.opt.updatetime = 200
 vim.opt.timeoutlen = 300
 -- @REVIEW: Increased synmaxcol limit slightly but still reasonable
 vim.opt.synmaxcol = 300
@@ -57,3 +57,11 @@ vim.opt.lazyredraw = false -- Keep false for modern Neovim (breaks some UI)
 vim.opt.redrawtime = 1500 -- Time for syntax highlighting (ms)
 vim.opt.maxmempattern = 5000 -- Max memory for pattern matching
 
+-- Memory limits: cap unbounded defaults
+vim.opt.undolevels = 200       -- default 1000
+vim.opt.history = 500          -- default 10000
+vim.opt.shada = "!,'100,<50,s10,h" -- cap shada: 100 file marks, 50 lines/register, skip >10KB items
+
+-- Disable disk I/O on every change (redundant with undofile + git)
+vim.opt.swapfile = false
+vim.opt.backup   = false

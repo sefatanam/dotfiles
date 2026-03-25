@@ -15,10 +15,7 @@ vim.api.nvim_set_keymap(
 )
 
 map({ "n", "v", "i" }, "<leader>fs", function()
-  vim.lsp.buf.format({
-    async = false,
-    timeout_ms = 500,
-  })
+  vim.lsp.buf.format({ async = true })
 end, { unique = true, desc = "Format file or range (in visual mode)" })
 
 map("t", "<Esc>", [[<C-\><C-n>]], { noremap = true, desc = "Exit terminal mode" })

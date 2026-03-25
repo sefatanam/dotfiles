@@ -1,9 +1,26 @@
 return {
   {
+    "ydkulks/cursor-dark.nvim",
+    lazy = true,
+    config = function()
+      -- vim.cmd.colorscheme("cursor-dark-midnight")
+      require("cursor-dark").setup({
+        -- For theme
+        style = "dark-midnight",
+        -- For a transparent background
+        -- transparent = true,
+        -- If you have dashboard-nvim plugin installed
+        dashboard = true,
+      })
+    end,
+  },
+  {
     "dgox16/oldworld.nvim",
+    lazy = true,
   },
   {
     "webhooked/kanso.nvim",
+    lazy = true,
     config = function()
       require("kanso").setup({
         compile = false,
@@ -25,6 +42,7 @@ return {
   },
   {
     "EdenEast/nightfox.nvim",
+    lazy = true,
     -- config = function()
     --   require('nightfox').setup({
     --     options = {
@@ -33,20 +51,20 @@ return {
     --   })
     -- end
   },
-  { "ellisonleao/gruvbox.nvim" },
-  { "metalelf0/black-metal-theme-neovim", },
-  { "sainnhe/gruvbox-material" },
-  { "sainnhe/everforest" },
-  { "olimorris/onedarkpro.nvim" },
-  { "olivercederborg/poimandres.nvim" },
+  { "ellisonleao/gruvbox.nvim", lazy = true },
+  { "metalelf0/black-metal-theme-neovim", lazy = true },
+  { "sainnhe/gruvbox-material", lazy = false, priority = 1000 },
+  { "sainnhe/everforest", lazy = true },
+  { "olimorris/onedarkpro.nvim", lazy = true },
+  { "olivercederborg/poimandres.nvim", lazy = true },
   {
     "rockyzhang24/arctic.nvim",
     dependencies = { "rktjmp/lush.nvim" },
     name = "arctic",
     branch = "main",
-    priority = 1000,
+    lazy = true,
   },
-  { "Yazeed1s/oh-lucy.nvim" },
+  { "Yazeed1s/oh-lucy.nvim", lazy = true },
   -- {
   --   'projekt0n/github-nvim-theme',
   --   name = 'github-theme',

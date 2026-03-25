@@ -1,5 +1,6 @@
 return {
   "colomb8/rambo.nvim",
+  event = "VeryLazy",
   config = function()
     require("rambo").setup({
       -- c_right_mode = 'bow', -- 'bow' or 'eow'
