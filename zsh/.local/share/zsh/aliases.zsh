@@ -19,7 +19,7 @@ alias edit-zsh="nvim ~/.zshrc"
 
 # Git aliases
 # alias gs='git status'
-# alias gp='git pull --rebase'
+alias gp='git stash && git pull --rebase && git stash pop'
 # alias gP='git push'
 # alias gc='git commit -m'
 # alias grh='git reset --hard'

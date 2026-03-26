@@ -1,5 +1,29 @@
-#theme = "kanso-zen"
-theme = "Gruvbox Material Dark"
+# ─── COLOR SCHEME (GitHub Dark Dimmed) ───
+background = #151b23
+foreground = #d1d7e0
+cursor-color = #0576ff
+selection-background = #316dca
+selection-foreground = #f0f6fc
+
+# ANSI normal (0–7)
+palette = 0=#2f3742
+palette = 1=#f47067
+palette = 2=#57ab5a
+palette = 3=#c69026
+palette = 4=#539bf5
+palette = 5=#b083f0
+palette = 6=#39c5cf
+palette = 7=#f0f6fc
+
+# ANSI bright (8–15)
+palette = 8=#656c76
+palette = 9=#ff938a
+palette = 10=#6bc46d
+palette = 11=#daaa3f
+palette = 12=#6cb6ff
+palette = 13=#dcbdfb
+palette = 14=#56d4dd
+palette = 15=#cdd9e5
 
 # ─── CLIPBOARD ───
 clipboard-read = allow
@@ -9,34 +33,32 @@ copy-on-select = true
 # ─── CURSOR (Optimized for Neovim) ───
 cursor-style = block
 cursor-style-blink = false
+focus-follows-mouse = true
+mouse-hide-while-typing = true
 
 # ─── FONT (Performance + Readability) ───
 font-size = 16
 
-# ─── JetBrainsMono Font Settings ───
-font-thicken = false
-#font-family = "JetBrainsMono Nerd Font Propo"
-font-family = "Maple Mono NF"
-adjust-cell-height = 15
+# ─── Font Settings ───
+font-family = "IBM Plex Mono"
+font-style = Light
+font-family-bold = "IBM Plex Mono"
+font-style-bold = Bold
+font-family-italic = "IBM Plex Mono"
+font-style-italic = Italic
+font-family-bold-italic = "IBM Plex Mono"
+font-style-bold-italic = Bold Italic
 
-
-# ─── Fantasque Font Settings ───
-# font-family = "Fantasque Sans Mono"
-# font-thicken = false
-# adjust-cell-height = 0%
-# adjust-cell-height = 15
-
-# ─── SpaceMono Font Settings ───
-# font-family = "Space Mono"
-# font-family = "JetBrainsMono Nerd Font Propo"
-# font-thicken = true
-# adjust-cell-height = 16
+font-thicken = true
+font-thicken-strength = 0
+adjust-cell-height = 12
+font-feature = -liga
 
 # ─── WINDOW (Maximize Screen Real Estate) ───
 window-padding-x = 2
-window-padding-y = 2
+window-padding-y = 4
 window-padding-balance = true
-window-padding-color = background
+# window-padding-color = background
 window-save-state = always
 window-colorspace = display-p3
 window-height = 180
@@ -61,7 +83,7 @@ keybind = super+v=paste_from_clipboard
 link-url = true
 
 # ─── AI AGENT SUPPORT (Claude, etc.) ───
-scrollback-limit = 50000
+scrollback-limit = 100000000
 mouse-scroll-multiplier = 3
 
 # ─── TMUX INTEGRATION ───
@@ -70,3 +92,8 @@ shell-integration = none
 # Proper TERM for true colors in tmux
 term = xterm-ghostty
 
+# tmux integration - send save-buffer command
+keybind = cmd+s=text:\x01\x73
+
+# tmux prefix to toggle zoom on current pane
+keybind = cmd+b=text:\x01\x7a
