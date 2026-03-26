@@ -3,7 +3,6 @@
 -- Add any additional keymaps here
 
 local map = vim.keymap.set
-map("n", ";", ":", { desc = "CMD enter command mode", noremap = true })
 map("n", "D", '"_d$', { desc = "Delete to the vois register.", noremap = true })
 
 
