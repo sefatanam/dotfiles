@@ -21,13 +21,9 @@ return {
     --   })
     -- end
   },
-  { "sainnhe/gruvbox-material",           lazy = true },
-  { "olivercederborg/poimandres.nvim",    lazy = true },
-  {
-    "lourenci/github-colors",
-    lazy = false,
-    priority = 1000,
-  },
+  { "sainnhe/gruvbox-material",        lazy = true },
+  { "olivercederborg/poimandres.nvim", lazy = true },
+  { "lourenci/github-colors",          lazy = true },
   {
     "LazyVim/LazyVim",
     opts = {
