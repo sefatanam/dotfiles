@@ -14,6 +14,11 @@ return {
             },
           },
         },
+        -- HTML LSP: attach to both html and htmlangular filetypes
+        -- This ensures HTML features work in Angular templates alongside Angular LSP
+        html = {
+          filetypes = { "html", "htmlangular" },
+        },
         -- only start in Svelte projects (svelte.config.* must exist)
         svelte = {
           root_dir = require("lspconfig.util").root_pattern(

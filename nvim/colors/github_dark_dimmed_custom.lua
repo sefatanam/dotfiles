@@ -94,7 +94,40 @@ set(0, "@text.literal",          { fg = "#6cb6ff" })
 set(0, "@text.uri",              { fg = "#6cb6ff" })
 set(0, "@text.reference",        { fg = "#96d0ff", italic = true })
 set(0, "@lsp.type.enum",         { fg = "#f69d50" })
-set(0, "@variable.member",       { fg = "#8ddb8c" })  -- json keys / property.json_key
+set(0, "@variable.member",       { fg = "#d1d7e0" })  -- class fields / object properties
+
+-- Additional Treesitter captures
+set(0, "@keyword.modifier",       { fg = "#f47067" })  -- private, public, static, readonly
+set(0, "@keyword.type",           { fg = "#f47067" })  -- type keyword
+set(0, "@keyword.import",         { fg = "#f47067" })  -- import/export/from
+set(0, "@type.qualifier",         { fg = "#f47067" })  -- type qualifiers
+set(0, "@module",                 { fg = "#d1d7e0" })  -- module/namespace names
+
+-- LSP Semantic Tokens
+set(0, "@lsp.type.class",         { fg = "#f69d50" })
+set(0, "@lsp.type.interface",     { fg = "#f69d50" })
+set(0, "@lsp.type.type",          { fg = "#f69d50" })
+set(0, "@lsp.type.typeParameter", { fg = "#f69d50" })
+set(0, "@lsp.type.enum",          { fg = "#f69d50" })
+set(0, "@lsp.type.enumMember",    { fg = "#f69d50" })
+set(0, "@lsp.type.variable",      { fg = "#d1d7e0" })
+set(0, "@lsp.type.property",      { fg = "#d1d7e0" })
+set(0, "@lsp.type.parameter",     { fg = "#f69d50" })
+set(0, "@lsp.type.function",      { fg = "#dcbdfb" })
+set(0, "@lsp.type.method",        { fg = "#dcbdfb" })
+set(0, "@lsp.type.namespace",     { fg = "#d1d7e0" })
+set(0, "@lsp.type.decorator",     { fg = "#6cb6ff" })
+set(0, "@lsp.type.keyword",       { fg = "#f47067" })
+set(0, "@lsp.mod.deprecated",     { strikethrough = true })
+
+-- JSON-specific: property keys are green
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "json",
+  callback = function()
+    set(0, "@property.json_key", { fg = "#8ddb8c" })
+    set(0, "@label",             { fg = "#8ddb8c" })
+  end,
+})
 
 -- Diff
 set(0, "DiffAdd",       { bg = "#1b4721" })

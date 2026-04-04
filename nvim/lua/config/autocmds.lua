@@ -89,12 +89,4 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 --   end,
 -- })
 
--- treat the htmlangular filetype like html to trigger the html-lsp
--- vim.api.nvim_create_autocmd("FileType", {
---   group = vim.api.nvim_create_augroup("HtmlAngularCompat", { clear = true }),
---   pattern = "htmlangular",
---   callback = function()
---     vim.bo.filetype = "html"
---   end,
---   desc = "Treat htmlangular as html"
--- })
+

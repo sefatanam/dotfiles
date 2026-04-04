@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__context7__get-library-docs",
+      "Bash(readlink:*)",
+      "Bash(cat:*)",
+      "Bash(ghostty:*)",
+      "Bash(grep -r \"vim.loop\\\\|vim.fn.jobstart\\\\|vim.api.nvim_create_autocmd\\\\|on_attach\\\\|vim.schedule\" /Users/sefat/.dotfiles/nvim --include=*.lua)"
+    ]
+  }
+}

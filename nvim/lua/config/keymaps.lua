@@ -90,6 +90,9 @@ if vim.g.vscode then
   keymap({ "n", "v" }, "<leader>fd", "<cmd>lua require('vscode').action('editor.action.formatDocument')<CR>")
 end
 
+-- LSP rename variable across file
+map("n", "<leader>vr", vim.lsp.buf.rename, { desc = "Rename variable (LSP)", noremap = true, silent = true })
+
 -- ref theprimeagen
 vim.keymap.set({"n","v"}, "<leader>p","\",_dP", { noremap = true, silent = true, desc = "Paste without replacing the default register" })
 
