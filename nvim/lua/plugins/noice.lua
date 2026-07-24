@@ -3,7 +3,7 @@ return {
   opts = {
     lsp = {
       -- fidget.nvim already handles LSP progress spinners
-      progress = { enabled = false },
+      -- progress = { enabled = false },
     },
   },
 }

@@ -1,0 +1,44 @@
+return {
+  "coder/claudecode.nvim",
+  dependencies = { "folke/snacks.nvim" },
+  opts = {
+    -- No embedded terminal: this Neovim instance only runs the WebSocket/MCP
+    -- server + lock file. Sends are delivered to whatever external `claude`
+    -- process is IDE-connected (e.g. `claude` running in another terminal),
+    -- instead of opening/toggling a blank terminal split beside Neovim.
+    terminal = {
+      provider = "none",
+    },
+  },
+  config = true,
+  -- `cmd` lets lazy.nvim create command stubs that load the plugin on first use,
+  -- so `:ClaudeCode` and friends work on a fresh start. Without it, a keys-only
+  -- spec defers loading until a <leader>a* mapping is pressed and the commands
+  -- would not exist yet.
+  cmd = {
+    "ClaudeCodeAdd",
+    "ClaudeCodeSend",
+    "ClaudeCodeTreeAdd",
+    "ClaudeCodeStatus",
+    "ClaudeCodeStart",
+    "ClaudeCodeStop",
+    "ClaudeCodeDiffAccept",
+    "ClaudeCodeDiffDeny",
+    "ClaudeCodeCloseAllDiffs",
+  },
+  keys = {
+    { "<leader>a",  nil,                       desc = "AI/Claude Code" },
+    { "<leader>ac", "<cmd>ClaudeCodeStart<cr>", desc = "Start Claude connection" },
+    { "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>", desc = "Add current buffer" },
+    { "<leader>as", "<cmd>ClaudeCodeSend<cr>",  mode = "v",                    desc = "Send to Claude" },
+    {
+      "<leader>as",
+      "<cmd>ClaudeCodeTreeAdd<cr>",
+      desc = "Add file",
+      ft = { "NvimTree", "neo-tree", "oil", "minifiles", "netrw", "snacks_picker_list" },
+    },
+    -- Diff management
+    { "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
+    { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>",   desc = "Deny diff" },
+  },
+}

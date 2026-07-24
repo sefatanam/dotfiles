@@ -95,6 +95,7 @@ map("n", "<leader>vr", vim.lsp.buf.rename, { desc = "Rename variable (LSP)", nor
 
 -- ref theprimeagen
 vim.keymap.set({"n","v"}, "<leader>p","\",_dP", { noremap = true, silent = true, desc = "Paste without replacing the default register" })
+vim.keymap.set("i", "<C-j>", "<Esc>o", { noremap = true, silent = true })
 
 -- @REVIEW: Toggle performance mode for large files
 map("n", "<leader>up", function()

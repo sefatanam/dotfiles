@@ -5,7 +5,20 @@
       "Bash(readlink:*)",
       "Bash(cat:*)",
       "Bash(ghostty:*)",
-      "Bash(grep -r \"vim.loop\\\\|vim.fn.jobstart\\\\|vim.api.nvim_create_autocmd\\\\|on_attach\\\\|vim.schedule\" /Users/sefat/.dotfiles/nvim --include=*.lua)"
+      "Bash(grep -r \"vim.loop\\\\|vim.fn.jobstart\\\\|vim.api.nvim_create_autocmd\\\\|on_attach\\\\|vim.schedule\" /Users/sefat/.dotfiles/nvim --include=*.lua)",
+      "WebFetch(domain:herdr.dev)",
+      "Bash(rtk ls *)",
+      "Bash(rtk read *)",
+      "Bash(rtk find *)",
+      "Bash(rtk grep *)",
+      "Bash(mkdir -p /Users/sefat/.dotfiles/herdr)",
+      "Bash(mkdir -p /Users/sefat/.dotfiles/stow-packages/shell/.config/herdr)",
+      "Bash(ln -s ../../../../herdr/config.toml config.toml)",
+      "Bash(stow -n -v -t ~ shell)",
+      "Bash(rm ~/.config/herdr/config.toml)",
+      "Bash(stow -v -t ~ shell)",
+      "Bash(herdr --version)",
+      "Bash(herdr server *)"
     ]
   }
 }

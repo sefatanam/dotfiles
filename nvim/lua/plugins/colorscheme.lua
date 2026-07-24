@@ -21,13 +21,15 @@ return {
     --   })
     -- end
   },
+  { 'marko-cerovac/material.nvim',     lazy = true },
   { "sainnhe/gruvbox-material",        lazy = true },
   { "olivercederborg/poimandres.nvim", lazy = true },
   { "lourenci/github-colors",          lazy = true },
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "github-colors",
+      -- colorscheme = "github-colors",
+      colorscheme = "gruvbox-material",
     },
   },
 }
