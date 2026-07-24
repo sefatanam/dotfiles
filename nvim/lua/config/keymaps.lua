@@ -3,7 +3,6 @@
 -- Add any additional keymaps here
 
 local map = vim.keymap.set
-map("n", ";", ":", { desc = "CMD enter command mode", noremap = true })
 map("n", "D", '"_d$', { desc = "Delete to the vois register.", noremap = true })
 
 
@@ -15,10 +14,7 @@ vim.api.nvim_set_keymap(
 )
 
 map({ "n", "v", "i" }, "<leader>fs", function()
-  vim.lsp.buf.format({
-    async = false,
-    timeout_ms = 500,
-  })
+  vim.lsp.buf.format({ async = true })
 end, { unique = true, desc = "Format file or range (in visual mode)" })
 
 map("t", "<Esc>", [[<C-\><C-n>]], { noremap = true, desc = "Exit terminal mode" })
@@ -94,8 +90,12 @@ if vim.g.vscode then
   keymap({ "n", "v" }, "<leader>fd", "<cmd>lua require('vscode').action('editor.action.formatDocument')<CR>")
 end
 
+-- LSP rename variable across file
+map("n", "<leader>vr", vim.lsp.buf.rename, { desc = "Rename variable (LSP)", noremap = true, silent = true })
+
 -- ref theprimeagen
 vim.keymap.set({"n","v"}, "<leader>p","\",_dP", { noremap = true, silent = true, desc = "Paste without replacing the default register" })
+vim.keymap.set("i", "<C-j>", "<Esc>o", { noremap = true, silent = true })
 
 -- @REVIEW: Toggle performance mode for large files
 map("n", "<leader>up", function()

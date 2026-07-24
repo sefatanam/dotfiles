@@ -1,13 +1,12 @@
 return {
   "folke/snacks.nvim",
   opts = {
-    image = { enabled = true, force = true, env = { SNACKS_GHOSTTY = true }, },
-    -- @NOT-NEED: scroll animation causes major lag on large files
-    -- scroll = { enabled = true },
-    scroll = { enabled = false },
-    -- @NOT-NEED: statuscolumn redraws on every scroll
-    -- statuscolumn = { enabled = true },
-    statuscolumn = { enabled = false },
+    image       = { enabled = true, force = false, env = { SNACKS_GHOSTTY = true } },
+    scroll      = { enabled = false },      -- scroll animation causes lag on large files
+    statuscolumn= { enabled = false },      -- redraws on every scroll
+    animate     = { enabled = false },      -- stops all snacks animations
+    indent      = { enabled = false },      -- indent guides redraw on every scroll
+    bigfile     = { enabled = true, size = 1.5 * 1024 * 1024, notify = true },
     explorer = {
       open = true,
       follow = true,
@@ -30,12 +29,13 @@ return {
     {
       "<C-n>",
       function()
-        if Snacks.picker.get({ source = "explorer" })[1] == nil then
+        local p = Snacks.picker.get({ source = "explorer" })[1]
+        if p == nil then
           Snacks.picker.explorer()
-        elseif Snacks.picker.get({ source = "explorer" })[1]:is_focused() == true then
+        elseif p:is_focused() then
           Snacks.picker.explorer()
-        elseif Snacks.picker.get({ source = "explorer" })[1]:is_focused() == false then
-          Snacks.picker.get({ source = "explorer" })[1]:focus()
+        else
+          p:focus()
         end
       end,
     },

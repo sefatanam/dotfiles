@@ -10,6 +10,7 @@
 -- Disable the concealing in some file formats
 -- The default conceallevel is 3 in LazyVim
 vim.api.nvim_create_autocmd({ "FileType" }, {
+  group = vim.api.nvim_create_augroup("DisableConceal", { clear = true }),
   pattern = { "json", "jsonc", "markdown" },
   callback = function()
     vim.wo.conceallevel = 0
@@ -80,19 +81,12 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
-vim.api.nvim_create_autocmd("BufReadPost", {
-  group = vim.api.nvim_create_augroup("RestoreCursor", { clear = true }),
-  callback = function()
-    local mark = vim.api.nvim_buf_get_mark(0, '"')
-    if mark[1] > 0 then vim.api.nvim_win_set_cursor(0, mark) end
-  end,
-})
+-- vim.api.nvim_create_autocmd("BufReadPost", {
+--   group = vim.api.nvim_create_augroup("RestoreCursor", { clear = true }),
+--   callback = function()
+--     local mark = vim.api.nvim_buf_get_mark(0, '"')
+--     if mark[1] > 0 then vim.api.nvim_win_set_cursor(0, mark) end
+--   end,
+-- })
 
--- treat the htmlangular filetype like html to trigger the html-lsp
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "htmlangular",
-  callback = function()
-    vim.bo.filetype = "html"
-  end,
-  desc = "Treat htmlangular as html"
-})
+

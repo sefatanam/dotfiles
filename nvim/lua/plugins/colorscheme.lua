@@ -1,30 +1,18 @@
 return {
   {
-    "dgox16/oldworld.nvim",
-  },
-  {
-    "webhooked/kanso.nvim",
+    "ydkulks/cursor-dark.nvim",
+    lazy = true,
     config = function()
-      require("kanso").setup({
-        compile = false,
-        undercurl = true,
-        commentStyle = { italic = true },
-        functionStyle = {},
-        keywordStyle = { italic = true },
-        statementStyle = {},
-        typeStyle = {},
+      require("cursor-dark").setup({
+        style = "dark-midnight",
+        -- For a transparent background
         -- transparent = true,
-        -- dimInactive = false,
-        terminalColors = true,
-        -- styles = {
-        --   sidebars = "transparent",
-        --   floats = "transparent",
-        -- },
       })
     end,
   },
   {
     "EdenEast/nightfox.nvim",
+    lazy = true,
     -- config = function()
     --   require('nightfox').setup({
     --     options = {
@@ -33,41 +21,15 @@ return {
     --   })
     -- end
   },
-  { "ellisonleao/gruvbox.nvim" },
-  { "metalelf0/black-metal-theme-neovim", },
-  { "sainnhe/gruvbox-material" },
-  { "sainnhe/everforest" },
-  { "olimorris/onedarkpro.nvim" },
-  { "olivercederborg/poimandres.nvim" },
-  {
-    "rockyzhang24/arctic.nvim",
-    dependencies = { "rktjmp/lush.nvim" },
-    name = "arctic",
-    branch = "main",
-    priority = 1000,
-  },
-  { "Yazeed1s/oh-lucy.nvim" },
-  -- {
-  --   'projekt0n/github-nvim-theme',
-  --   name = 'github-theme',
-  --   lazy = false,    -- make sure we load this during startup if it is your main colorscheme
-  --   priority = 1000, -- make sure to load this before all the other start plugins
-  --   config = function()
-  --     require('github-theme').setup({
-  --       options = {
-  --         transparent = true
-  --       }
-  --     })
-  --
-  --   end,
-  -- },
+  { 'marko-cerovac/material.nvim',     lazy = true },
+  { "sainnhe/gruvbox-material",        lazy = true },
+  { "olivercederborg/poimandres.nvim", lazy = true },
+  { "lourenci/github-colors",          lazy = true },
   {
     "LazyVim/LazyVim",
     opts = {
-      -- colorscheme = "kanso-zen",
-      -- colorscheme = "Terafox",
+      -- colorscheme = "github-colors",
       colorscheme = "gruvbox-material",
-      -- colorscheme = "everforest",
     },
   },
 }

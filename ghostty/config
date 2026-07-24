@@ -1,6 +1,7 @@
-#theme = "kanso-zen"
-theme = "Gruvbox Material Dark"
-
+macos-icon = xray
+#theme = dark:"Github Dark Dimmed",light:"Github Light Default"
+# theme = dark:"Earthsong",light:"Github Light Default"
+theme = dark:"Gruvbox Material Dark",light:"Github Light Default"
 # ─── CLIPBOARD ───
 clipboard-read = allow
 clipboard-write = allow
@@ -9,34 +10,42 @@ copy-on-select = true
 # ─── CURSOR (Optimized for Neovim) ───
 cursor-style = block
 cursor-style-blink = false
+focus-follows-mouse = true
+mouse-hide-while-typing = true
 
 # ─── FONT (Performance + Readability) ───
 font-size = 16
 
-# ─── JetBrainsMono Font Settings ───
-font-thicken = false
-#font-family = "JetBrainsMono Nerd Font Propo"
+# ─── Font Settings ───
+# font-family = "IBM Plex Mono"
+# font-style = Regular
+# font-family-bold = "IBM Plex Mono"
+# font-style-bold = Bold
+# font-family-italic = "IBM Plex Mono"
+# font-style-italic = Italic
+# font-family-bold-italic = "IBM Plex Mono"
+# font-style-bold-italic = Bold Italic
+#
+
 font-family = "Maple Mono NF"
-adjust-cell-height = 15
+font-style = Regular
+font-family-bold = "IBM Plex Mono"
+font-style-bold = Bold
+font-family-italic = "IBM Plex Mono"
+font-style-italic = Italic
+font-family-bold-italic = "IBM Plex Mono"
+font-style-bold-italic = Bold Italic
 
-
-# ─── Fantasque Font Settings ───
-# font-family = "Fantasque Sans Mono"
-# font-thicken = false
-# adjust-cell-height = 0%
-# adjust-cell-height = 15
-
-# ─── SpaceMono Font Settings ───
-# font-family = "Space Mono"
-# font-family = "JetBrainsMono Nerd Font Propo"
-# font-thicken = true
-# adjust-cell-height = 16
+font-thicken = true
+font-thicken-strength = 0
+adjust-cell-height = 12
+font-feature = -liga
 
 # ─── WINDOW (Maximize Screen Real Estate) ───
 window-padding-x = 2
-window-padding-y = 2
+window-padding-y = 4
 window-padding-balance = true
-window-padding-color = background
+# window-padding-color = background
 window-save-state = always
 window-colorspace = display-p3
 window-height = 180
@@ -61,7 +70,7 @@ keybind = super+v=paste_from_clipboard
 link-url = true
 
 # ─── AI AGENT SUPPORT (Claude, etc.) ───
-scrollback-limit = 50000
+scrollback-limit = 100000000
 mouse-scroll-multiplier = 3
 
 # ─── TMUX INTEGRATION ───
@@ -70,3 +79,8 @@ shell-integration = none
 # Proper TERM for true colors in tmux
 term = xterm-ghostty
 
+# tmux integration - send save-buffer command
+keybind = cmd+s=text:\x01\x73
+
+# tmux prefix to toggle zoom on current pane
+keybind = cmd+b=text:\x01\x7a

@@ -41,7 +41,8 @@ autoload -Uz add-zsh-hook
 add-zsh-hook precmd _first_prompt_hook
 
 # OpenJDK 21
-export JAVA_HOME="/opt/homebrew/opt/openjdk"
+# export JAVA_HOME="/opt/homebrew/opt/openjdk"
+export JAVA_HOME=/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home
 export PATH="$JAVA_HOME/bin:$PATH"
 
 # export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
@@ -72,3 +73,9 @@ export PATH="$PATH:/Users/sefat/.lmstudio/bin"
 # End of LM Studio CLI section
 
 export PATH="$HOME/.local/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/sefat/.antigravity/antigravity/bin:$PATH"
+
+# Added by Antigravity IDE
+export PATH="/Users/sefat/.antigravity-ide/antigravity-ide/bin:$PATH"

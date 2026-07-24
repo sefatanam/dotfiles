@@ -1,0 +1,84 @@
+# herdr configuration
+# https://herdr.dev/docs/configuration/  https://herdr.dev/docs/config-reference/
+#
+# Keymap mirrors ~/.dotfiles/tmux/.tmux.conf as closely as herdr's action set
+# allows. Anything tmux does that herdr has no equivalent for (refresh-client,
+# window swap >/<, select-layout space, pane join/break, the VPN-aware detach
+# shell logic) is called out below instead of silently dropped.
+
+onboarding = false
+
+[keys]
+prefix = "ctrl+a"                                   # tmux: set -g prefix C-a
+
+# Reload / settings
+reload_config = "prefix+r"                          # tmux: bind r source-file ...
+# tmux's `R` (refresh-client) has no herdr equivalent - skipped.
+settings = "prefix+comma"                            # moved off "s" so split_horizontal can use it
+
+# Pane navigation (vim-style, prefix+hjkl) - already herdr's default, kept explicit
+focus_pane_left = ["prefix+h", "shift+left"]         # tmux: bind-key h / bind -n S-Left
+focus_pane_down = ["prefix+j", "shift+down"]         # tmux: bind-key j / bind -n S-Down
+focus_pane_up = ["prefix+k", "shift+up"]             # tmux: bind-key k / bind -n S-Up
+focus_pane_right = ["prefix+l", "shift+right"]       # tmux: bind-key l / bind -n S-Right
+
+# Window/tab navigation
+next_tab = ["prefix+n", "ctrl+right"]                # tmux: bind -n C-Right next-window
+previous_tab = ["prefix+p", "ctrl+left"]             # tmux: bind -n C-Left previous-window
+
+# Resizing - herdr has a modal resize_mode instead of tmux's repeatable
+# shift-arrow resize (bind -r S-Left/Down/Up/Right resize-pane). Enter the
+# mode with the key below, then use arrow keys to resize, esc to exit.
+resize_mode = "prefix+shift+r"
+
+# Splitting - herdr names splits by the resulting divider orientation, tmux
+# by the flag passed to split-window, so the letters land the same way:
+split_vertical = "prefix+v"                          # tmux: bind v split-window -h (side by side)
+split_horizontal = "prefix+s"                        # tmux: bind s split-window -v (stacked)
+
+# Detach - tmux's `d` also kills a VPN process in a side session first; herdr
+# keybindings can't chain a shell command before detaching, so that part
+# isn't replicated. The key itself still detaches.
+detach = ["prefix+q", "prefix+d"]                    # tmux: bind d run-shell ... \; detach-client
+
+# Copy mode - herdr already enters copy mode on prefix+[ like tmux's default,
+# and its internal vi-style selection keys (v/y/ctrl+v/esc/enter) aren't
+# separately configurable, so no override needed here.
+copy_mode = "prefix+["
+
+# Session/workspace navigation - herdr's native pickers replace tmux's fzf
+# session-switch popup; ctrl+j is kept as an extra binding for muscle memory.
+workspace_picker = ["prefix+w", "prefix+ctrl+j"]     # tmux: bind C-j display-popup ... fzf session switch
+
+# Popups (tmux's C-y/C-r/C-t/C-z display-popup bindings)
+[[keys.command]]
+key = "prefix+ctrl+y"
+type = "popup"
+command = "lazygit"
+description = "lazygit"
+width = "90%"
+height = "90%"
+
+[[keys.command]]
+key = "prefix+ctrl+r"
+type = "popup"
+command = "yazi"
+description = "yazi"
+width = "90%"
+height = "90%"
+
+[[keys.command]]
+key = "prefix+ctrl+t"
+type = "popup"
+command = "exec \"${SHELL:-zsh}\""
+description = "scratch shell"
+width = "75%"
+height = "75%"
+
+[[keys.command]]
+key = "prefix+ctrl+z"
+type = "popup"
+command = "nvim ~/.zshrc"
+description = "edit .zshrc"
+width = "80%"
+height = "80%"

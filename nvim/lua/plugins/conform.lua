@@ -15,7 +15,6 @@ return {
       prettier = {
         prepend_args = function(_, ctx)
           -- Add tailwind plugin for files that might use Tailwind
-          print("Formatting with prettier, filetype:", ctx.filetype)
           local tailwind_filetypes = { "html", "vue", "svelte", "astro" }
 
           for _, ft in ipairs(tailwind_filetypes) do

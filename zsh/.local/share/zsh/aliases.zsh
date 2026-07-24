@@ -19,7 +19,7 @@ alias edit-zsh="nvim ~/.zshrc"
 
 # Git aliases
 # alias gs='git status'
-# alias gp='git pull --rebase'
+alias gp='git stash && git pull --rebase && git stash pop'
 # alias gP='git push'
 # alias gc='git commit -m'
 # alias grh='git reset --hard'
@@ -79,3 +79,15 @@ alias brc="brew cleanup --prune=all"
 
 # MISC - Project Specific
 alias rca="mvn spring-boot:run '-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'"
+alias fabric='fabric-ai'
+
+alias roa="npx ng serve --port 4200 --ssl true --ssl-key ssl/localhost-key.pem --ssl-cert ssl/localhost.pem"
+
+# Office Add-in dev cert: (re)install office-addin-dev-certs and trust the CA root
+# for SSL so Chrome stops throwing ERR_CERT_AUTHORITY_INVALID on localhost.
+# Certs expire ~30 days; re-run when the add-in icons/pane fail to load.
+office-cert-fix() {
+  npx --yes office-addin-dev-certs install || return 1
+  security add-trusted-cert -r trustRoot -p ssl -k "$HOME/Library/Keychains/login.keychain-db" "$HOME/.office-addin-dev-certs/ca.crt" && echo "Office CA trusted for SSL - fully quit Chrome (Cmd+Q) and reopen."
+}
+alias fix-office-cert='office-cert-fix'
