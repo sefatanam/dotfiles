@@ -9,3 +9,4 @@ backup-manual-20250816-173504/current-symlinks.txt
 *.zwc
 .cache/
 cache/
+/graphify-out
