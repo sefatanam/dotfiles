@@ -1,5 +1,7 @@
 # aliases.zsh - All command aliases
 
+alias c="clear"
+
 # Directory navigation
 alias cdd='cd_to_dir ~/Documents/'
 alias cds='cd_to_dir'

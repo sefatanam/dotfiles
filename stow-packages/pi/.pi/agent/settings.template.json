@@ -1,0 +1,32 @@
+{
+  "lastChangelogVersion": "0.84.1",
+  "theme": "dark",
+  "defaultProvider": "omniroute",
+  "defaultModel": "cc/claude-opus-4-8",
+  "defaultThinkingLevel": "high",
+  "httpIdleTimeoutMs": 30000,
+  "showCacheMissNotices": true,
+  "quietStartup": true,
+  "enableInstallTelemetry": false,
+  "defaultProjectTrust": "always",
+  "terminal": {
+    "showImages": false,
+    "showTerminalProgress": true
+  },
+  "showHardwareCursor": true,
+  "editorPaddingX": 2,
+  "outputPad": 1,
+  "hideThinkingBlock": true,
+  "markdown": {
+    "mermaid": "final"
+  },
+  "fullscreenScrollbar": "always",
+  "enabledModels": [
+    "omniroute/cc/claude-haiku-4-5-20251001",
+    "omniroute/cc/claude-opus-4-8"
+  ],
+  "packages": [
+    "extensions/lazy-mcp",
+    "extensions/ponytail/pi-extension"
+  ]
+}
