@@ -27,6 +27,7 @@
   ],
   "packages": [
     "extensions/lazy-mcp",
-    "extensions/ponytail/pi-extension"
+    "extensions/ponytail/pi-extension",
+    "extensions/markdown-polish"
   ]
 }
