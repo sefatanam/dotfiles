@@ -288,6 +288,44 @@ ffwd() {
     fi
 }
 
+# Detect an available browser for yt-dlp cookie extraction.
+# Override with $YTD_BROWSER (e.g. YTD_BROWSER=chrome ytd <url>).
+# Chrome is checked first since it works on both Linux and macOS;
+# Safari (macOS-only) is the fallback.
+_ytd_cookie_browser() {
+    if [ -n "$YTD_BROWSER" ]; then
+        echo "$YTD_BROWSER"
+        return 0
+    fi
+
+    local candidates
+    if [ "$(uname -s)" = "Darwin" ]; then
+        candidates=(
+            "chrome:$HOME/Library/Application Support/Google/Chrome/Default/Cookies"
+            "chromium:$HOME/Library/Application Support/Chromium/Default/Cookies"
+            "safari:$HOME/Library/Cookies/Cookies.binarycookies"
+        )
+    else
+        candidates=(
+            "chrome:$HOME/.config/google-chrome/Default/Cookies"
+            "chromium:$HOME/.config/chromium/Default/Cookies"
+        )
+    fi
+
+    local candidate browser path
+    for candidate in "${candidates[@]}"; do
+        browser="${candidate%%:*}"
+        path="${candidate#*:}"
+        if [ -f "$path" ]; then
+            echo "$browser"
+            return 0
+        fi
+    done
+
+    # Nothing detected; default to chrome and let yt-dlp report the real error
+    echo "chrome"
+}
+
 # YouTube video downloader with yt-dlp
 ytd() {
     if ! command -v yt-dlp >/dev/null 2>&1; then
@@ -307,8 +345,10 @@ ytd() {
         echo ""
     echo "Default download location: ~/Downloads/"
     echo ""
-    echo "Note: Uses Safari cookies for YouTube authentication"
-    echo "      Make sure you're signed into YouTube in Safari"
+    echo "Note: Uses browser cookies for YouTube authentication"
+    echo "      (auto-detects Chrome, falls back to Safari on macOS)"
+    echo "      Make sure you're signed into YouTube in that browser,"
+    echo "      or set \$YTD_BROWSER to override (e.g. YTD_BROWSER=chrome)"
     echo ""
     echo "Examples:"
         echo "  ytd https://youtube.com/watch?v=..."
@@ -338,8 +378,11 @@ ytd() {
             ;;
     esac
 
+    local browser
+    browser="$(_ytd_cookie_browser)"
+
     echo "🎥 Downloading YouTube video in ${resolution}..."
-    echo "🔐 Using Safari cookies for authentication..."
+    echo "🔐 Using $browser cookies for authentication..."
     echo "📁 Output directory: $download_dir"
 
     # Format selection with fallbacks
@@ -364,9 +407,8 @@ ytd() {
     local output_template="$download_dir/[%(height)sp] %(title)s.%(ext)s"
     local expected_file="$download_dir/[*] *.mp4"
 
-    # @REVIEW: Added Safari cookie authentication for YouTube bot detection bypass
     yt-dlp \
-        --cookies-from-browser safari \
+        --cookies-from-browser "$browser" \
         --extractor-retries 3 \
         --retry-sleep 5 \
         --format "$format_selector" \
@@ -391,9 +433,10 @@ ytd() {
         echo "❌ Download failed."
         echo ""
         echo "💡 Troubleshooting:"
-        echo "   1. Sign into YouTube in Safari (youtube.com)"
+        echo "   1. Sign into YouTube in $browser (youtube.com)"
         echo "   2. Update yt-dlp: brew upgrade yt-dlp"
         echo "   3. Check video availability and region restrictions"
+        echo "   4. Override the detected browser: YTD_BROWSER=chrome ytd ..."
         return 1
     fi
 }
@@ -410,7 +453,7 @@ _ytd_audio() {
         echo "Usage: ytd-audio <youtube_url> [output_dir]"
         echo "Downloads best quality audio (usually 128-320kbps)"
         echo "Default download location: ~/Downloads/"
-        echo "Note: Requires YouTube sign-in via Safari"
+        echo "Note: Requires YouTube sign-in via Chrome (or Safari on macOS)"
         return 1
     fi
 
@@ -419,13 +462,15 @@ _ytd_audio() {
 
     mkdir -p "$download_dir"
 
+    local browser
+    browser="$(_ytd_cookie_browser)"
+
     echo "🎵 Downloading audio from YouTube..."
-    echo "🔐 Using Safari cookies for authentication..."
+    echo "🔐 Using $browser cookies for authentication..."
     echo "📁 Output directory: $download_dir"
 
-    # @REVIEW: Added Safari cookie authentication
     yt-dlp \
-        --cookies-from-browser safari \
+        --cookies-from-browser "$browser" \
         --extractor-retries 3 \
         --retry-sleep 5 \
         --extract-audio \
@@ -446,7 +491,8 @@ _ytd_audio() {
         fi
     else
         echo "❌ Audio download failed."
-        echo "💡 Make sure you're signed into YouTube in Safari"
+        echo "💡 Make sure you're signed into YouTube in $browser"
+        echo "💡 Override the detected browser: YTD_BROWSER=chrome ytd-audio ..."
         return 1
     fi
 }
@@ -473,8 +519,11 @@ _ytd_playlist() {
 
     mkdir -p "$playlist_dir"
 
+    local browser
+    browser="$(_ytd_cookie_browser)"
+
     echo "📋 Downloading playlist in ${resolution}..."
-    echo "🔐 Using Safari cookies for authentication..."
+    echo "🔐 Using $browser cookies for authentication..."
     echo "📁 Output directory: $playlist_dir"
 
     # Get playlist title for subdirectory
@@ -499,9 +548,8 @@ _ytd_playlist() {
 
     local format_selector="bestvideo[height<=${height}]+bestaudio/best"
 
-    # @REVIEW: Added Safari cookie authentication
     yt-dlp \
-        --cookies-from-browser safari \
+        --cookies-from-browser "$browser" \
         --extractor-retries 3 \
         --retry-sleep 5 \
         --format "$format_selector" \
@@ -518,7 +566,8 @@ _ytd_playlist() {
         echo "📁 Downloaded $file_count videos"
     else
         echo "❌ Playlist download failed."
-        echo "💡 Make sure you're signed into YouTube in Safari"
+        echo "💡 Make sure you're signed into YouTube in $browser"
+        echo "💡 Override the detected browser: YTD_BROWSER=chrome ytd-playlist ..."
         return 1
     fi
 }
@@ -543,13 +592,15 @@ _ytd_fast() {
 
     mkdir -p "$download_dir"
 
+    local browser
+    browser="$(_ytd_cookie_browser)"
+
     echo "⚡ Fast downloading from YouTube..."
-    echo "🔐 Using Safari cookies for authentication..."
+    echo "🔐 Using $browser cookies for authentication..."
     echo "📁 Output directory: $download_dir"
 
-    # @REVIEW: Added Safari cookie authentication
     yt-dlp \
-        --cookies-from-browser safari \
+        --cookies-from-browser "$browser" \
         --extractor-retries 3 \
         --format "best[height<=1080]" \
         --output "$download_dir/[FAST] %(title)s.%(ext)s" \
@@ -566,7 +617,8 @@ _ytd_fast() {
         fi
     else
         echo "❌ Fast download failed."
-        echo "💡 Make sure you're signed into YouTube in Safari"
+        echo "💡 Make sure you're signed into YouTube in $browser"
+        echo "💡 Override the detected browser: YTD_BROWSER=chrome ytd-fast ..."
         return 1
     fi
 }
@@ -591,13 +643,15 @@ _ytd_best() {
 
     mkdir -p "$download_dir"
 
+    local browser
+    browser="$(_ytd_cookie_browser)"
+
     echo "🏆 Downloading best quality from YouTube..."
-    echo "🔐 Using Safari cookies for authentication..."
+    echo "🔐 Using $browser cookies for authentication..."
     echo "📁 Output directory: $download_dir"
 
-    # @REVIEW: Added Safari cookie authentication
     yt-dlp \
-        --cookies-from-browser safari \
+        --cookies-from-browser "$browser" \
         --extractor-retries 3 \
         --retry-sleep 5 \
         --format "bestvideo+bestaudio/best" \
@@ -621,7 +675,8 @@ _ytd_best() {
         fi
     else
         echo "❌ Best quality download failed."
-        echo "💡 Make sure you're signed into YouTube in Safari"
+        echo "💡 Make sure you're signed into YouTube in $browser"
+        echo "💡 Override the detected browser: YTD_BROWSER=chrome ytd-best ..."
         return 1
     fi
 }
