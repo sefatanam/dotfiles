@@ -10,3 +10,6 @@ backup-manual-20250816-173504/current-symlinks.txt
 .cache/
 cache/
 /graphify-out
+
+# Subagent-driven-development workspace (ledgers, briefs, review packages)
+.superpowers/
