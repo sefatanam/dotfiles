@@ -24,10 +24,12 @@ _source_if_exists "$ZSH_CONFIG_DIR/completions.zsh"
 
 # zsh plugins
 unset -f _source_if_exists
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+## source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh #For MacOS
+source /home/linuxbrew/.linuxbrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh #For Linux
 
 _load_syntax_highlighting() {
-    source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    ## source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh #For MacOS
+    source /home/linuxbrew/.linuxbrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh #For Linux
     unset -f _load_syntax_highlighting
 }
 # Load after first prompt using precmd hook
@@ -79,3 +81,4 @@ export PATH="/Users/sefat/.antigravity/antigravity/bin:$PATH"
 
 # Added by Antigravity IDE
 export PATH="/Users/sefat/.antigravity-ide/antigravity-ide/bin:$PATH"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
