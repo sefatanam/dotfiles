@@ -327,7 +327,7 @@ exit 1
 - [ ] **Step 5: Run the tests to verify they pass**
 
 Run: `chmod +x scripts/check-portability.sh scripts/test-check-portability.sh && bash scripts/test-check-portability.sh`
-Expected: `10 assertions, 0 failed`
+Expected: `9 assertions, 0 failed`
 
 - [ ] **Step 6: Record the red baseline**
 
