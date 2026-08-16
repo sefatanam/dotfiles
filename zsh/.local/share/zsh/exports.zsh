@@ -5,16 +5,26 @@ if [[ ! -f "$HOME/.cache/zsh-path.cache" ]] || [[ "$HOME/.cache/zsh-path.cache" 
     mkdir -p "$HOME/.cache"
     {
         echo "#Cached PATH configuration"
-        echo "export DYLD_LIBRARY_PATH=\"/opt/homebrew/lib:\$DYLD_LIBRARY_PATH\""
-        echo "export GOROOT=\"/opt/homebrew/opt/go/libexec\""
+
+        # macOS (Homebrew at /opt/homebrew)
+        # echo "export DYLD_LIBRARY_PATH=\"/opt/homebrew/lib:\$DYLD_LIBRARY_PATH\""
+        # echo "export GOROOT=\"/opt/homebrew/opt/go/libexec\""
+        # echo "export PNPM_HOME=\"/Users/sefat/Library/pnpm\""
+
+        # Linux (Linuxbrew at /home/linuxbrew/.linuxbrew)
+        echo "export GOROOT=\"/home/linuxbrew/.linuxbrew/opt/go/libexec\""
+        echo "export PNPM_HOME=\"\$HOME/.local/share/pnpm\""
+
         echo "export GOPATH=\$HOME/go"
         echo "export BUN_INSTALL=\"\$HOME/.bun\""
-        echo "export PNPM_HOME=\"/Users/sefat/Library/pnpm\""
         echo "export NVM_DIR=~/.nvm"
         echo "export EDITOR=\"nvim\""
-        
+
         # Build optimized PATH
-        local NEW_PATH="/opt/homebrew/opt/go/libexec/bin:\$HOME/go/bin:\$HOME/.bun/bin:/Users/sefat/Library/pnpm:/Users/sefat/bin:/Users/sefat/.opencode/bin:\$PATH"
+        # macOS
+        # local NEW_PATH="/opt/homebrew/opt/go/libexec/bin:\$HOME/go/bin:\$HOME/.bun/bin:/Users/sefat/Library/pnpm:/Users/sefat/bin:/Users/sefat/.opencode/bin:\$PATH"
+        # Linux
+        local NEW_PATH="/home/linuxbrew/.linuxbrew/opt/go/libexec/bin:\$HOME/go/bin:\$HOME/.bun/bin:\$HOME/.local/share/pnpm:\$HOME/bin:\$HOME/.opencode/bin:\$PATH"
         echo "export PATH=\"$NEW_PATH\""
     } > "$HOME/.cache/zsh-path.cache"
 fi
