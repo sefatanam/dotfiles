@@ -1,0 +1,12 @@
+nerdfont: true
+
+# Applied to every project unless a project's .workmux.yaml overrides it
+# (project configs must reference "<global>" to inherit these instead of
+# replacing them entirely).
+files:
+  symlink:
+    # Only symlinked when the pattern actually matches something in the
+    # main worktree, so this is a no-op for projects without node_modules.
+    - node_modules
+  copy:
+    - .env

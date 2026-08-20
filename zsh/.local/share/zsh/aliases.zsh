@@ -13,7 +13,7 @@ alias ls="eza --icons=always"
 
 # Applications
 alias n='nvim'
-alias g='lazygit'
+alias g='nvm use 24.4 && lazygit'
 
 # Zsh management
 alias reload-zsh="source ~/.zshrc"

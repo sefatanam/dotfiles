@@ -374,9 +374,12 @@ setup_dotfiles() {
     cd "$stow_dir"
     for package in "${packages[@]}"; do
         log_check "Stowing package: $package"
-        if stow -t ~ "$package" 2>/dev/null; then
+        # pi needs --no-folding: ~/.pi/agent also holds pi's own real dirs (auth, sessions)
+        local stow_opts=()
+        [[ "$package" == "pi" ]] && stow_opts=(--no-folding)
+        if stow "${stow_opts[@]}" -t ~ "$package" 2>/dev/null; then
             log_success "Package '$package' stowed successfully"
-        elif stow -R -t ~ "$package" 2>/dev/null; then
+        elif stow "${stow_opts[@]}" -R -t ~ "$package" 2>/dev/null; then
             log_success "Package '$package' re-stowed successfully"
         else
             log_warning "Failed to stow package '$package'"
