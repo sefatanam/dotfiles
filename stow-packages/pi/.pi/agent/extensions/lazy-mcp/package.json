@@ -1,6 +1,0 @@
-{
-  "name": "pi-lazy-mcp",
-  "private": true,
-  "type": "module",
-  "main": "index.js"
-}

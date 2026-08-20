@@ -64,6 +64,12 @@ unset _starship_cache
 # export ANDROID_NDK_HOME="$ANDROID_HOME/ndk-bundle"
 # # Valdi configuration end
 
+# Android SDK / NDK
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export ANDROID_SDK_ROOT="$ANDROID_HOME"
+export ANDROID_NDK_HOME="$ANDROID_HOME/ndk/29.0.13846066"
+export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/bin:$PATH"
+
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
 export PATH="/Users/sefat/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
