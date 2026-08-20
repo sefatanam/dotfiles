@@ -1,17 +1,25 @@
 return {
   "folke/snacks.nvim",
   opts = {
-    image       = { enabled = true, force = false, env = { SNACKS_GHOSTTY = true } },
-    scroll      = { enabled = false },      -- scroll animation causes lag on large files
-    statuscolumn= { enabled = false },      -- redraws on every scroll
-    animate     = { enabled = false },      -- stops all snacks animations
-    indent      = { enabled = false },      -- indent guides redraw on every scroll
-    bigfile     = { enabled = true, size = 1.5 * 1024 * 1024, notify = true },
-    explorer = {
+    image        = { enabled = true, force = false, env = { SNACKS_GHOSTTY = true } },
+    scroll       = { enabled = false }, -- scroll animation causes lag on large files
+    statuscolumn = { enabled = false }, -- redraws on every scroll
+    animate      = { enabled = false }, -- stops all snacks animations
+    indent       = { enabled = false }, -- indent guides redraw on every scroll
+    bigfile      = { enabled = true, size = 1.5 * 1024 * 1024, notify = true },
+    explorer     = {
       open = true,
       follow = true,
     },
-    picker = {
+    picker       = {
+      enabled = true,
+      win = {
+        input = {
+          keys = {
+            ["<a-o>"] = { "opencode_send", mode = { "n", "i" } },
+          },
+        },
+      },
       sources = {
         explorer = {
           layout = {
@@ -20,6 +28,17 @@ return {
         },
       },
     },
+  },
+  actions = {
+    opencode_send = function(picker) ---@param picker snacks.Picker
+      local items = vim.tbl_map(function(item) ---@param item snacks.picker.Item
+        return item.file
+            and require("opencode").format({ path = item.file, from = item.pos, to = item.end_pos })
+            or item.text
+      end, picker:selected({ fallback = true }))
+
+      require("opencode").prompt(table.concat(items, ", ") .. " ")
+    end,
   },
   config = function(_, opts)
     require("snacks").setup(opts)
