@@ -22,3 +22,4 @@ pi/agent/git/
 pi/agent/trust.json
 pi/agent/settings.json
 pi/agent/models.json
+/.claude/settings.local.json
