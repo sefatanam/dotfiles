@@ -1,13 +1,17 @@
 tap "agavra/tap"
+tap "alielsokary/tap", trusted: { casks: ["caskhub"] }
 tap "anomalyco/tap"
 tap "brewforge/extras", trusted: true
+tap "can1357/tap"
+tap "nico81/icontainer", trusted: true
 tap "nikitabobko/tap", trusted: true
 tap "oven-sh/bun", trusted: true
 tap "qltysh/tap", trusted: true
+tap "raine/workmux"
 tap "steipete/tap", trusted: true
 tap "tw93/tap", trusted: true
-tap "zennotes/tap"
-# GNU internationalization (i18n) and localization (l10n) library
+tap "zennotes/tap", trusted: { casks: ["zennotes"] }
+# GNU internationalization (i19n) and localization (l10n) library
 brew "gettext"
 # Download with resuming and segmented downloading
 brew "aria2"
@@ -21,6 +25,10 @@ brew "glib"
 brew "cmake"
 # Console Matrix
 brew "cmatrix"
+# Dependency manager for Cocoa projects
+brew "cocoapods"
+# Create and run Linux containers using lightweight virtual machines
+brew "container"
 # Secure runtime for JavaScript and TypeScript
 brew "deno"
 # Modern, maintained replacement for ls
@@ -53,6 +61,8 @@ brew "glow"
 brew "go"
 # Website Cloner
 brew "goclone"
+# Agent multiplexer that lives in your terminal
+brew "herdr"
 # Tools and libraries to manipulate images in select formats
 brew "imagemagick"
 # DevTools proxy for iOS devices
@@ -75,8 +85,12 @@ brew "tree-sitter"
 brew "neovim"
 # Manage multiple Node.js versions
 brew "nvm"
+# Beautiful Reddit threads, live in your terminal
+brew "oh-my-reddit"
 # Create, run, and share large language models (LLMs)
 brew "ollama", restart_service: :changed
+# AI-powered code review tool with deterministic pipelines and an LLM agent
+brew "open-code-review"
 # Open Fortinet client for PPP+TLS VPN tunnel services
 brew "openfortivpn"
 # Development kit for the Java programming language
@@ -135,70 +149,88 @@ brew "zsh-syntax-highlighting"
 brew "agavra/tap/tuicr", trusted: true
 # The AI coding agent built for the terminal.
 brew "anomalyco/tap/opencode", trusted: true
+# Coding agent with the IDE wired in
+brew "can1357/tap/omp", trusted: true
 # Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
 brew "oven-sh/bun/bun"
 # Code quality toolkit
 brew "qltysh/tap/qlty"
+# Opinionated workflow tool that orchestrates git worktrees and tmux
+brew "raine/workmux/workmux", trusted: true
 # Send and read iMessage / SMS from the terminal
 brew "steipete/tap/imsg"
 # Fast CLI for Apple Reminders
 brew "steipete/tap/remindctl"
 # AeroSpace is an i3-like tiling window manager for macOS
 cask "nikitabobko/tap/aerospace"
+# GPU-accelerated terminal emulator
+cask "alacritty"
+# Command-line tools for building and debugging Android apps
+cask "android-commandlinetools"
 # Android SDK component
 cask "android-platform-tools"
 # CPU management application
 cask "app-tamer"
 # Application uninstaller
 cask "appcleaner"
+# Tool to flash OS images to SD cards & USB drives
+cask "balenaetcher"
 # Compact TeX distribution as alternative to the full TeX Live / MacTeX
 cask "basictex"
 # App for managing battery charging
 cask "batfi"
 # Cross platform SQL editor and database management app
 cask "beekeeper-studio"
-# Display management tool
-cask "betterdisplay"
 # Desktop password and login vault
 cask "bitwarden"
 # Open source IDE for exploring and testing APIs
 cask "bruno"
+# Anthropic's official Claude AI desktop app
+cask "claude"
 # Terminal-based AI coding assistant
 cask "claude-code"
 # Free app that makes your Internet safer
 cask "cloudflare-warp"
+# Menu bar display manager: DDC brightness, HiDPI, presets, virtual displays
+cask "crisp"
 # Disk space visualiser
 cask "daisydisk"
 # Developer platform
 cask "dotnet-sdk"
 # Developer platform
 cask "dotnet-sdk@9"
-cask "font-blex-mono-nerd-font"
 cask "font-geist-pixel"
+cask "font-googlesanscode-nerd-font"
 cask "font-jetbrains-mono"
 cask "font-jetbrains-mono-nerd-font"
 cask "font-maple-mono-nf"
-cask "font-meslo-lg-nerd-font"
 cask "font-monaspace"
 cask "font-selawik"
+cask "font-space-mono-nerd-font"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
 # Web browser
 cask "google-chrome"
 # Chromium-based web browser
 cask "helium-browser"
+# Native macOS UI for Apple's container CLI
+cask "nico81/icontainer/icontainer"
 # Free and open-source media player
 cask "iina"
+# iOS Sideloading Companion
+cask "iloader"
 # Screenshot and screen recording tool
 cask "macshot"
+# Recorder for meetings capturing mic and system audio
+cask "meetingrecorder"
+# Email client
+cask "microsoft-outlook"
 # Meet, chat, call, and collaborate in just one place
 cask "microsoft-teams"
 # Open-source software for live streaming and screen recording
 cask "obs"
 # Verify system files structure, run miscellaneous maintenance and more
 cask "onyx"
-# AI usage tracker for Cursor, Claude Code, Codex, Copilot and more
-cask "openusage"
 # Replacement for Docker Desktop
 cask "orbstack"
 # VPN client focusing on security
@@ -207,22 +239,22 @@ cask "protonvpn"
 cask "rancher"
 # Control your tools with a few keystrokes
 cask "raycast"
-# React client for Simplenote
-cask "simplenote"
 # System monitor for the menu bar
 cask "stats"
 # Mesh VPN based on WireGuard
 cask "tailscale-app"
 # Git client focusing on power and productivity
 cask "tower"
+# Open-source BitTorrent client
+cask "transmission"
 # Open-source code editor
 cask "visual-studio-code"
+# GPU-accelerated cross-platform terminal emulator and multiplexer
+cask "wezterm"
 # Native desktop client for WhatsApp
 cask "whatsapp"
 # Connect to Windows
 cask "windows-app"
-# Keyboard-first, local-first Markdown notes with vim motions and live preview
-cask "zennotes/tap/zennotes", trusted: true
 vscode "angular.ng-template"
 vscode "antfu.icons-carbon"
 vscode "anthropic.claude-code"
@@ -272,14 +304,4 @@ go "github.com/Skardyy/ttyimg"
 go "github.com/wailsapp/wails/v2/cmd/wails"
 cargo "vtracer"
 uv "graphifyy"
-npm "@google/gemini-cli"
-npm "aicommit2"
 npm "corepack"
-npm "inofile-ui"
-npm "madge"
-npm "moltbot"
-npm "neovim"
-npm "omniroute"
-npm "pnpm"
-npm "prettier"
-npm "tmux-ide"
