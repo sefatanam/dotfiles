@@ -85,3 +85,6 @@ export PATH="/Users/sefat/.antigravity/antigravity/bin:$PATH"
 
 # Added by Antigravity IDE
 export PATH="/Users/sefat/.antigravity-ide/antigravity-ide/bin:$PATH"
+
+# bun completions
+[ -s "/Users/sefat/.bun/_bun" ] && source "/Users/sefat/.bun/_bun"

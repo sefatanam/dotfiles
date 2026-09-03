@@ -82,6 +82,7 @@ alias brc="brew cleanup --prune=all"
 # MISC - Project Specific
 alias rca="mvn spring-boot:run '-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'"
 alias fabric='fabric-ai'
+alias tovpn="sudo route add host 10.100.206.11 gateway ppp0 && sudo route add -host 10.100.207.8 -interface ppp0"
 
 alias roa="npx ng serve --port 4200 --ssl true --ssl-key ssl/localhost-key.pem --ssl-cert ssl/localhost.pem"
 
