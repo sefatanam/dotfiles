@@ -9,3 +9,17 @@ backup-manual-20250816-173504/current-symlinks.txt
 *.zwc
 .cache/
 cache/
+/graphify-out
+
+# @REVIEW: pi machine-specific / secret / volatile state (never track)
+# Content lives in /pi and is exposed to ~/.pi via stow-packages/pi/.pi -> ../../pi
+pi/agent/auth.json
+pi/agent/sessions/
+pi/agent/*.log
+pi/agent/models-store.json
+pi/agent/npm/
+pi/agent/git/
+pi/agent/trust.json
+pi/agent/settings.json
+pi/agent/models.json
+/.claude/settings.local.json

@@ -67,6 +67,10 @@
   dc = diff --cached                # diff staged changes
   last = diff HEAD^                 # diff last committed change
 
+  # patch — save current commit's diff (HEAD vs previous commit) to a file.
+  # Default filename: <YYYY-MM-DD_HHMMSS>.patch  |  override: git test-patch myname.patch
+  test-patch = "!f() { out=\"${1:-$(date +%Y-%m-%d_%H%M%S).patch}\"; git diff HEAD~1 HEAD > \"$out\" && echo \"Wrote $out\"; }; f"
+
   # log
   l = log --graph --date=short
   changes = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\" --name-status
@@ -134,7 +138,7 @@
 [core]
   autocrlf = false
   editor = vim
-  excludesfile = ~/.gitignore
+	excludesfile = /Users/sefat/.gitignore_global
 [advice]
   statusHints = false
 [diff]

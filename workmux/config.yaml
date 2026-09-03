@@ -1,0 +1,27 @@
+nerdfont: true
+
+# Applied to every project unless a project's .workmux.yaml overrides it
+# (project configs must reference "<global>" to inherit these instead of
+# replacing them entirely).
+files:
+  symlink:
+    # Only symlinked when the pattern actually matches something in the
+    # main worktree, so this is a no-op for projects without node_modules.
+    # Deliberately NOT "**/node_modules" or generic "*/*/node_modules": those
+    # also match node_modules nested *inside* another node_modules (hoisted
+    # sub-deps, e.g. node_modules/eslint/node_modules is only 2 segments deep
+    # - same range as a real workspace package). Symlinking those would write
+    # back into the shared real node_modules through the already-symlinked
+    # parent and corrupt it. Named-convention globs only match real workspace
+    # dirs, never a literal "node_modules" as an intermediate segment.
+    - node_modules
+    - "apps/*/node_modules"
+    - "packages/*/node_modules"
+    - "libs/*/node_modules"
+    - "services/*/node_modules"
+  copy:
+    - .env
+    - "apps/*/.env"
+    - "packages/*/.env"
+    - "libs/*/.env"
+    - "services/*/.env"

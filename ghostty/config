@@ -27,18 +27,18 @@ font-size = 16
 # font-style-bold-italic = Bold Italic
 #
 
-font-family = "Maple Mono NF"
+font-family = "Monsaspace Neon"
 font-style = Regular
-font-family-bold = "IBM Plex Mono"
+font-family-bold = "Monsaspace Neon"
 font-style-bold = Bold
-font-family-italic = "IBM Plex Mono"
+font-family-italic = "Monsaspace Neon"
 font-style-italic = Italic
-font-family-bold-italic = "IBM Plex Mono"
+font-family-bold-italic = "Monsaspace Neon"
 font-style-bold-italic = Bold Italic
 
 font-thicken = true
-font-thicken-strength = 0
-adjust-cell-height = 12
+font-thicken-strength = 1
+adjust-cell-height = 18
 font-feature = -liga
 
 # ─── WINDOW (Maximize Screen Real Estate) ───
