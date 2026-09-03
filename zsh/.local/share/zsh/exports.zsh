@@ -9,12 +9,12 @@ if [[ ! -f "$HOME/.cache/zsh-path.cache" ]] || [[ "$HOME/.cache/zsh-path.cache" 
         echo "export GOROOT=\"/opt/homebrew/opt/go/libexec\""
         echo "export GOPATH=\$HOME/go"
         echo "export BUN_INSTALL=\"\$HOME/.bun\""
-        echo "export PNPM_HOME=\"/Users/sefat/Library/pnpm\""
+        echo "export PNPM_HOME=\"/Users/anam/Library/pnpm\""
         echo "export NVM_DIR=~/.nvm"
         echo "export EDITOR=\"nvim\""
         
         # Build optimized PATH
-        local NEW_PATH="/opt/homebrew/opt/go/libexec/bin:\$HOME/go/bin:\$HOME/.bun/bin:/Users/sefat/Library/pnpm:/Users/sefat/bin:/Users/sefat/.opencode/bin:\$PATH"
+        local NEW_PATH="/opt/homebrew/opt/go/libexec/bin:\$HOME/go/bin:\$HOME/.bun/bin:/Users/anam/Library/pnpm:/Users/anam/bin:/Users/anam/.opencode/bin:\$PATH"
         echo "export PATH=\"$NEW_PATH\""
     } > "$HOME/.cache/zsh-path.cache"
 fi
@@ -34,13 +34,5 @@ done
 
 # OpenJDK 21
 # export JAVA_HOME="//homebrew/opt/openjdk@21/bin:$PATH"
-#
-# # Valdi configuration begin
-# export ANDROID_HOME="$HOME/.valdi/android_home"
-# # export ANDROID_NDK_HOME="$ANDROID_HOME/ndk-bundle"
-# export ANDROID_NDK_HOME=/Users/sefat/.valdi/android_home/ndk/25.2.9519653
-# export CPPFLAGS="-I/opt/homebrew/opt/openjdk@17/include"
-# export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
-# export JAVA_HOME="/usr/libexec/java_home -v 17"
-# Valdi configuration end
+
 

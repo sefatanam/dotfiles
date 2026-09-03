@@ -69,22 +69,4 @@ export ANDROID_HOME="$HOME/Library/Android/sdk"
 export ANDROID_SDK_ROOT="$ANDROID_HOME"
 export ANDROID_NDK_HOME="$ANDROID_HOME/ndk/29.0.13846066"
 export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/bin:$PATH"
-
-### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
-export PATH="/Users/sefat/.rd/bin:$PATH"
-### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/sefat/.lmstudio/bin"
-# End of LM Studio CLI section
-
 export PATH="$HOME/.local/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/sefat/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity IDE
-export PATH="/Users/sefat/.antigravity-ide/antigravity-ide/bin:$PATH"
-
-# bun completions
-[ -s "/Users/sefat/.bun/_bun" ] && source "/Users/sefat/.bun/_bun"

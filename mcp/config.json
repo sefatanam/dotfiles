@@ -1,14 +1,5 @@
 {
   "mcpServers": {
-    "filesystem": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "/Users/sefat/Desktop",
-        "/Users/sefat/Downloads"
-      ]
-    },
     "Context7": {
       "command": "npx",
       "args": [

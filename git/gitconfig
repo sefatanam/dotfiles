@@ -138,7 +138,7 @@
 [core]
   autocrlf = false
   editor = vim
-	excludesfile = /Users/sefat/.gitignore_global
+	excludesfile = /Users/anam/.gitignore_global
 [advice]
   statusHints = false
 [diff]
