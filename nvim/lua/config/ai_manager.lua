@@ -2,7 +2,7 @@ local M = {}
 
 local plugins = {
   pi = {
-    spec = "carderne/pi-nvim",
+    lazy_name = "pi-nvim",
     keys = {
       { "<leader>ap", "<cmd>PiSend<cr>", mode = "n", desc = "Pi Send" },
       { "<leader>af", "<cmd>PiSendFile<cr>", mode = "n", desc = "Pi Send File" },
@@ -13,7 +13,7 @@ local plugins = {
     },
   },
   claude = {
-    spec = "coder/claudecode.nvim",
+    lazy_name = "claudecode.nvim",
     keys = {
       { "<leader>ac", "<cmd>ClaudeCodeStart<cr>", mode = "n", desc = "Start Claude connection" },
       { "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>", mode = "n", desc = "Add current buffer" },
@@ -23,7 +23,7 @@ local plugins = {
     },
   },
   opencode = {
-    spec = "nickjvandyke/opencode.nvim",
+    lazy_name = "opencode.nvim",
     keys = {
       { "<C-q>", function() require("opencode").ask("@this: ", { submit = true }) end, mode = { "n", "x" }, desc = "Ask opencode…" },
       { "<C-x>", function() require("opencode").select() end, mode = { "n", "x" }, desc = "Execute opencode action…" },
@@ -40,8 +40,8 @@ function M.activate(name)
     return
   end
 
-  -- Load the plugin via lazy.nvim
-  require("lazy").load({ plugin.spec })
+  -- Load the plugin via lazy.nvim by registered plugin name.
+  require("lazy").load({ plugins = { plugin.lazy_name } })
 
   -- Apply keymaps
   for _, keymap in ipairs(plugin.keys) do

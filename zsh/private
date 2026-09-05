@@ -1,7 +1,7 @@
 export GIT_NAME=""
 export GIT_EMAIL=""
 export OLLAMA_API_KEY=""
-
+export OMNIROUTE_API_KEY=""
 # For PI Coding agent setup with Omniroute
 # export ANTHROPIC_API_KEY="sk-7ab782a88f8de565-954748-abc6417f"
 # export ANTHROPIC_BASE_URL="http://localhost:20128/v1"
