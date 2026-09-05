@@ -1,9 +1,36 @@
-return { "carderne/pi-nvim" }
+return {
+  "carderne/pi-nvim",
+  cmd = { "PiSend", "PiSendFile", "PiSendSelection", "PiSendBuffer", "PiPing" },
+  keys = {
+    { "<leader>ap", "<cmd>PiSend<cr>", mode = "n", desc = "Pi Send" },
+    { "<leader>af", "<cmd>PiSendFile<cr>", mode = "n", desc = "Pi Send File" },
+    { "<leader>as", "<cmd>PiSendSelection<cr>", mode = "v", desc = "Pi Send Selection (With Prompt)" },
+    { "<leader>aS", ":lua PiSendSelectionSilent()<cr>", mode = "v", desc = "Pi Send Selection (Silent)" },
+    { "<leader>ab", "<cmd>PiSendBuffer<cr>", mode = "n", desc = "Pi Send Buffer" },
+    { "<leader>ai", "<cmd>PiPing<cr>", mode = "n", desc = "Pi Ping" },
+  },
+  config = function()
+    require("pi-nvim").setup()
 
+    -- Custom function to send selection without asking for a prompt
+    _G.PiSendSelectionSilent = function()
+      local pi = require("pi-nvim")
+      local start_pos = vim.fn.getpos("'<")
+      local end_pos = vim.fn.getpos("'>")
+      local lines = vim.fn.getregion(start_pos, end_pos, { type = vim.fn.visualmode() })
+      local selection = table.concat(lines, "\n")
 
--- https://github.com/carderne/pi-nvim
---vim.keymap.set("n", "<leader>pp", ":PiSend<CR>")
--- vim.keymap.set("n", "<leader>pf", ":PiSendFile<CR>")
--- vim.keymap.set("v", "<leader>ps", ":PiSendSelection<CR>")
--- vim.keymap.set("n", "<leader>pb", ":PiSendBuffer<CR>")
--- vim.keymap.set("n", "<leader>pi", ":PiPing<CR>")
+      if selection == "" then
+        vim.notify("Empty selection", vim.log.levels.WARN)
+        return
+      end
+
+      local header = string.format("%s lines %d-%d", vim.fn.expand("%:."), start_pos[2], end_pos[2])
+      local message = string.format("Context only: Please remember the following code from %s but DO NOT respond or analyze it yet. Just acknowledge you received it and wait for my specific instructions.\n\n```%s\n%s\n```", header, vim.bo.filetype, selection)
+      pi.prompt(message)
+    end
+
+    -- Override the keymap to use the silent version
+    vim.keymap.set("v", "<leader>as", ":lua PiSendSelectionSilent()<CR>", { silent = true, desc = "Pi Send Selection (Silent)" })
+  end
+}
