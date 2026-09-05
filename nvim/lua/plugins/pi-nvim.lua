@@ -1,14 +1,6 @@
 return {
   "carderne/pi-nvim",
-  cmd = { "PiSend", "PiSendFile", "PiSendSelection", "PiSendBuffer", "PiPing" },
-  keys = {
-    { "<leader>ap", "<cmd>PiSend<cr>", mode = "n", desc = "Pi Send" },
-    { "<leader>af", "<cmd>PiSendFile<cr>", mode = "n", desc = "Pi Send File" },
-    { "<leader>as", "<cmd>PiSendSelection<cr>", mode = "v", desc = "Pi Send Selection (With Prompt)" },
-    { "<leader>aS", ":lua PiSendSelectionSilent()<cr>", mode = "v", desc = "Pi Send Selection (Silent)" },
-    { "<leader>ab", "<cmd>PiSendBuffer<cr>", mode = "n", desc = "Pi Send Buffer" },
-    { "<leader>ai", "<cmd>PiPing<cr>", mode = "n", desc = "Pi Ping" },
-  },
+  lazy = true,
   config = function()
     require("pi-nvim").setup()
 
