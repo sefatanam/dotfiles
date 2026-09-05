@@ -37,7 +37,7 @@ export default {
     const sandbox = getSandbox(env.Sandbox, 'ide', { normalizeId: true });
     
     if (request.url.endsWith('/start')) {
-      await sandbox.exec('curl -fsSL https://code-server.dev/install.sh | sh');
+      await sandbox.exec('curl -fsSL https://code-server.dev/install.sh -o install_code_server.sh && sh install_code_server.sh');
       await sandbox.startProcess('code-server --bind-addr 0.0.0.0:8080', {
         processId: 'vscode'
       });

@@ -183,11 +183,11 @@ install_dev_tools() {
         log_info "Installing Node.js..."
         case $DISTRO in
             ubuntu|debian)
-                curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
+                curl -fsSL https://deb.nodesource.com/setup_lts.x -o /tmp/nodesource_setup.sh && bash /tmp/nodesource_setup.sh
                 apt-get install -y nodejs
                 ;;
             fedora|centos|rhel)
-                curl -fsSL https://rpm.nodesource.com/setup_lts.x | bash -
+                curl -fsSL https://rpm.nodesource.com/setup_lts.x -o /tmp/nodesource_setup.sh && bash /tmp/nodesource_setup.sh
                 if command -v dnf &> /dev/null; then
                     dnf install -y nodejs npm
                 else

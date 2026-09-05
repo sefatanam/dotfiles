@@ -71,10 +71,6 @@
     //     "--header",
     //     "Authorization: Bearer ${RENDER_API_KEY}"
     //   ],
-    //   "environment": {
-    //     "RENDER_API_KEY": "rnd_7CPMBqlNQfaMLUdkpBQciWvaLN4N"
-    //   },
-    //   "enabled": false
     // },
     // "supabase": {
     //   "type": "local",
