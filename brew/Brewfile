@@ -11,7 +11,7 @@ tap "raine/workmux"
 tap "steipete/tap", trusted: true
 tap "tw93/tap", trusted: true
 tap "zennotes/tap", trusted: { casks: ["zennotes"] }
-# GNU internationalization (i19n) and localization (l10n) library
+# GNU internationalization (i18n) and localization (l10n) library
 brew "gettext"
 # Download with resuming and segmented downloading
 brew "aria2"
@@ -83,8 +83,6 @@ brew "mole"
 brew "tree-sitter"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
-# Manage multiple Node.js versions
-brew "nvm"
 # Beautiful Reddit threads, live in your terminal
 brew "oh-my-reddit"
 # Create, run, and share large language models (LLMs)
@@ -105,6 +103,8 @@ brew "resvg"
 brew "ripgrep"
 # CLI proxy to minimize LLM token consumption
 brew "rtk"
+# Safe, concurrent, practical language
+brew "rust"
 # 7-Zip is a file archiver with a high compression ratio
 brew "sevenzip"
 # Fast, collaborative live terminal sharing over the web
@@ -121,6 +121,8 @@ brew "tlrc"
 brew "tmux"
 # Program that allows you to count code, quickly
 brew "tokei"
+# Lightweight BitTorrent client
+brew "transmission-cli"
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
 # Parser generator tool
@@ -152,19 +154,17 @@ brew "anomalyco/tap/opencode", trusted: true
 # Coding agent with the IDE wired in
 brew "can1357/tap/omp", trusted: true
 # Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
-brew "oven-sh/bun/bun"
+brew "oven-sh/bun/bun", trusted: true
 # Code quality toolkit
-brew "qltysh/tap/qlty"
+brew "qltysh/tap/qlty", trusted: true
 # Opinionated workflow tool that orchestrates git worktrees and tmux
 brew "raine/workmux/workmux", trusted: true
 # Send and read iMessage / SMS from the terminal
-brew "steipete/tap/imsg"
+brew "steipete/tap/imsg", trusted: true
 # Fast CLI for Apple Reminders
-brew "steipete/tap/remindctl"
+brew "steipete/tap/remindctl", trusted: true
 # AeroSpace is an i3-like tiling window manager for macOS
-cask "nikitabobko/tap/aerospace"
-# GPU-accelerated terminal emulator
-cask "alacritty"
+cask "nikitabobko/tap/aerospace", trusted: true
 # Command-line tools for building and debugging Android apps
 cask "android-commandlinetools"
 # Android SDK component
@@ -214,7 +214,7 @@ cask "google-chrome"
 # Chromium-based web browser
 cask "helium-browser"
 # Native macOS UI for Apple's container CLI
-cask "nico81/icontainer/icontainer"
+cask "nico81/icontainer/icontainer", trusted: true
 # Free and open-source media player
 cask "iina"
 # iOS Sideloading Companion
@@ -245,8 +245,6 @@ cask "stats"
 cask "tailscale-app"
 # Git client focusing on power and productivity
 cask "tower"
-# Open-source BitTorrent client
-cask "transmission"
 # Open-source code editor
 cask "visual-studio-code"
 # GPU-accelerated cross-platform terminal emulator and multiplexer
@@ -304,4 +302,3 @@ go "github.com/Skardyy/ttyimg"
 go "github.com/wailsapp/wails/v2/cmd/wails"
 cargo "vtracer"
 uv "graphifyy"
-npm "corepack"

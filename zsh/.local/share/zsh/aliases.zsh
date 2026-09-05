@@ -13,21 +13,21 @@ alias ls="eza --icons=always"
 
 # Applications
 alias n='nvim'
-alias g='nvm use 24.4 && lazygit'
+alias g='lazygit'
 
 # Zsh management
 alias reload-zsh="source ~/.zshrc"
 alias edit-zsh="nvim ~/.zshrc"
 
 # Git aliases
-# alias gs='git status'
+alias gs='git status'
 alias gp='git stash && git pull --rebase && git stash pop'
-# alias gP='git push'
-# alias gc='git commit -m'
-# alias grh='git reset --hard'
-# alias gts='git stash'
-# alias gtp='git stash pop'
-# alias gl='git log --oneline'
+alias gP='git push'
+alias gc='git commit -m'
+alias grh='git reset --hard'
+alias gts='git stash'
+alias gtp='git stash pop'
+alias gl='git log --oneline'
 alias gcn='git config --local user.name "$GIT_NAME"'
 alias gce='git config --local user.email "$GIT_EMAIL"'
 alias gcll='git config --local --list'
@@ -41,6 +41,11 @@ alias tk='tmux kill-session -t'
 alias tn='tmux new -s'
 alias ts='tmux switch -t'
 alias td='tmux detach'
+
+# workmux
+alias wa="workmux add"
+alias wc="workmux close"
+alias wr="workmux remove"
 
 # NPM aliases
 alias ns="npm start"

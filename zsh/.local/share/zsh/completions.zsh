@@ -6,7 +6,7 @@ mkdir -p "$_zsh_init_cache"
 if command -v bun >/dev/null 2>&1; then
     bun() {
         unset -f bun
-        [ -s "/Users/anam/.bun/_bun" ] && source "/Users/anam/.bun/_bun"
+        [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
         command bun "$@"
     }
 fi
