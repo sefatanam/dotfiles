@@ -1,7 +1,7 @@
 macos-icon = xray
 #theme = dark:"Github Dark Dimmed",light:"Github Light Default"
 # theme = dark:"Earthsong",light:"Github Light Default"
-theme = dark:"Gruvbox Material Dark",light:"Github Light Default"
+theme = dark:"poimandres-darker",light:"zenbones-zenwritten-light"
 # ─── CLIPBOARD ───
 clipboard-read = allow
 clipboard-write = allow
