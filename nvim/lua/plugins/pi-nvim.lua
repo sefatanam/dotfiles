@@ -3,12 +3,12 @@ return {
   lazy = true,
   cmd = { "PiSend", "PiSendFile", "PiSendSelection", "PiSendBuffer", "PiPing" },
   keys = {
-    { "<leader>ap", "<cmd>PiSend<cr>",                  mode = "n", desc = "Pi Send" },
-    { "<leader>af", "<cmd>PiSendFile<cr>",              mode = "n", desc = "Pi Send File" },
-    { "<leader>as", "<cmd>PiSendSelection<cr>",         mode = "v", desc = "Pi Send Selection (With Prompt)" },
-    { "<leader>aS", ":lua PiSendSelectionSilent()<cr>", mode = "v", desc = "Pi Send Selection (Silent)" },
-    { "<leader>ab", "<cmd>PiSendBuffer<cr>",            mode = "n", desc = "Pi Send Buffer" },
-    { "<leader>ai", "<cmd>PiPing<cr>",                  mode = "n", desc = "Pi Ping" },
+    { "<leader>Pp", "<cmd>PiSend<cr>",                  mode = "n", desc = "Pi Send" },
+    { "<leader>Pf", "<cmd>PiSendFile<cr>",              mode = "n", desc = "Pi Send File" },
+    { "<leader>Ps", "<cmd>PiSendSelection<cr>",         mode = "v", desc = "Pi Send Selection (With Prompt)" },
+    { "<leader>PS", ":lua PiSendSelectionSilent()<cr>", mode = "v", desc = "Pi Send Selection (Silent)" },
+    { "<leader>Pb", "<cmd>PiSendBuffer<cr>",            mode = "n", desc = "Pi Send Buffer" },
+    { "<leader>Pi", "<cmd>PiPing<cr>",                  mode = "n", desc = "Pi Ping" },
   },
   config = function()
     require("pi-nvim").setup()
