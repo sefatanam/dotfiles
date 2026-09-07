@@ -129,5 +129,3 @@ map("n", "<leader>up", function()
     vim.notify("Performance mode: OFF", vim.log.levels.INFO)
   end
 end, { desc = "Toggle performance mode" })
--- AI provider manager (on-demand activation)
-require("config.ai_manager")

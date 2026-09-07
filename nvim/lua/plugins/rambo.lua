@@ -1,5 +1,6 @@
 return {
   "colomb8/rambo.nvim",
+  lazy = true,
   event = "VeryLazy",
   config = function()
     require("rambo").setup({
