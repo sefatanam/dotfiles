@@ -6,9 +6,9 @@
 # ─── APPEARANCE ───
 # Follows the terminal, same gruvbox pair as ghostty/alacritty.
 appearance  = "system"
-theme_dark  = "gruvbox-dark"
-theme_light = "gruvbox-light"
-transparent_background = true
+theme_dark  = "github-dark"
+theme_light = "github-light"
+transparent_background = false
 
 # ─── DIFF VIEW ───
 diff_view             = "side-by-side"
@@ -24,7 +24,11 @@ show_pr_comments      = true
 
 # ─── EDITING ───
 editor       = "nvim"          # `e` / `:edit` — overrides $EDITOR
-comment_vim  = true            # modal editing in the comment box
+# comment_vim = true crashes tuicr 0.26.0: Shift-Tab in the comment box hits an
+# unimplemented!() in edtui 0.11.7 (events/key/input.rs:146) and panics the process.
+# Off also means Tab / Shift-Tab cycle the comment type while you type, instead of
+# only in Normal mode. Re-test with `:vim` after an edtui bump before flipping back.
+# comment_vim  = false           # modal editing in the comment box
 comment_tab_width = 4
 mouse        = true
 q_quits      = false           # `q` closes panes, not the app
