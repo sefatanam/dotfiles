@@ -1,77 +1,58 @@
-; Global git configuration.
-; Installed with: cd ~/.dotfiles/stow-packages && stow -t ~ git
-; See git/README.md for a key-by-key explanation of everything in this file.
-
 [user]
 	name = Sefat Anam
 	email = sefatanam@gmail.com
+  signingkey = ~/.ssh/id_ed25519.pub
 
 [core]
-	# input: normalize CRLF -> LF on commit, leave the working tree alone on checkout
 	autocrlf = input
-	editor = vim
+	editor = nvim
 	excludesfile = ~/.gitignore_global
+  pager = delta
+
+[interactive]
+  diffFilter = delta --color-only
+
+[delta]
+  navigate = true
+  dark = true
+  line-numbers = true
+
+[merge]
+  conflictStyle = zdiff3
+	summary = true
+	verbosity = 1
+	tool = nvimdiff
 
 [init]
 	defaultBranch = main
 
 [gpg]
-	program = gpg
-	format = openpgp
+	format = ssh
 
 [gpg "ssh"]
-	program = ssh-keygen
-	allowedSignersFile = ""
+	allowedSignersFile = ~/.ssh/allowed_signers
 
 [commit]
-	gpgSign = false
+	gpgsign = true
+  verbose = true
 
 [tag]
-	forceSignAnnotated = false
+  gpgsign = true
 
 [diff]
 	tool = vscode
-	# Git diff will use (i)ndex, (w)ork tree, (c)ommit and (o)bject
-	# instead of a/b/c/d as prefixes for patches
 	mnemonicprefix = true
-	algorithm = patience
+	algorithm = histogram
+  colorMoved = default
 
 [difftool "vscode"]
 	cmd = code --wait --diff \"$LOCAL\" \"$REMOTE\"
 
-[merge]
-	summary = true
-	verbosity = 1
-	tool = nvimdiff
-
-[mergetool]
-	prompt = false
-
 [rerere]
-	# Remember my merges
-	# http://gitfu.wordpress.com/2008/04/20/git-rerere-rereremember-what-you-did-last-time/
 	enabled = true
-
-# credential.helper is CUMULATIVE across config files, it does not override.
-# Homebrew's /opt/homebrew/etc/gitconfig already sets `helper = osxkeychain`,
-# so adding `helper = store` here would ALSO write tokens in plaintext to
-# ~/.git-credentials. Left disabled on purpose; see git/README.md.
-# [credential]
-#  helper = store
 
 [color]
 	ui = true
-
-[color "branch"]
-	current = yellow reverse
-	local = yellow
-	remote = green
-
-[color "diff"]
-	meta = yellow bold
-	frag = magenta bold
-	old = red
-	new = green
 
 [format]
 	pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
@@ -84,8 +65,6 @@
 	sort = -committerdate
 
 [push]
-	# 'git push' will push the current branch to its tracking branch
-	# the usual default is to push all branches
 	default = upstream
 
 [pull]
@@ -95,7 +74,7 @@
 	prune = true
 
 [advice]
-	statusHints = false
+	statusHints = true
 
 [column]
 	ui = auto
@@ -111,10 +90,8 @@
 #  path = ~/.gitconfig.work
 
 [alias]
-	# add
-	a = add                           # add
-	chunkyadd = add --patch           # stage commits chunk by chunk
-	# Shows list of contributors of a repository.
+	a = add
+	chunkyadd = add --patch
 	contributors = shortlog --summary --numbered --email
 
 	# via http://philjackson.github.io/2013/04/07/handy-git-tips-to-stop-you-getting-fired.html
@@ -124,24 +101,18 @@
 	#via http://stackoverflow.com/questions/5188320/how-can-i-get-a-list-of-git-branches-ordered-by-most-recent-commit
 	recent-branches = !git for-each-ref --count=15 --sort=-committerdate refs/heads/ --format='%(refname:short)'
 
-	# branch
 	b = branch -v                     # branch (verbose)
-
-	# commit
 	c = commit -m                     # commit with message
 	ca = commit -am                   # commit all with message
 	ci = commit                       # commit
 	amend = commit --amend            # ammend your last commit
 	ammend = commit --amend           # ammend your last commit
 
-	# checkout
 	co = checkout                     # checkout
 	nb = checkout -b                  # create and switch to a new branch (mnemonic: "git new branch branchname...")
 
-	# cherry-pick
 	cp = cherry-pick -x               # grab a change from a branch
 
-	# diff
 	d = diff                          # diff unstaged changes
 	dc = diff --cached                # diff staged changes
 	last = diff HEAD^                 # diff last committed change
@@ -157,62 +128,33 @@
 	simple = log --pretty=format:\" * %s\"
 	shortnocolor = log --pretty=format:\"%h %cr %cn %s\"
 
-	# pull
 	pl = pull                         # pull
-
-	# push
 	ps = push                         # push
 
-	# rebase
 	rc = rebase --continue            # continue rebase
 	rs = rebase --skip                # skip rebase
 
-	# remote
 	r = remote -v                     # show remotes (verbose)
 
-	# reset
 	unstage = reset HEAD              # remove files from index (tracking)
 	uncommit = reset --soft HEAD^     # go back before last commit, with files in uncommitted state
 	filelog = log -u                  # show changes to a file
 	mt = mergetool                    # fire up the merge tool
 
-	# stash
 	ss = stash                        # stash changes
 	sl = stash list                   # list stashes
 	sa = stash apply                  # apply stash (restore changes)
 	sd = stash drop                   # drop stashes (destory changes)
 
-	# status
 	s = status                        # status
 	st = status                       # status
 	stat = status                     # status
 
-	# tag
 	t = tag -n                        # show tags with <n> lines of each tag message
 
-	# svn helpers
 	svnr = svn rebase
 	svnd = svn dcommit
 	svnl = svn log --oneline --show-commit
 
-	# --- git-side twins of the zsh aliases in zsh/.local/share/zsh/aliases.zsh ---
-	# Same names, reachable as `git gs` etc. from any shell.
-	# NOTE: alias names are case-INSENSITIVE here, so `gP` cannot coexist
-	# with `gp` — use `ps` (above) for push.
-	gs = status                       # zsh: gs
-	gc = commit -m                    # zsh: gc
-	gl = log --oneline                # zsh: gl
-	grh = reset --hard                # zsh: grh  — DESTRUCTIVE, discards all local changes
-	gts = stash                       # zsh: gts
-	gtp = stash pop                   # zsh: gtp
-	gcll = config --local --list      # zsh: gcll
-	grp = remote prune origin         # zsh: grp
-
-	# zsh: gp — stash, pull --rebase, restore. Pops only what this run stashed,
-	# so a clean tree can never resurrect an unrelated older stash.
-	gp = "!f() { s=0; if ! git diff --quiet HEAD 2>/dev/null; then git stash push -m \"gp $(date +%F_%T)\" >/dev/null && s=1; fi; git pull --rebase || exit 1; if [ \"$s\" = 1 ]; then git stash pop; fi; }; f"
-
-	# zsh: gcn / gce — set this repo's identity from $GIT_NAME / $GIT_EMAIL
-	# (exported by zsh/private). Refuses rather than writing an empty value.
 	gcn = "!f() { [ -n \"${GIT_NAME:-}\" ] || { echo 'GIT_NAME is not set (see zsh/private)' >&2; exit 1; }; git config --local user.name \"$GIT_NAME\"; }; f"
 	gce = "!f() { [ -n \"${GIT_EMAIL:-}\" ] || { echo 'GIT_EMAIL is not set (see zsh/private)' >&2; exit 1; }; git config --local user.email \"$GIT_EMAIL\"; }; f"
