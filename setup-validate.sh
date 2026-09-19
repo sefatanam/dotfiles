@@ -16,9 +16,8 @@ bad()  { echo "❌ $1"; fail=1; }
 for conf in "$ROOT"/*/install.conf; do
     [ -f "$conf" ] || continue
     tool="$(basename "$(dirname "$conf")")"
-    while IFS= read -r line || [ -n "$line" ]; do
-        line="${line%%#*}"
-        line="$(printf '%s' "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+    while IFS= read -r raw || [ -n "$raw" ]; do
+        line="$(_install_conf_normalize "$raw")"
         [ -z "$line" ] && continue
         directive="${line%% *}"
         case "$directive" in

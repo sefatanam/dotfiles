@@ -92,6 +92,15 @@ _dotfiles_os() {
     esac
 }
 
+# Strips comments and leading/trailing whitespace from one install.conf line.
+# Shared with setup-validate.sh's static check, so the parsing rules only
+# live in one place.
+_install_conf_normalize() {
+    local line="$1"
+    line="${line%%#*}"
+    printf '%s' "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'
+}
+
 _apply_declared_link() {
     local tool="$1" dir="$2" spec="$3"
     local src="${spec%% -> *}"
@@ -115,7 +124,7 @@ _apply_declared_link() {
 
 apply_declared_installs() {
     local root="$1"
-    local conf dir tool platform line directive rest
+    local conf dir tool platform raw line directive rest
 
     for conf in "$root"/*/install.conf; do
         [ -f "$conf" ] || continue
@@ -123,9 +132,8 @@ apply_declared_installs() {
         tool="$(basename "$dir")"
         platform=""
 
-        while IFS= read -r line || [ -n "$line" ]; do
-            line="${line%%#*}"
-            line="$(printf '%s' "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+        while IFS= read -r raw || [ -n "$raw" ]; do
+            line="$(_install_conf_normalize "$raw")"
             [ -z "$line" ] && continue
 
             directive="${line%% *}"
@@ -135,19 +143,17 @@ apply_declared_installs() {
                 PLATFORM)
                     platform="$rest"
                     ;;
-                LINK)
+                LINK|POST)
                     if [ -n "$platform" ] && [ "$platform" != "$(_dotfiles_os)" ]; then
                         continue
                     fi
-                    _apply_declared_link "$tool" "$dir" "$rest"
-                    ;;
-                POST)
-                    if [ -n "$platform" ] && [ "$platform" != "$(_dotfiles_os)" ]; then
-                        continue
+                    if [ "$directive" = "LINK" ]; then
+                        _apply_declared_link "$tool" "$dir" "$rest"
+                    else
+                        info "Running $tool post-install..."
+                        (cd "$dir" && eval "$rest")
+                        success "$tool post-install done."
                     fi
-                    info "Running $tool post-install..."
-                    (cd "$dir" && eval "$rest")
-                    success "$tool post-install done."
                     ;;
                 *)
                     warn "$conf: unknown install.conf directive '$directive'"
