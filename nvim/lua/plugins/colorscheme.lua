@@ -5,6 +5,8 @@ return {
   -- { "olivercederborg/poimandres.nvim", lazy = true },
   -- { "lourenci/github-colors",          lazy = true },
   { "rose-pine/neovim", name = "rose-pine" },
+  { "folke/tokyonight.nvim", enabled = false },
+  { "catppuccin/nvim", name = "catppuccin", enabled = false },
   {
     "LazyVim/LazyVim",
     opts = {
