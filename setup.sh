@@ -94,6 +94,42 @@ ensure_omp_config() {
     fi
 }
 
+ensure_bat_themes() {
+    local root="$1"
+    # delta reads its syntax themes out of bat's compiled cache, so the Rosé Pine
+    # .tmTheme files in bat/themes only take effect once the cache is rebuilt.
+    if ! command -v bat >/dev/null 2>&1; then
+        warn "bat not installed (skipping syntax theme cache)"
+        return
+    fi
+    if [ ! -d "$root/bat/themes" ]; then
+        return
+    fi
+    info "Building bat theme cache (delta syntax themes)..."
+    bat cache --build >/dev/null
+    success "bat theme cache built."
+}
+
+ensure_lazygit_config() {
+    local root="$1"
+    local config="$root/lazygit/config.yml"
+    local target="$HOME/Library/Application Support/lazygit/config.yml"
+
+    # On macOS lazygit reads ~/Library/Application Support, not ~/.config, so the
+    # stowed ~/.config/lazygit link is not enough here.
+    if [ ! -f "$config" ] || [ "$(uname -s)" != "Darwin" ]; then
+        return
+    fi
+    info "Linking lazygit config..."
+    mkdir -p "$(dirname "$target")"
+    if [ -f "$target" ] && [ ! -L "$target" ] && [ -s "$target" ]; then
+        warn "Existing $target left alone (back it up and re-run)"
+        return
+    fi
+    ln -sfn "$config" "$target"
+    success "lazygit config linked."
+}
+
 main() {
     local root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -103,6 +139,8 @@ main() {
     ensure_dirs "${PRIVATE_DIRS[@]}"
     ensure_git_hooks "$root"
     ensure_omp_config "$root"
+    ensure_bat_themes "$root"
+    ensure_lazygit_config "$root"
 
     echo -e "\n${GREEN}✨ Setup complete!${NC}"
     info "Restart terminal or run 'source ~/.zshrc'"

@@ -47,12 +47,29 @@ stow -t ~ shell editor git
 
 | Package | Links | Notable configs |
 |---|---|---|
-| `shell` | `~/.zshrc`, `~/.zprofile`, `~/.p10k.zsh`, `~/.tmux.conf`, `~/.wezterm.lua`, `~/.config/*` | alacritty, ghostty, aerospace, workmux, herdr, [tuicr](tuicr/README.md) |
+| `shell` | `~/.zshrc`, `~/.zprofile`, `~/.p10k.zsh`, `~/.tmux.conf`, `~/.wezterm.lua`, `~/.tuicrignore`, `~/.config/*` | alacritty, ghostty, aerospace, workmux, herdr, bat, lazygit, [tuicr](tuicr/README.md) |
 | `editor` | `~/.config/nvim` | Neovim |
 | `git` | `~/.gitconfig`, `~/.gitignore_global` | [git/README.md](git/README.md) |
 
 Each `~/.config/<app>` entry is a symlink back to a folder of the same name in this repo
 root, so editing e.g. `tuicr/config.toml` takes effect immediately — no restow.
+
+## Theme
+
+Everything shares one Rosé Pine palette — Ghostty, Neovim, lazygit, and git diffs:
+
+| Tool | Where |
+|---|---|
+| delta (git pager) | `git/delta-rose-pine.gitconfig` — `rose-pine`, `rose-pine-moon`, `rose-pine-dawn` features, included from `git/gitconfig` |
+| syntax highlighting | `bat/themes/*.tmTheme` — delta reads these from bat's cache, so run `bat cache --build` after changing them |
+| lazygit | `lazygit/config.yml` — theme colors plus delta as the pager |
+
+Switch variants by pointing `[delta] features` in `git/gitconfig` and `--features`/`--syntax-theme`
+in `lazygit/config.yml` at `rose-pine-moon` or `rose-pine-dawn`. `delta --show-themes` and
+`delta --show-syntax-themes` preview what is available.
+
+> On macOS lazygit reads `~/Library/Application Support/lazygit`, not `~/.config`; `setup.sh`
+> symlinks `lazygit/config.yml` there for you.
 
 ## Usage
 
