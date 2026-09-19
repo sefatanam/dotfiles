@@ -1,0 +1,121 @@
+# Rosé Pine themes for delta (https://github.com/dandavison/delta)
+#
+# Structured like delta's own themes.gitconfig — activate one with:
+#
+#   [delta]
+#       features = rose-pine
+#
+# Colors come from the official palette: https://rosepinetheme.com/palette
+# The `syntax-theme` values require the matching .tmTheme from ../bat/themes to
+# be in bat's theme cache (`bat cache --build`; setup.sh does this for you).
+
+[delta "rose-pine"]
+    # base #191724  surface #1f1d2e  overlay #26233a  muted #6e6a86
+    # text #e0def4  love #eb6f92  gold #f6c177  rose #ebbcba
+    # pine #31748f  foam #9ccfd8  iris #c4a7e7
+    dark = true
+    syntax-theme = rose-pine
+    line-numbers = true
+    file-style = "#e0def4" bold
+    file-decoration-style = "#403d52" ul
+    file-added-label = [+]
+    file-copied-label = [==]
+    file-modified-label = [*]
+    file-removed-label = [-]
+    file-renamed-label = [->]
+    hunk-header-style = file line-number syntax
+    hunk-header-decoration-style = "#26233a" box ul
+    hunk-header-file-style = "#9ccfd8"
+    hunk-header-line-number-style = "#c4a7e7"
+    minus-style = syntax "#472a3c"
+    minus-emph-style = normal "#6d3a50"
+    minus-non-emph-style = syntax auto
+    plus-style = syntax "#213749"
+    plus-emph-style = normal "#25455a"
+    plus-non-emph-style = syntax auto
+    zero-style = syntax
+    line-numbers-minus-style = "#eb6f92"
+    line-numbers-plus-style = "#9ccfd8"
+    line-numbers-zero-style = "#6e6a86"
+    line-numbers-left-style = "#403d52"
+    line-numbers-right-style = "#403d52"
+    whitespace-error-style = "#eb6f92" reverse
+    commit-style = "#f6c177" bold
+    commit-decoration-style = "#f6c177" box ul
+    blame-code-style = syntax
+    blame-palette = "#191724 #1f1d2e #26233a #21202e"
+    merge-conflict-begin-symbol = ~
+    merge-conflict-end-symbol = ~
+    merge-conflict-ours-diff-header-style = "#f6c177" bold
+    merge-conflict-ours-diff-header-decoration-style = "#403d52" box
+    merge-conflict-theirs-diff-header-style = "#f6c177" bold
+    merge-conflict-theirs-diff-header-decoration-style = "#403d52" box
+
+[delta "rose-pine-moon"]
+    # base #232136  surface #2a273f  overlay #393552  pine #3e8fb0  rose #ea9a97
+    dark = true
+    syntax-theme = rose-pine-moon
+    line-numbers = true
+    file-style = "#e0def4" bold
+    file-decoration-style = "#44415a" ul
+    file-added-label = [+]
+    file-copied-label = [==]
+    file-modified-label = [*]
+    file-removed-label = [-]
+    file-renamed-label = [->]
+    hunk-header-style = file line-number syntax
+    hunk-header-decoration-style = "#393552" box ul
+    hunk-header-file-style = "#9ccfd8"
+    hunk-header-line-number-style = "#c4a7e7"
+    minus-style = syntax "#4f324a"
+    minus-emph-style = normal "#73405b"
+    minus-non-emph-style = syntax auto
+    plus-style = syntax "#2c4760"
+    plus-emph-style = normal "#315873"
+    plus-non-emph-style = syntax auto
+    zero-style = syntax
+    line-numbers-minus-style = "#eb6f92"
+    line-numbers-plus-style = "#9ccfd8"
+    line-numbers-zero-style = "#6e6a86"
+    line-numbers-left-style = "#44415a"
+    line-numbers-right-style = "#44415a"
+    whitespace-error-style = "#eb6f92" reverse
+    commit-style = "#f6c177" bold
+    commit-decoration-style = "#f6c177" box ul
+    blame-code-style = syntax
+    blame-palette = "#232136 #2a273f #393552 #2a283e"
+
+[delta "rose-pine-dawn"]
+    # base #faf4ed  surface #fffaf3  overlay #f2e9e1  text #575279
+    # love #b4637a  gold #ea9d34  rose #d7827e  pine #286983  foam #56949f
+    light = true
+    syntax-theme = rose-pine-dawn
+    line-numbers = true
+    file-style = "#575279" bold
+    file-decoration-style = "#dfdad9" ul
+    file-added-label = [+]
+    file-copied-label = [==]
+    file-modified-label = [*]
+    file-removed-label = [-]
+    file-renamed-label = [->]
+    hunk-header-style = file line-number syntax
+    hunk-header-decoration-style = "#f2e9e1" box ul
+    hunk-header-file-style = "#56949f"
+    hunk-header-line-number-style = "#907aa9"
+    minus-style = syntax "#eddad8"
+    minus-emph-style = normal "#e4c6c8"
+    minus-non-emph-style = syntax auto
+    plus-style = syntax "#dce3df"
+    plus-emph-style = normal "#c6d5d4"
+    plus-non-emph-style = syntax auto
+    zero-style = syntax
+    line-numbers-minus-style = "#b4637a"
+    line-numbers-plus-style = "#56949f"
+    line-numbers-zero-style = "#9893a5"
+    line-numbers-left-style = "#dfdad9"
+    line-numbers-right-style = "#dfdad9"
+    whitespace-error-style = "#b4637a" reverse
+    commit-style = "#ea9d34" bold
+    commit-decoration-style = "#ea9d34" box ul
+    blame-code-style = syntax
+    blame-palette = "#faf4ed #fffaf3 #f2e9e1 #f4ede8"

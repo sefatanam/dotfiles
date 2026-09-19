@@ -2,9 +2,11 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
-      inlay_hints        = { enabled = false },
-      codelens           = { enabled = false },
-      document_highlight = { enabled = false }, -- no LSP re-query on every CursorHold
+      inlay_hints = { enabled = false },
+      codelens    = { enabled = false },
+      -- document-highlight-on-CursorHold is actually driven by snacks.nvim's
+      -- `words` module (LazyVim has no `document_highlight` opt to disable it
+      -- through), see nvim/lua/plugins/snacks.lua for the real toggle.
       servers = {
         ["*"] = {
           capabilities = {
@@ -13,6 +15,10 @@ return {
               didChangeWatchedFiles = { dynamicRegistration = false },
             },
           },
+          -- Neovim's own default is already 150ms; double it so heavier
+          -- servers (vtsls/jdtls/angularls) reparse on fewer, larger bursts
+          -- of typing instead of nearly every keystroke
+          flags = { debounce_text_changes = 300 },
         },
         -- HTML LSP: attach to both html and htmlangular filetypes
         -- This ensures HTML features work in Angular templates alongside Angular LSP

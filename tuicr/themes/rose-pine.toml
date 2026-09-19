@@ -1,0 +1,63 @@
+# Rosé Pine (main) for tuicr — https://rosepinetheme.com/palette
+#
+# base #191724  surface #1f1d2e  overlay #26233a
+# muted #6e6a86  subtle #908caa  text #e0def4
+# love #eb6f92  gold #f6c177  rose #ebbcba
+# pine #31748f  foam #9ccfd8  iris #c4a7e7
+# highlight low #21202e  med #403d52  high #524f67
+#
+# Diff backgrounds are the same blends delta uses in git/delta-rose-pine.gitconfig,
+# so tuicr and `git diff` render an identical hunk.
+
+panel_bg     = "#191724"   # base
+bg_highlight = "#403d52"   # highlight med
+fg_primary   = "#e0def4"   # text
+fg_secondary = "#908caa"   # subtle
+fg_dim       = "#6e6a86"   # muted
+
+diff_add            = "#9ccfd8"   # foam
+diff_add_bg         = "#213749"   # = delta plus-style
+diff_del            = "#eb6f92"   # love
+diff_del_bg         = "#472a3c"   # = delta minus-style
+diff_context        = "#e0def4"   # text
+diff_hunk_header    = "#c4a7e7"   # iris
+expanded_context_fg = "#6e6a86"   # muted
+
+syntax_add_bg = "#213749"
+syntax_del_bg = "#472a3c"
+# Symlink to ../../bat/themes/ — one .tmTheme shared by bat, delta and tuicr.
+syntax_theme  = "rose-pine.tmTheme"
+
+file_added    = "#9ccfd8"   # foam
+file_modified = "#f6c177"   # gold
+file_deleted  = "#eb6f92"   # love
+file_renamed  = "#c4a7e7"   # iris
+
+reviewed = "#9ccfd8"   # foam
+pending  = "#f6c177"   # gold
+
+# Matches the comment_types in ../config.toml: note / suggestion / issue.
+comment_note       = "#9ccfd8"   # foam
+comment_suggestion = "#f6c177"   # gold
+comment_issue      = "#eb6f92"   # love
+comment_praise     = "#ebbcba"   # rose (unused; `praise` isn't a configured type)
+
+border_focused   = "#ebbcba"   # rose
+border_unfocused = "#403d52"   # highlight med
+status_bar_bg    = "#1f1d2e"   # surface
+cursor_color     = "#ebbcba"   # rose
+cursor_line_bg   = "#21202e"   # highlight low
+branch_name      = "#c4a7e7"   # iris
+help_indicator   = "#908caa"   # subtle
+
+message_info_fg    = "#191724"
+message_info_bg    = "#9ccfd8"   # foam
+message_warning_fg = "#191724"
+message_warning_bg = "#f6c177"   # gold
+message_error_fg   = "#191724"
+message_error_bg   = "#eb6f92"   # love
+update_badge_fg    = "#191724"
+update_badge_bg    = "#f6c177"   # gold
+
+mode_fg = "#191724"
+mode_bg = "#ebbcba"   # rose

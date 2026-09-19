@@ -16,10 +16,14 @@ _source_if_exists() {
 
 _source_if_exists "$ZSH_CONFIG_DIR/exports.zsh"
 _source_if_exists "$ZSH_CONFIG_DIR/aliases.zsh"
+# work.zsh: job/project-specific aliases, not secret, committed.
+# local.zsh: gitignored — network details, client names, anything that
+# doesn't belong in a public repo. See local.zsh.example for the shape.
+_source_if_exists "$ZSH_CONFIG_DIR/work.zsh"
+_source_if_exists "$ZSH_CONFIG_DIR/local.zsh"
 _source_if_exists "$ZSH_CONFIG_DIR/functions.zsh"
 _source_if_exists "$ZSH_CONFIG_DIR/completions.zsh"
 
-[[ -f ~/.private ]] && source ~/.private
 [[ -f "$HOME/.dotfiles/zsh/private" ]] && source "$HOME/.dotfiles/zsh/private"
 
 # zsh plugins

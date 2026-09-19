@@ -12,7 +12,13 @@
 [interactive]
   diffFilter = delta --color-only
 
+# Rosé Pine themes for delta live next to this file (rose-pine, rose-pine-moon,
+# rose-pine-dawn). Browse delta's own themes with `delta --show-themes`.
+[include]
+  path = ~/.dotfiles/git/delta-rose-pine.gitconfig
+
 [delta]
+  features = rose-pine
   navigate = true
   dark = true
   line-numbers = true

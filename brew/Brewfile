@@ -13,6 +13,8 @@ brew "gettext"
 brew "aria2"
 # Improved shell history for zsh, bash, fish and nushell
 brew "atuin"
+# Clone of cat(1) with syntax highlighting and Git integration
+brew "bat"
 # Core application library for C
 brew "glib"
 # Cross-platform make
