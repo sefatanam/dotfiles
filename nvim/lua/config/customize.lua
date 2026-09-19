@@ -1,0 +1,126 @@
+-- All personal/custom Neovim config lives here (keymaps, user commands, toggles).
+-- Required from config/keymaps.lua so it still loads on LazyVim's VeryLazy event.
+-- See nvim/README.md for the documented keymap list.
+
+local map = vim.keymap.set
+
+map("n", "D", '"_d$', { desc = "Delete to the vois register.", noremap = true })
+
+vim.api.nvim_set_keymap(
+  "n",
+  "<leader>drr",
+  ":lua vim.lsp.diagnostic.refresh()<CR>",
+  { noremap = true, silent = true, unique = true }
+)
+
+map({ "n", "v", "i" }, "<leader>fs", function()
+  vim.lsp.buf.format({ async = true })
+end, { unique = true, desc = "Format file or range (in visual mode)" })
+
+map("t", "<Esc>", [[<C-\><C-n>]], { noremap = true, desc = "Exit terminal mode" })
+
+-- Jumps
+map("n", "<leader>jt", "<cmd>/template:<cr><cmd>nohl<cr>", { unique = true, desc = "Jump to template" })
+map("n", "<leader>js", "<cmd>/style.:<cr><cmd>nohl<cr>", { unique = true, desc = "Jump to styles" })
+map("n", "<leader>jc", "<cmd>/Component {<cr><cmd>nohl<cr>", { unique = true, desc = "Jump to component" })
+
+if not vim.g.vscode then
+  -- ufo
+  map("n", "zR", require("ufo").openAllFolds)
+  map("n", "zM", require("ufo").closeAllFolds)
+end
+
+vim.api.nvim_create_user_command("TOhtml", function()
+  local tohtml = require("tohtml")
+  local bufname = vim.api.nvim_buf_get_name(0)
+  local filename = bufname:match("^.+/(.+)$") or "Untitled"
+  local final_filename = filename .. "-ShareBySefat.html"
+  local filepath = os.getenv("HOME") .. "/Downloads/" .. final_filename
+  local output = tohtml.tohtml(0, { title = final_filename, style = "colorful" })
+
+  local file = io.open(filepath, "w")
+  if file then
+    file:write(table.concat(output, "\n"))
+    file:close()
+    print("Yo! HTML saved to " .. filepath)
+  else
+    print("Error: Unable to save file.")
+  end
+end, {})
+
+if not vim.g.vscode then
+  -- Map H to previous buffer
+  map("n", "<S-Tab>", ":bprev<CR>", { desc = "Previous buffer", silent = true, unique = true })
+  -- Map L to next buffer
+  map("n", "<Tab>", ":bnext<CR>", { desc = "Next buffer", silent = true, unique = true })
+  -- New tab
+  map("n", "te", ":tabedit")
+  -- Split window
+  map("n", "hs", ":split<Return>", { desc = "Horizontal Split", silent = true, unique = true })
+  map("n", "vs", ":vsplit<Return>", { desc = "Verticle Split", silent = true, unique = true })
+end
+
+if vim.g.vscode then
+  local keymap = vim.keymap.set
+  local opts = {
+    noremap = true,
+    silent = true,
+  }
+
+  -- remap leader key
+  keymap("n", "<Space>", "", opts)
+  vim.g.mapleader = " "
+  vim.g.maplocalleader = " "
+
+  -- general keymaps
+  keymap({ "n", "v" }, "<leader>t", "<cmd>lua require('vscode').action('workbench.action.terminal.toggleTerminal')<CR>")
+  keymap({ "n", "v" }, "<leader>b", "<cmd>lua require('vscode').action('editor.debug.action.toggleBreakpoint')<CR>")
+  keymap({ "n", "v" }, "<leader>d", "<cmd>lua require('vscode').action('editor.action.showHover')<CR>")
+  keymap({ "n", "v" }, "<leader>a", "<cmd>lua require('vscode').action('editor.action.quickFix')<CR>")
+  keymap({ "n", "v" }, "<leader>sp", "<cmd>lua require('vscode').action('workbench.actions.view.problems')<CR>")
+  keymap({ "n", "v" }, "<leader>cn", "<cmd>lua require('vscode').action('notifications.clearAll')<CR>")
+  keymap({ "n", "v" }, "<leader>ff", "<cmd>lua require('vscode').action('workbench.action.quickOpen')<CR>")
+  keymap({ "n", "v" }, "<leader>cp", "<cmd>lua require('vscode').action('workbench.action.showCommands')<CR>")
+  keymap({ "n", "v" }, "<leader>pr", "<cmd>lua require('vscode').action('code-runner.run')<CR>")
+  keymap({ "n", "v" }, "<leader>fd", "<cmd>lua require('vscode').action('editor.action.formatDocument')<CR>")
+end
+
+-- LSP rename variable across file
+map("n", "<leader>vr", vim.lsp.buf.rename, { desc = "Rename variable (LSP)", noremap = true, silent = true })
+
+-- ref theprimeagen
+vim.keymap.set({ "n", "v" }, "<leader>p", '",_dP', { noremap = true, silent = true, desc = "Paste without replacing the default register" })
+vim.keymap.set("i", "<C-j>", "<Esc>o", { noremap = true, silent = true })
+
+-- Toggle performance mode for large files
+map("n", "<leader>up", function()
+  vim.b.large_file = not vim.b.large_file
+  if vim.b.large_file then
+    -- Enable performance mode
+    vim.opt_local.relativenumber = false
+    vim.opt_local.cursorline = false
+    vim.opt_local.foldmethod = "manual"
+    vim.opt_local.list = false
+
+    local ok, ts_context = pcall(require, "treesitter-context")
+    if ok then ts_context.disable() end
+
+    local ufo_ok, ufo = pcall(require, "ufo")
+    if ufo_ok then ufo.detach() end
+
+    vim.notify("Performance mode: ON", vim.log.levels.INFO)
+  else
+    -- Disable performance mode
+    vim.opt_local.relativenumber = true
+    vim.opt_local.cursorline = true
+    vim.opt_local.list = true
+
+    local ok, ts_context = pcall(require, "treesitter-context")
+    if ok then ts_context.enable() end
+
+    local ufo_ok, ufo = pcall(require, "ufo")
+    if ufo_ok then ufo.attach() end
+
+    vim.notify("Performance mode: OFF", vim.log.levels.INFO)
+  end
+end, { desc = "Toggle performance mode" })
