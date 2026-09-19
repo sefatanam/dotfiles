@@ -19,7 +19,6 @@ _source_if_exists "$ZSH_CONFIG_DIR/aliases.zsh"
 _source_if_exists "$ZSH_CONFIG_DIR/functions.zsh"
 _source_if_exists "$ZSH_CONFIG_DIR/completions.zsh"
 
-[[ -f ~/.private ]] && source ~/.private
 [[ -f "$HOME/.dotfiles/zsh/private" ]] && source "$HOME/.dotfiles/zsh/private"
 
 # zsh plugins

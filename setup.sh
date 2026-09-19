@@ -5,7 +5,6 @@ set -euo pipefail
 BREWFILE="brew/Brewfile"
 STOW_ROOT="stow-packages"
 STOW_PACKAGES=("shell" "editor" "git")
-PRIVATE_DIRS=("$HOME/.config/private")
 GIT_HOOKS_DIR="git/hooks"
 
 BLUE='\033[0;34m'
@@ -52,16 +51,6 @@ apply_stow() {
     cd - > /dev/null
 }
 
-ensure_dirs() {
-    local dirs=("$@")
-    for dir in "${dirs[@]}"; do
-        if [ ! -d "$dir" ]; then
-            mkdir -p "$dir"
-            touch "$dir/.env"
-            warn "Created $dir (add secrets to .env)"
-        fi
-    done
-}
 ensure_git_hooks() {
     local root="$1"
     local hooks="$GIT_HOOKS_DIR"
@@ -82,52 +71,90 @@ ensure_git_hooks() {
     success "Git hooks wired to $hooks"
 }
 
-ensure_omp_config() {
-    local root="$1"
-    local config="$root/omp/agent/config.yml"
-    local target="$HOME/.omp/agent/config.yml"
-    if [ -f "$config" ]; then
-        info "Linking OMP config..."
-        mkdir -p "$(dirname "$target")"
-        ln -sf "$config" "$target"
-        success "OMP config linked."
-    fi
+# --- Declarative per-tool install recipes -----------------------------------
+#
+# A tool that needs more than a plain `stow` symlink (a link outside $HOME's
+# stowed tree, or a one-off command after linking) declares it in its own
+# <tool>/install.conf instead of getting a bespoke ensure_<tool>() function
+# here. One line per directive:
+#
+#   PLATFORM darwin              # optional; restricts the whole file to an OS
+#   LINK <src> -> <dest>         # src is relative to the tool's own dir
+#   POST <shell command>         # run with CWD set to the tool's own dir
+#
+# See readme.md ("Adding a new tool") for the full convention.
+
+_dotfiles_os() {
+    case "$(uname -s)" in
+        Darwin) echo darwin ;;
+        Linux) echo linux ;;
+        *) echo other ;;
+    esac
 }
 
-ensure_bat_themes() {
-    local root="$1"
-    # delta reads its syntax themes out of bat's compiled cache, so the Rosé Pine
-    # .tmTheme files in bat/themes only take effect once the cache is rebuilt.
-    if ! command -v bat >/dev/null 2>&1; then
-        warn "bat not installed (skipping syntax theme cache)"
+_apply_declared_link() {
+    local tool="$1" dir="$2" spec="$3"
+    local src="${spec%% -> *}"
+    local dest="${spec#* -> }"
+    dest="${dest/#\~/$HOME}"
+    local abs_src="$dir/$src"
+
+    if [ ! -e "$abs_src" ]; then
+        warn "$tool: install.conf points at missing $abs_src"
         return
     fi
-    if [ ! -d "$root/bat/themes" ]; then
+
+    mkdir -p "$(dirname "$dest")"
+    if [ -e "$dest" ] && [ ! -L "$dest" ]; then
+        warn "$tool: existing $dest left alone (back it up and re-run)"
         return
     fi
-    info "Building bat theme cache (delta syntax themes)..."
-    bat cache --build >/dev/null
-    success "bat theme cache built."
+    ln -sfn "$abs_src" "$dest"
+    success "$tool: linked $dest"
 }
 
-ensure_lazygit_config() {
+apply_declared_installs() {
     local root="$1"
-    local config="$root/lazygit/config.yml"
-    local target="$HOME/Library/Application Support/lazygit/config.yml"
+    local conf dir tool platform line directive rest
 
-    # On macOS lazygit reads ~/Library/Application Support, not ~/.config, so the
-    # stowed ~/.config/lazygit link is not enough here.
-    if [ ! -f "$config" ] || [ "$(uname -s)" != "Darwin" ]; then
-        return
-    fi
-    info "Linking lazygit config..."
-    mkdir -p "$(dirname "$target")"
-    if [ -f "$target" ] && [ ! -L "$target" ] && [ -s "$target" ]; then
-        warn "Existing $target left alone (back it up and re-run)"
-        return
-    fi
-    ln -sfn "$config" "$target"
-    success "lazygit config linked."
+    for conf in "$root"/*/install.conf; do
+        [ -f "$conf" ] || continue
+        dir="$(dirname "$conf")"
+        tool="$(basename "$dir")"
+        platform=""
+
+        while IFS= read -r line || [ -n "$line" ]; do
+            line="${line%%#*}"
+            line="$(printf '%s' "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+            [ -z "$line" ] && continue
+
+            directive="${line%% *}"
+            rest="${line#* }"
+
+            case "$directive" in
+                PLATFORM)
+                    platform="$rest"
+                    ;;
+                LINK)
+                    if [ -n "$platform" ] && [ "$platform" != "$(_dotfiles_os)" ]; then
+                        continue
+                    fi
+                    _apply_declared_link "$tool" "$dir" "$rest"
+                    ;;
+                POST)
+                    if [ -n "$platform" ] && [ "$platform" != "$(_dotfiles_os)" ]; then
+                        continue
+                    fi
+                    info "Running $tool post-install..."
+                    (cd "$dir" && eval "$rest")
+                    success "$tool post-install done."
+                    ;;
+                *)
+                    warn "$conf: unknown install.conf directive '$directive'"
+                    ;;
+            esac
+        done < "$conf"
+    done
 }
 
 main() {
@@ -136,14 +163,15 @@ main() {
     ensure_homebrew
     apply_brew_bundle "$root/$BREWFILE"
     apply_stow "$root/$STOW_ROOT" "${STOW_PACKAGES[@]}"
-    ensure_dirs "${PRIVATE_DIRS[@]}"
     ensure_git_hooks "$root"
-    ensure_omp_config "$root"
-    ensure_bat_themes "$root"
-    ensure_lazygit_config "$root"
+    apply_declared_installs "$root"
 
     echo -e "\n${GREEN}✨ Setup complete!${NC}"
     info "Restart terminal or run 'source ~/.zshrc'"
 }
 
-main "$@"
+# Sourceable (see setup-validate.sh) without running main — only executes
+# when the script is run directly, not when it's sourced for its functions.
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main "$@"
+fi
