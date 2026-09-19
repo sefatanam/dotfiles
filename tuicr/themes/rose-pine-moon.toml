@@ -1,0 +1,61 @@
+# Rosé Pine Moon for tuicr — https://rosepinetheme.com/palette
+#
+# base #232136  surface #2a273f  overlay #393552
+# muted #6e6a86  subtle #908caa  text #e0def4
+# love #eb6f92  gold #f6c177  rose #ea9a97
+# pine #3e8fb0  foam #9ccfd8  iris #c4a7e7
+# highlight low #2a283e  med #44415a  high #56526e
+#
+# Same key-for-key mapping as rose-pine.toml, Moon palette. Diff backgrounds
+# match [delta "rose-pine-moon"] in git/delta-rose-pine.gitconfig.
+
+panel_bg     = "#232136"   # base
+bg_highlight = "#44415a"   # highlight med
+fg_primary   = "#e0def4"   # text
+fg_secondary = "#908caa"   # subtle
+fg_dim       = "#6e6a86"   # muted
+
+diff_add            = "#9ccfd8"   # foam
+diff_add_bg         = "#2c4760"   # = delta plus-style
+diff_del            = "#eb6f92"   # love
+diff_del_bg         = "#4f324a"   # = delta minus-style
+diff_context        = "#e0def4"   # text
+diff_hunk_header    = "#c4a7e7"   # iris
+expanded_context_fg = "#6e6a86"   # muted
+
+syntax_add_bg = "#2c4760"
+syntax_del_bg = "#4f324a"
+syntax_theme  = "rose-pine-moon.tmTheme"
+
+file_added    = "#9ccfd8"   # foam
+file_modified = "#f6c177"   # gold
+file_deleted  = "#eb6f92"   # love
+file_renamed  = "#c4a7e7"   # iris
+
+reviewed = "#9ccfd8"   # foam
+pending  = "#f6c177"   # gold
+
+comment_note       = "#9ccfd8"   # foam
+comment_suggestion = "#f6c177"   # gold
+comment_issue      = "#eb6f92"   # love
+comment_praise     = "#ea9a97"   # rose
+
+border_focused   = "#ea9a97"   # rose
+border_unfocused = "#44415a"   # highlight med
+status_bar_bg    = "#2a273f"   # surface
+cursor_color     = "#ea9a97"   # rose
+cursor_line_bg   = "#2a283e"   # highlight low
+branch_name      = "#c4a7e7"   # iris
+help_indicator   = "#908caa"   # subtle
+
+message_info_fg    = "#232136"
+message_info_bg    = "#9ccfd8"   # foam
+message_warning_fg = "#232136"
+message_warning_bg = "#f6c177"   # gold
+message_error_fg   = "#232136"
+message_error_bg   = "#eb6f92"   # love
+update_badge_fg    = "#232136"
+update_badge_bg    = "#f6c177"   # gold
+
+mode_fg = "#232136"
+mode_bg = "#ea9a97"   # rose

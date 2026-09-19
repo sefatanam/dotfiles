@@ -1,13 +1,17 @@
 # tuicr — code review TUI
 # Docs: https://github.com/agavra/tuicr/blob/main/docs/CONFIG.md
 # Stowed to ~/.config/tuicr/config.toml via stow-packages/shell
-# Local themes, if ever added, go in tuicr/themes/ (sibling of this file).
+# Local themes live in tuicr/themes/ (sibling of this file), tmTheme files there
+# are symlinks into bat/themes/ so bat, delta and tuicr share one syntax theme.
 
 # ─── APPEARANCE ───
-# Follows the terminal, same gruvbox pair as ghostty/alacritty.
+# Follows the terminal. Both halves are local themes from ./themes/ — tuicr has
+# no bundled Rosé Pine (`--theme` knows github/catppuccin/gruvbox/nord/tokyo-night/
+# everforest/solarized/ayu/onedark only), so the palette lives here alongside the
+# bat, delta and lazygit ports.
 appearance  = "system"
-theme_dark  = "github-dark"
-theme_light = "github-light"
+theme_dark  = "rose-pine"        # `rose-pine-moon` is also in ./themes/
+theme_light = "rose-pine-dawn"
 transparent_background = false
 
 # ─── DIFF VIEW ───
@@ -39,10 +43,17 @@ username     = "Sefat Anam"    # author stamped on comments
 # Order matters: the first entry is the default selection; `None` is always
 # appended to the Tab cycle, so untyped comments stay possible.
 # `definition` is the guidance shown in the legend and handed to LLMs.
+# Colors are Rosé Pine hex, not ANSI names, so the badges match the rest of the
+# palette instead of whatever the terminal maps `blue`/`yellow`/`red` to. These
+# are the main (dark) hues; under `appearance = "system"` they stay fixed while
+# the theme flips, so in light mode swap in the Dawn column below.
+#   foam  #9ccfd8 dark / #56949f dawn
+#   gold  #f6c177 dark / #ea9d34 dawn
+#   love  #eb6f92 dark / #b4637a dawn
 comment_types = [
-  { id = "note",       color = "blue",   definition = "context or an observation; no action required" },
-  { id = "suggestion", color = "yellow", definition = "an optional improvement the author may take or leave" },
-  { id = "issue",      color = "red",    definition = "a problem that must be fixed before merge" },
+  { id = "note",       color = "#9ccfd8", definition = "context or an observation; no action required" },
+  { id = "suggestion", color = "#f6c177", definition = "an optional improvement the author may take or leave" },
+  { id = "issue",      color = "#eb6f92", definition = "a problem that must be fixed before merge" },
 ]
 
 [forge]

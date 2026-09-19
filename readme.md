@@ -56,17 +56,19 @@ root, so editing e.g. `tuicr/config.toml` takes effect immediately — no restow
 
 ## Theme
 
-Everything shares one Rosé Pine palette — Ghostty, Neovim, lazygit, and git diffs:
+Everything shares one Rosé Pine palette — Ghostty, Neovim, lazygit, tuicr, and git diffs:
 
 | Tool | Where |
 |---|---|
 | delta (git pager) | `git/delta-rose-pine.gitconfig` — `rose-pine`, `rose-pine-moon`, `rose-pine-dawn` features, included from `git/gitconfig` |
 | syntax highlighting | `bat/themes/*.tmTheme` — delta reads these from bat's cache, so run `bat cache --build` after changing them |
 | lazygit | `lazygit/config.yml` — theme colors plus delta as the pager |
+| tuicr (review TUI) | `tuicr/themes/*.toml` — local themes; tuicr bundles no Rosé Pine. The `.tmTheme` files there symlink into `bat/themes/` |
 
-Switch variants by pointing `[delta] features` in `git/gitconfig` and `--features`/`--syntax-theme`
-in `lazygit/config.yml` at `rose-pine-moon` or `rose-pine-dawn`. `delta --show-themes` and
-`delta --show-syntax-themes` preview what is available.
+Switch variants by pointing `[delta] features` in `git/gitconfig`, `--features`/`--syntax-theme`
+in `lazygit/config.yml`, and `theme_dark` in `tuicr/config.toml` at `rose-pine-moon` or
+`rose-pine-dawn`. `delta --show-themes` and `delta --show-syntax-themes` preview what is
+available.
 
 > On macOS lazygit reads `~/Library/Application Support/lazygit`, not `~/.config`; `setup.sh`
 > symlinks `lazygit/config.yml` there for you.

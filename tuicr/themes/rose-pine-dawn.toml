@@ -1,0 +1,61 @@
+# Rosé Pine Dawn (light) for tuicr — https://rosepinetheme.com/palette
+#
+# base #faf4ed  surface #fffaf3  overlay #f2e9e1
+# muted #9893a5  subtle #797593  text #575279
+# love #b4637a  gold #ea9d34  rose #d7827e
+# pine #286983  foam #56949f  iris #907aa9
+# highlight low #f4ede8  med #dfdad9  high #cecacd
+#
+# The light half of `appearance = "system"` in ../config.toml. Diff backgrounds
+# match [delta "rose-pine-dawn"] in git/delta-rose-pine.gitconfig.
+
+panel_bg     = "#faf4ed"   # base
+bg_highlight = "#dfdad9"   # highlight med
+fg_primary   = "#575279"   # text
+fg_secondary = "#797593"   # subtle
+fg_dim       = "#9893a5"   # muted
+
+diff_add            = "#56949f"   # foam
+diff_add_bg         = "#dce3df"   # = delta plus-style
+diff_del            = "#b4637a"   # love
+diff_del_bg         = "#eddad8"   # = delta minus-style
+diff_context        = "#575279"   # text
+diff_hunk_header    = "#907aa9"   # iris
+expanded_context_fg = "#9893a5"   # muted
+
+syntax_add_bg = "#dce3df"
+syntax_del_bg = "#eddad8"
+syntax_theme  = "rose-pine-dawn.tmTheme"
+
+file_added    = "#56949f"   # foam
+file_modified = "#ea9d34"   # gold
+file_deleted  = "#b4637a"   # love
+file_renamed  = "#907aa9"   # iris
+
+reviewed = "#56949f"   # foam
+pending  = "#ea9d34"   # gold
+
+comment_note       = "#56949f"   # foam
+comment_suggestion = "#ea9d34"   # gold
+comment_issue      = "#b4637a"   # love
+comment_praise     = "#d7827e"   # rose
+
+border_focused   = "#d7827e"   # rose
+border_unfocused = "#dfdad9"   # highlight med
+status_bar_bg    = "#fffaf3"   # surface
+cursor_color     = "#d7827e"   # rose
+cursor_line_bg   = "#f4ede8"   # highlight low
+branch_name      = "#907aa9"   # iris
+help_indicator   = "#797593"   # subtle
+
+message_info_fg    = "#faf4ed"
+message_info_bg    = "#56949f"   # foam
+message_warning_fg = "#faf4ed"
+message_warning_bg = "#ea9d34"   # gold
+message_error_fg   = "#faf4ed"
+message_error_bg   = "#b4637a"   # love
+update_badge_fg    = "#faf4ed"
+update_badge_bg    = "#ea9d34"   # gold
+
+mode_fg = "#faf4ed"
+mode_bg = "#d7827e"   # rose
