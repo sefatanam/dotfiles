@@ -1,6 +1,6 @@
 macos-icon = xray
 #theme = dark:"Github Dark Dimmed",light:"Github Light Default"
-theme = dark:"Gruvbox Dark",light:"zenbones-zenwritten-light"
+theme = dark:"gruvbox-dark",light:"zenbones-zenwritten-light"
 # ─── CLIPBOARD ───
 clipboard-read = allow
 clipboard-write = allow
@@ -15,14 +15,7 @@ mouse-hide-while-typing = true
 # ─── FONT (Performance + Readability) ───
 font-size = 16
 
-font-family = "JetBrainsMono Nerd Font Propo"
-font-style = Regular
-font-family-bold = "JetBrainsMono Nerd Font Propo"
-font-style-bold = Bold
-font-family-italic = "JetBrainsMono Nerd Font Propo"
-font-style-italic = Italic
-font-family-bold-italic = "JetBrainsMono Nerd Font Propo"
-font-style-bold-italic = Bold Italic
+font-family = "Maple Mono NF"
 
 font-thicken = true
 font-thicken-strength = 1

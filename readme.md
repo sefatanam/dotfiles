@@ -36,20 +36,24 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 
 # Setup dotfiles
 cd ~/.dotfiles/stow-packages
-stow -t ~ shell editor
+stow -t ~ shell editor git
 ```
+
+> `stow -t ~ git` installs `git/gitconfig` as `~/.gitconfig` and `git/gitignore` as
+> `~/.gitignore_global`. If you already have a real `~/.gitconfig`, back it up and remove it
+> first — stow refuses to overwrite regular files. See [git/README.md](git/README.md).
 
 ## Usage
 
 ```bash
 # Install/update configs
-stow -t ~ shell editor
+stow -t ~ shell editor git
 
 # Update after changes  
-stow -R shell editor
+stow -R shell editor git
 
 # Remove configs
-stow -D shell editor
+stow -D shell editor git
 ```
 
 ## After Setup

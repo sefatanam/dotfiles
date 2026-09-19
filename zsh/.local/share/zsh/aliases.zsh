@@ -1,6 +1,7 @@
 # aliases.zsh - All command aliases
 
 alias c="clear"
+alias e="exit"
 
 # Directory navigation
 alias cdd='cd_to_dir ~/Documents/'
@@ -9,7 +10,7 @@ alias cd="z"
 
 # Enhanced ls
 alias es='eza -alF --color=always --sort=size | grep -v /'
-alias ls="eza --icons=always"
+alias el="eza --icons=always"
 
 # Applications
 alias n='nvim'
@@ -43,9 +44,11 @@ alias ts='tmux switch -t'
 alias td='tmux detach'
 
 # workmux
+alias w="workmux"
 alias wa="workmux add"
 alias wc="workmux close"
 alias wr="workmux remove"
+alias wo="workmux open"
 
 # NPM aliases
 alias ns="npm start"
@@ -54,8 +57,6 @@ alias nf="npm run format"
 alias nl="npm run lint"
 alias nlf="nl && nf"
 
-# Utility aliases
-alias cat="glow"
 
 # GitHub aliases
 alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
@@ -65,6 +66,13 @@ alias ghca="gh extension install github/gh-copilot"
 alias ghcs="gh copilot suggest"
 alias ghce="gh copilot explain"
 alias ghcup="gh extension upgrade gh-copilot"
+
+# Git Shortcut
+alias ld="luhmen docker"
+# alias gfd="git fetch -p && \
+#   git for-each-ref --format '%(refname:short) %(upstream:track)' | \
+#   awk '$2 == "[gone]" {print $1}' | \
+#   xargs -r git branch -D"
 
 # Forticlient VPN connect
 alias fvpn="sudo openfortivpn -c ~/.openfortivpn/config"

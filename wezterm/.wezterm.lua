@@ -6,8 +6,8 @@ local config = wezterm.config_builder()
 
 -- This is where you actually apply your config choices
 
--- config.font = wezterm.font("JetBrainsMono Nerd Font Propo")
-config.font = wezterm.font("IBM Plex Mono")
+config.font = wezterm.font("Maple Mono NF")
+-- config.font = wezterm.font("IBM Plex Mono")
 -- config.weight = "Thin"
 config.font_size = 12
 config.line_height= 1.6
