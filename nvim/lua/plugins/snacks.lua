@@ -7,6 +7,7 @@ return {
     -- animate      = { enabled = false }, -- stops all snacks animations
     -- indent       = { enabled = false }, -- indent guides redraw on every scroll
     -- bigfile      = { enabled = true, size = 1.5 * 1024 * 1024, notify = true },
+    words        = { enabled = false }, -- stops textDocument/documentHighlight requests firing on every CursorHold
     -- explorer     = {
     --   open = true,
     --   follow = true,

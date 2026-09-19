@@ -81,6 +81,20 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
+-- Disable LSP semantic token highlighting globally. It's the most common
+-- source of "typing feels laggy" once an LSP is attached: servers like
+-- vtsls/angularls/jdtls recompute and repaint token ranges on every edit.
+-- Treesitter already covers syntax highlighting, so this is pure win.
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("DisableSemanticTokens", { clear = true }),
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client then
+      client.server_capabilities.semanticTokensProvider = nil
+    end
+  end,
+})
+
 -- vim.api.nvim_create_autocmd("BufReadPost", {
 --   group = vim.api.nvim_create_augroup("RestoreCursor", { clear = true }),
 --   callback = function()
