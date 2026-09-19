@@ -28,3 +28,7 @@ pi/agent/models.json
 /graft/
 /.pi/skills
 /opencode.json
+
+# zsh: machine/employer-specific aliases (network details, client names) —
+# never track. Template: zsh/.local/share/zsh/local.zsh.example
+zsh/.local/share/zsh/local.zsh

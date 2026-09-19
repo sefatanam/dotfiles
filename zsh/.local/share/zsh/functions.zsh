@@ -6,6 +6,8 @@ zsh-recompile() {
         "$HOME/.zshrc"
         "$HOME/.local/share/zsh/exports.zsh"
         "$HOME/.local/share/zsh/aliases.zsh"
+        "$HOME/.local/share/zsh/work.zsh"
+        "$HOME/.local/share/zsh/local.zsh"
         "$HOME/.local/share/zsh/functions.zsh"
         "$HOME/.local/share/zsh/completions.zsh"
         "$HOME/.dotfiles/zsh/private"

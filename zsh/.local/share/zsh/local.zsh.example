@@ -1,0 +1,13 @@
+# local.zsh.example - Template for local.zsh (gitignored, never committed).
+#
+# Copy this to local.zsh on each machine and fill in real values. Anything
+# with a network address, VPN route, internal hostname, or client/company
+# name that shouldn't be public belongs here instead of aliases.zsh or
+# work.zsh.
+#
+#   cp zsh/.local/share/zsh/local.zsh.example zsh/.local/share/zsh/local.zsh
+#
+# Example shape (not real values):
+#
+# alias tovpn="sudo route add host <internal-ip> gateway ppp0 && sudo route add -host <internal-ip-2> -interface ppp0"
+# alias ld="<company-name> docker"

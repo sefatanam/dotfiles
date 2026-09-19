@@ -63,6 +63,22 @@ stow -t ~ shell editor git
 Each `~/.config/<app>` entry is a symlink back to a folder of the same name in this repo
 root, so editing e.g. `tuicr/config.toml` takes effect immediately — no restow.
 
+## Shell aliases: global, work, local
+
+`zsh/.local/share/zsh/` splits aliases/functions into three tiers instead of one flat file:
+
+| File | Committed? | For |
+|---|---|---|
+| `aliases.zsh` / `functions.zsh` | Yes | Broadly useful anywhere (tmux, git, npm, media tools, …) |
+| `work.zsh` | Yes | Job/project-specific, but nothing secret (assumes a particular project layout) |
+| `local.zsh` | **No** (gitignored) | Real network addresses, VPN routes, client/company names — anything that shouldn't be public |
+
+`local.zsh` doesn't exist on a fresh clone; copy the template and fill it in:
+
+```bash
+cp zsh/.local/share/zsh/local.zsh.example zsh/.local/share/zsh/local.zsh
+```
+
 ## Adding a new tool
 
 Most tools only need a `~/.config/<app>` stub added under `stow-packages/shell/.config/`
