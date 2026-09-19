@@ -73,18 +73,21 @@ apply_stow() {
     local root="$1"
     shift
     local pkgs=("$@")
-    local stow_flags=()
-    [ "$DRY_RUN" -eq 1 ] && stow_flags+=("-n")
 
     info "Syncing Symlinks..."
     cd "$root"
     for pkg in "${pkgs[@]}"; do
         if [ -d "$pkg" ]; then
-            stow "${stow_flags[@]}" -t "$HOME" -D "$pkg" 2>/dev/null || true
-            stow "${stow_flags[@]}" -t "$HOME" "$pkg"
+            # An empty array expanded under `set -u` is an "unbound variable"
+            # error on bash 3.2 (macOS's /bin/bash, what the shebang runs) —
+            # branch explicitly instead of building a conditional flags array.
             if [ "$DRY_RUN" -eq 1 ]; then
+                stow -n -t "$HOME" -D "$pkg" 2>/dev/null || true
+                stow -n -t "$HOME" "$pkg"
                 success "Would stow $pkg (dry-run)"
             else
+                stow -t "$HOME" -D "$pkg" 2>/dev/null || true
+                stow -t "$HOME" "$pkg"
                 success "Stowed $pkg"
             fi
         fi

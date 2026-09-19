@@ -117,6 +117,43 @@ else
     bad "confirm_or_abort proceeded on a non-interactive stdin without --yes"
 fi
 
+# --- 4. apply_stow itself, both DRY_RUN paths — this is what actually
+#        crashed under bash 3.2's `set -u` + empty-array-expansion pitfall
+#        when the dry-run flag was first added; the fixtures above never
+#        called apply_stow, so that regression shipped undetected. ---------
+stow_root="$(mktemp -d)"
+stow_target="$(mktemp -d)"
+mkdir -p "$stow_root/pkg"
+echo "payload" > "$stow_root/pkg/.stowtest"
+
+DRY_RUN=0
+HOME="$stow_target"
+( apply_stow "$stow_root" "pkg" >/dev/null 2>&1 )
+apply_stow_exit=$?
+HOME="$real_home"
+
+if [ "$apply_stow_exit" -eq 0 ] && [ -L "$stow_target/.stowtest" ]; then
+    ok "apply_stow (real run) links the package without crashing"
+else
+    bad "apply_stow (real run) failed (exit $apply_stow_exit) or didn't link — this is the bash-3.2 empty-array regression if it recurs"
+fi
+
+rm -f "$stow_target/.stowtest"
+DRY_RUN=1
+HOME="$stow_target"
+( apply_stow "$stow_root" "pkg" >/dev/null 2>&1 )
+apply_stow_dry_exit=$?
+HOME="$real_home"
+DRY_RUN=0
+
+if [ "$apply_stow_dry_exit" -eq 0 ] && [ ! -e "$stow_target/.stowtest" ]; then
+    ok "apply_stow --dry-run doesn't crash and makes no real link"
+else
+    bad "apply_stow --dry-run failed (exit $apply_stow_dry_exit) or linked for real"
+fi
+
+rm -rf "$stow_root" "$stow_target"
+
 echo
 if [ "$fail" -eq 0 ]; then
     echo "✨ setup-validate.sh: all checks passed."
