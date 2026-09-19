@@ -1,6 +1,6 @@
 macos-icon = xray
 #theme = dark:"Github Dark Dimmed",light:"Github Light Default"
-theme = dark:"gruvbox-dark",light:"zenbones-zenwritten-light"
+theme = dark:"Rose Pine",light:"zenbones-zenwritten-light"
 # ─── CLIPBOARD ───
 clipboard-read = allow
 clipboard-write = allow
