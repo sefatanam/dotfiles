@@ -399,6 +399,49 @@ root**, not from your current directory; the rest are plain git sub-command expa
 **Subversion bridges** — legacy, only useful against an SVN remote: `svnr` (`svn rebase`),
 `svnd` (`svn dcommit`), `svnl` (`svn log --oneline --show-commit`).
 
+### Twins of the zsh aliases
+
+The shell aliases in `zsh/.local/share/zsh/aliases.zsh` (lines 24-35) exist here under the same
+names, so `git gs` works in any shell — bash, a container, a `sh -c` one-liner — not just an
+interactive zsh with that file sourced.
+
+| Alias | Expands to | zsh twin |
+|---|---|---|
+| `gs` | `status` | `gs` |
+| `gc` | `commit -m` | `gc` |
+| `gl` | `log --oneline` | `gl` |
+| `grh` | `reset --hard` | `grh` — **destructive**, discards every uncommitted change |
+| `gts` | `stash` | `gts` |
+| `gtp` | `stash pop` | `gtp` |
+| `gcll` | `config --local --list` | `gcll` |
+| `grp` | `remote prune origin` | `grp` |
+| `gp` | stash → `pull --rebase` → restore | `gp` (hardened, see below) |
+| `gcn` | `config --local user.name "$GIT_NAME"` | `gcn` (guarded) |
+| `gce` | `config --local user.email "$GIT_EMAIL"` | `gce` (guarded) |
+
+**`gP` is deliberately absent.** Git config variable names are **case-insensitive**, so `alias.gP`
+and `alias.gp` are the same key — defining both leaves whichever comes last, silently:
+
+```console
+$ git config --get alias.gp    # with both gp and gP in the file
+push                           # the gp definition is simply gone
+```
+
+Your shell has no such restriction, which is why `gs`/`gP` coexist happily in `aliases.zsh`. On the
+git side, push is `git ps`.
+
+**`gp` is hardened against a stash bug.** The shell version is
+`git stash && git pull --rebase && git stash pop`, but `git stash` on a clean tree still **succeeds**
+(it just prints "No local changes to save"), so the trailing `pop` applies whatever happens to be at
+`stash@{0}` — a stash from last week, silently, onto an unrelated branch. The git alias records
+whether *this run* stashed anything and pops only then, so a clean tree is left alone. It also
+labels its stash (`gp <timestamp>`) so it's identifiable if a rebase conflict interrupts the pop.
+
+**`gcn` / `gce` refuse to write an empty value.** They read `$GIT_NAME` / `$GIT_EMAIL`, exported by
+`zsh/private`. If the variable is unset — a non-interactive shell, a machine where `private` was
+never filled in — the plain version would set `user.name` to the empty string and break committing
+in that repo with a confusing error. These print what's missing and exit 1 instead.
+
 ---
 
 ## 5. The global ignore file
@@ -411,6 +454,7 @@ It exists so machine-level and tool-level noise never has to be added to a proje
 - **macOS cruft** — `.DS_Store`, `.AppleDouble`, `.LSOverride`, `Icon`, `._*`, `.Spotlight-V100`, `.Trashes`
 - **Editor / tooling state** — `tags`, `vendor-tags`, `.lvimrc`, `.projections.json`, `.phpactor.json`, `.rgignore`, `_ide_helper.php`
 - **AI agent state** — `**/.claude`, `**/CLAUDE.md`, `**/AGENTS.md`, `**/.agents`, `**/.superpowers`, `**/.mcp.json`, `**/docs/agents`, `**/tasks/*.md`, `**/.serena`, `**/.rtk`, `**/graft`, `**/graphify-out`, `skills-lock.json`
+- **Editor swap / backup files** — `*.swp`, `*.swo`, `*.swn`, `*~`, `.*.sw[a-p]`. The last pattern is the one that matters: vim names the swap for `gitconfig` as **`.gitconfig.swp`**, a dotfile, which `*.swp` alone does not match.
 - **Secrets-adjacent** — `.ssh`, `__ignored`
 
 Two things to keep in mind: a global ignore is invisible to your collaborators, so anything the

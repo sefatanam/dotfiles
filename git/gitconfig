@@ -194,3 +194,25 @@
 	svnr = svn rebase
 	svnd = svn dcommit
 	svnl = svn log --oneline --show-commit
+
+	# --- git-side twins of the zsh aliases in zsh/.local/share/zsh/aliases.zsh ---
+	# Same names, reachable as `git gs` etc. from any shell.
+	# NOTE: alias names are case-INSENSITIVE here, so `gP` cannot coexist
+	# with `gp` — use `ps` (above) for push.
+	gs = status                       # zsh: gs
+	gc = commit -m                    # zsh: gc
+	gl = log --oneline                # zsh: gl
+	grh = reset --hard                # zsh: grh  — DESTRUCTIVE, discards all local changes
+	gts = stash                       # zsh: gts
+	gtp = stash pop                   # zsh: gtp
+	gcll = config --local --list      # zsh: gcll
+	grp = remote prune origin         # zsh: grp
+
+	# zsh: gp — stash, pull --rebase, restore. Pops only what this run stashed,
+	# so a clean tree can never resurrect an unrelated older stash.
+	gp = "!f() { s=0; if ! git diff --quiet HEAD 2>/dev/null; then git stash push -m \"gp $(date +%F_%T)\" >/dev/null && s=1; fi; git pull --rebase || exit 1; if [ \"$s\" = 1 ]; then git stash pop; fi; }; f"
+
+	# zsh: gcn / gce — set this repo's identity from $GIT_NAME / $GIT_EMAIL
+	# (exported by zsh/private). Refuses rather than writing an empty value.
+	gcn = "!f() { [ -n \"${GIT_NAME:-}\" ] || { echo 'GIT_NAME is not set (see zsh/private)' >&2; exit 1; }; git config --local user.name \"$GIT_NAME\"; }; f"
+	gce = "!f() { [ -n \"${GIT_EMAIL:-}\" ] || { echo 'GIT_EMAIL is not set (see zsh/private)' >&2; exit 1; }; git config --local user.email \"$GIT_EMAIL\"; }; f"

@@ -20,19 +20,6 @@ alias g='lazygit'
 alias reload-zsh="source ~/.zshrc"
 alias edit-zsh="nvim ~/.zshrc"
 
-# Git aliases
-alias gs='git status'
-alias gp='git stash && git pull --rebase && git stash pop'
-alias gP='git push'
-alias gc='git commit -m'
-alias grh='git reset --hard'
-alias gts='git stash'
-alias gtp='git stash pop'
-alias gl='git log --oneline'
-alias gcn='git config --local user.name "$GIT_NAME"'
-alias gce='git config --local user.email "$GIT_EMAIL"'
-alias gcll='git config --local --list'
-alias grp="git remote prune origin"
 
 # Tmux aliases
 alias t='tmux'

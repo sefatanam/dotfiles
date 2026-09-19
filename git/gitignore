@@ -36,3 +36,10 @@ skills-lock.json
 **/graft
 
 **/.claude/settings.local.json
+
+# Editor swap / backup files
+*.swp
+*.swo
+*.swn
+*~
+.*.sw[a-p]
