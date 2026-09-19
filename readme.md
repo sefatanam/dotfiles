@@ -22,7 +22,16 @@ git clone https://github.com/sefatanam/dotfiles ~/.dotfiles
 
 # Run automated setup script
 cd ~/.dotfiles && ./setup.sh
+
+# Preview what it would do without changing anything
+./setup.sh --dry-run
 ```
+
+`setup.sh` refuses to sync Homebrew packages (the slow, external-reaching step) without an
+interactive confirmation — a non-interactive invocation (a script, a copy-pasted pipe, an
+agent) skips it rather than silently installing/upgrading packages. Pass `--yes` to confirm
+non-interactively; everything else (stow, git hooks, `install.conf` links) is idempotent and
+guarded against clobbering real files, so it always runs. See `./setup.sh --help`.
 
 ## Manual Setup
 

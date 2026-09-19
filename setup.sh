@@ -7,6 +7,9 @@ STOW_ROOT="stow-packages"
 STOW_PACKAGES=("shell" "editor" "git")
 GIT_HOOKS_DIR="git/hooks"
 
+DRY_RUN=0
+FORCE_YES=0
+
 BLUE='\033[0;34m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -15,8 +18,31 @@ info()    { echo -e "${BLUE}➜${NC} $1"; }
 success() { echo -e "${GREEN}✔${NC} $1"; }
 warn()    { echo -e "${YELLOW}⚠${NC} $1"; }
 
+# Gate for anything that reaches outside the repo (installs/upgrades
+# packages, mainly). Dry-run always passes without running the command;
+# --yes/-y always passes; otherwise it prompts, and — critically — refuses
+# by default when stdin isn't a terminal, so a non-interactive invocation
+# (a script, a copy-pasted one-liner piped in, an agent) can't silently
+# trigger a real package sync.
+confirm_or_abort() {
+    local prompt="$1"
+    [ "$DRY_RUN" -eq 1 ] && return 0
+    [ "$FORCE_YES" -eq 1 ] && return 0
+    if [ ! -t 0 ]; then
+        warn "Not an interactive terminal — skipping: $prompt (pass --yes to run non-interactively, or --dry-run to preview)"
+        return 1
+    fi
+    local reply
+    read -r -p "$prompt [y/N] " reply
+    [[ "$reply" =~ ^[Yy]$ ]]
+}
+
 ensure_homebrew() {
     if ! command -v brew >/dev/null 2>&1; then
+        if [ "$DRY_RUN" -eq 1 ]; then
+            info "[dry-run] Would install Homebrew."
+            return
+        fi
         info "Installing Homebrew..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -26,26 +52,41 @@ ensure_homebrew() {
 
 apply_brew_bundle() {
     local path="$1"
-    if [ -f "$path" ]; then
-        info "Syncing Brewfile: $path"
-        brew install stow
-        brew bundle --file="$path"
-        success "Brew bundle synced."
+    [ -f "$path" ] || return
+
+    if [ "$DRY_RUN" -eq 1 ]; then
+        info "[dry-run] Would sync Brewfile: $path"
+        command -v brew >/dev/null 2>&1 && brew bundle check --file="$path" --verbose || true
+        return
     fi
+    if ! confirm_or_abort "Install/upgrade Homebrew packages from $path?"; then
+        return
+    fi
+
+    info "Syncing Brewfile: $path"
+    brew install stow
+    brew bundle --file="$path"
+    success "Brew bundle synced."
 }
 
 apply_stow() {
     local root="$1"
     shift
     local pkgs=("$@")
+    local stow_flags=()
+    [ "$DRY_RUN" -eq 1 ] && stow_flags+=("-n")
 
     info "Syncing Symlinks..."
     cd "$root"
     for pkg in "${pkgs[@]}"; do
         if [ -d "$pkg" ]; then
-            stow -t "$HOME" -D "$pkg" 2>/dev/null || true
-            stow -t "$HOME" "$pkg"
-            success "Stowed $pkg"
+            stow "${stow_flags[@]}" -t "$HOME" -D "$pkg" 2>/dev/null || true
+            stow "${stow_flags[@]}" -t "$HOME" "$pkg"
+            if [ "$DRY_RUN" -eq 1 ]; then
+                success "Would stow $pkg (dry-run)"
+            else
+                success "Stowed $pkg"
+            fi
         fi
     done
     cd - > /dev/null
@@ -62,6 +103,10 @@ ensure_git_hooks() {
     fi
     if ! git -C "$root" rev-parse --git-dir >/dev/null 2>&1; then
         warn "Not a git repo: $root (skipping hooks)"
+        return
+    fi
+    if [ "$DRY_RUN" -eq 1 ]; then
+        info "[dry-run] Would wire git hooks to $hooks"
         return
     fi
 
@@ -112,12 +157,16 @@ _apply_declared_link() {
         warn "$tool: install.conf points at missing $abs_src"
         return
     fi
-
-    mkdir -p "$(dirname "$dest")"
     if [ -e "$dest" ] && [ ! -L "$dest" ]; then
         warn "$tool: existing $dest left alone (back it up and re-run)"
         return
     fi
+    if [ "$DRY_RUN" -eq 1 ]; then
+        info "[dry-run] $tool: would link $dest -> $abs_src"
+        return
+    fi
+
+    mkdir -p "$(dirname "$dest")"
     ln -sfn "$abs_src" "$dest"
     success "$tool: linked $dest"
 }
@@ -149,6 +198,8 @@ apply_declared_installs() {
                     fi
                     if [ "$directive" = "LINK" ]; then
                         _apply_declared_link "$tool" "$dir" "$rest"
+                    elif [ "$DRY_RUN" -eq 1 ]; then
+                        info "[dry-run] $tool: would run POST: $rest"
                     else
                         info "Running $tool post-install..."
                         (cd "$dir" && eval "$rest")
@@ -163,7 +214,30 @@ apply_declared_installs() {
     done
 }
 
+usage() {
+    cat <<EOF
+Usage: setup.sh [--dry-run] [--yes]
+
+  --dry-run, -n   Show what would change without changing anything
+                  (stow runs with -n; the Brewfile sync is replaced by
+                  a read-only 'brew bundle check').
+  --yes, -y       Skip the confirmation before installing/upgrading
+                  Homebrew packages (for non-interactive runs).
+  --help, -h      Show this message.
+EOF
+}
+
 main() {
+    local arg
+    for arg in "$@"; do
+        case "$arg" in
+            --dry-run|-n) DRY_RUN=1 ;;
+            --yes|-y) FORCE_YES=1 ;;
+            --help|-h) usage; exit 0 ;;
+            *) warn "Unknown argument: $arg (see --help)"; exit 1 ;;
+        esac
+    done
+
     local root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
     ensure_homebrew
@@ -172,8 +246,12 @@ main() {
     ensure_git_hooks "$root"
     apply_declared_installs "$root"
 
-    echo -e "\n${GREEN}✨ Setup complete!${NC}"
-    info "Restart terminal or run 'source ~/.zshrc'"
+    if [ "$DRY_RUN" -eq 1 ]; then
+        echo -e "\n${BLUE}🔍 Dry run complete — nothing was changed.${NC}"
+    else
+        echo -e "\n${GREEN}✨ Setup complete!${NC}"
+        info "Restart terminal or run 'source ~/.zshrc'"
+    fi
 }
 
 # Sourceable (see setup-validate.sh) without running main — only executes

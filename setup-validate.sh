@@ -89,6 +89,34 @@ else
     bad "LINK clobbered a pre-existing real file"
 fi
 
+# --- 3. --dry-run never touches anything, and non-interactive runs refuse
+#        to sync Homebrew packages without --yes -----------------------------
+mkdir -p "$fixtures/dry-widget"
+echo "payload" > "$fixtures/dry-widget/file.txt"
+cat > "$fixtures/dry-widget/install.conf" <<'EOF'
+LINK file.txt -> ~/.dry-widget/file.txt
+POST touch dry-post-ran.marker
+EOF
+
+real_home="$HOME"
+HOME="$sandbox"
+DRY_RUN=1
+apply_declared_installs "$fixtures" >/dev/null
+DRY_RUN=0
+HOME="$real_home"
+
+if [ ! -e "$sandbox/.dry-widget" ] && [ ! -f "$fixtures/dry-widget/dry-post-ran.marker" ]; then
+    ok "DRY_RUN=1 skips LINK and POST entirely"
+else
+    bad "DRY_RUN=1 still made a real change"
+fi
+
+if ! (echo | FORCE_YES=0 confirm_or_abort "test prompt" >/dev/null 2>&1); then
+    ok "confirm_or_abort refuses on a non-interactive stdin without --yes"
+else
+    bad "confirm_or_abort proceeded on a non-interactive stdin without --yes"
+fi
+
 echo
 if [ "$fail" -eq 0 ]; then
     echo "✨ setup-validate.sh: all checks passed."
