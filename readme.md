@@ -43,6 +43,17 @@ stow -t ~ shell editor git
 > `~/.gitignore_global`. If you already have a real `~/.gitconfig`, back it up and remove it
 > first — stow refuses to overwrite regular files. See [git/README.md](git/README.md).
 
+## Packages
+
+| Package | Links | Notable configs |
+|---|---|---|
+| `shell` | `~/.zshrc`, `~/.zprofile`, `~/.p10k.zsh`, `~/.tmux.conf`, `~/.wezterm.lua`, `~/.config/*` | alacritty, ghostty, aerospace, workmux, herdr, [tuicr](tuicr/README.md) |
+| `editor` | `~/.config/nvim` | Neovim |
+| `git` | `~/.gitconfig`, `~/.gitignore_global` | [git/README.md](git/README.md) |
+
+Each `~/.config/<app>` entry is a symlink back to a folder of the same name in this repo
+root, so editing e.g. `tuicr/config.toml` takes effect immediately — no restow.
+
 ## Usage
 
 ```bash
