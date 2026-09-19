@@ -4,8 +4,9 @@ set -euo pipefail
 
 BREWFILE="brew/Brewfile"
 STOW_ROOT="stow-packages"
-STOW_PACKAGES=("shell" "editor")
+STOW_PACKAGES=("shell" "editor" "git")
 PRIVATE_DIRS=("$HOME/.config/private")
+GIT_HOOKS_DIR="git/hooks"
 
 BLUE='\033[0;34m'
 GREEN='\033[0;32m'
@@ -61,6 +62,26 @@ ensure_dirs() {
         fi
     done
 }
+ensure_git_hooks() {
+    local root="$1"
+    local hooks="$GIT_HOOKS_DIR"
+
+    # core.hooksPath lives in .git/config, which is never version-controlled —
+    # so a fresh clone has to be re-pointed at git/hooks here.
+    if [ ! -d "$root/$hooks" ]; then
+        return
+    fi
+    if ! git -C "$root" rev-parse --git-dir >/dev/null 2>&1; then
+        warn "Not a git repo: $root (skipping hooks)"
+        return
+    fi
+
+    info "Wiring git hooks..."
+    chmod +x "$root/$hooks"/* 2>/dev/null || true
+    git -C "$root" config core.hooksPath "$hooks"
+    success "Git hooks wired to $hooks"
+}
+
 ensure_omp_config() {
     local root="$1"
     local config="$root/omp/agent/config.yml"
@@ -80,6 +101,7 @@ main() {
     apply_brew_bundle "$root/$BREWFILE"
     apply_stow "$root/$STOW_ROOT" "${STOW_PACKAGES[@]}"
     ensure_dirs "${PRIVATE_DIRS[@]}"
+    ensure_git_hooks "$root"
     ensure_omp_config "$root"
 
     echo -e "\n${GREEN}✨ Setup complete!${NC}"

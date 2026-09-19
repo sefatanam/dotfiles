@@ -5,7 +5,6 @@ return {
     config = function()
       require("cursor-dark").setup({
         style = "dark-midnight",
-        -- For a transparent background
         -- transparent = true,
       })
     end,
@@ -28,7 +27,6 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      -- colorscheme = "github-colors",
       colorscheme = "gruvbox-material",
     },
   },

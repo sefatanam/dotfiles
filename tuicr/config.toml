@@ -1,0 +1,54 @@
+# tuicr — code review TUI
+# Docs: https://github.com/agavra/tuicr/blob/main/docs/CONFIG.md
+# Stowed to ~/.config/tuicr/config.toml via stow-packages/shell
+# Local themes, if ever added, go in tuicr/themes/ (sibling of this file).
+
+# ─── APPEARANCE ───
+# Follows the terminal, same gruvbox pair as ghostty/alacritty.
+appearance  = "system"
+theme_dark  = "gruvbox-dark"
+theme_light = "gruvbox-light"
+transparent_background = true
+
+# ─── DIFF VIEW ───
+diff_view             = "side-by-side"
+ignore_whitespace     = false
+relative_line_numbers = true   # matches the nvim gutter
+cursor_line           = true
+search_highlight      = true
+wrap                  = false
+scroll_offset         = 5
+show_file_list        = true
+compact_folders       = true
+show_pr_comments      = true
+
+# ─── EDITING ───
+editor       = "nvim"          # `e` / `:edit` — overrides $EDITOR
+comment_vim  = true            # modal editing in the comment box
+comment_tab_width = 4
+mouse        = true
+q_quits      = false           # `q` closes panes, not the app
+username     = "Sefat Anam"    # author stamped on comments
+
+# ─── COMMENT TYPES ───
+# `label` defaults to the id uppercased -> NOTE / SUGGESTION / ISSUE.
+# Order matters: the first entry is the default selection; `None` is always
+# appended to the Tab cycle, so untyped comments stay possible.
+# `definition` is the guidance shown in the legend and handed to LLMs.
+comment_types = [
+  { id = "note",       color = "blue",   definition = "context or an observation; no action required" },
+  { id = "suggestion", color = "yellow", definition = "an optional improvement the author may take or leave" },
+  { id = "issue",      color = "red",    definition = "a problem that must be fixed before merge" },
+]
+
+[forge]
+# Prefix submitted PR comments with [NOTE] / [SUGGESTION] / [ISSUE].
+comment_type_prefix = true
+
+[export]
+# Markdown written to the clipboard or --stdout.
+intro    = "I reviewed this diff and left the comments below. NOTE is context, SUGGESTION is optional, ISSUE must be fixed."
+legend   = true    # spells out what each type means
+scope_line     = true
+pr_metadata    = true
+session_header = true

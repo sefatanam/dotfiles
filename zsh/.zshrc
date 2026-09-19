@@ -57,12 +57,8 @@ fi
 source "$_starship_cache"
 unset _starship_cache
 
-# # Valdi configuration begin
-# export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
-# export JAVA_HOME=`/usr/libexec/java_home -v 11`
-# export ANDROID_HOME="$HOME/.valdi/android_home"
-# export ANDROID_NDK_HOME="$ANDROID_HOME/ndk-bundle"
-# # Valdi configuration end
+# Flutter SDK PATH
+export PATH="$HOME/.localdev/flutter/bin:$PATH"
 
 # Android SDK / NDK
 export ANDROID_HOME="$HOME/Library/Android/sdk"
@@ -70,3 +66,4 @@ export ANDROID_SDK_ROOT="$ANDROID_HOME"
 export ANDROID_NDK_HOME="$ANDROID_HOME/ndk/29.0.13846066"
 export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+

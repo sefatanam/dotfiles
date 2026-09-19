@@ -2,7 +2,7 @@ return {
   "MagicDuck/grug-far.nvim",
   keys = {
     {
-      "<leader>sr",
+      "SR",
       function()
         local word = vim.fn.expand("<cword>")
         local current_file = vim.fn.expand("%:p")

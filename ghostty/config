@@ -1,7 +1,6 @@
 macos-icon = xray
 #theme = dark:"Github Dark Dimmed",light:"Github Light Default"
-# theme = dark:"Earthsong",light:"Github Light Default"
-theme = dark:"Gruvbox Material Dark",light:"Github Light Default"
+theme = dark:"gruvbox-dark",light:"zenbones-zenwritten-light"
 # ─── CLIPBOARD ───
 clipboard-read = allow
 clipboard-write = allow
@@ -16,25 +15,7 @@ mouse-hide-while-typing = true
 # ─── FONT (Performance + Readability) ───
 font-size = 16
 
-# ─── Font Settings ───
-# font-family = "IBM Plex Mono"
-# font-style = Regular
-# font-family-bold = "IBM Plex Mono"
-# font-style-bold = Bold
-# font-family-italic = "IBM Plex Mono"
-# font-style-italic = Italic
-# font-family-bold-italic = "IBM Plex Mono"
-# font-style-bold-italic = Bold Italic
-#
-
-font-family = "Monsaspace Neon"
-font-style = Regular
-font-family-bold = "Monsaspace Neon"
-font-style-bold = Bold
-font-family-italic = "Monsaspace Neon"
-font-style-italic = Italic
-font-family-bold-italic = "Monsaspace Neon"
-font-style-bold-italic = Bold Italic
+font-family = "Maple Mono NF"
 
 font-thicken = true
 font-thicken-strength = 1

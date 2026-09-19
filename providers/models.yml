@@ -1,0 +1,27 @@
+providers:
+  omniroute:
+    baseUrl: http://127.0.0.1:20128/v1
+    api: openai-completions
+    apiKey: OMNIROUTE_API_KEY
+    models:
+      - id: kr/claude-sonnet-4.5
+        name: kr/claude-sonnet-4.5
+      - id: kr/claude-haiku-4.5
+        name: kr/claude-haiku-4.5
+      - id: kr/minimax-m2.5
+        name: kr/minimax-m2.5
+      - id: kr/qwen3-coder-next
+        name: kr/qwen3-coder-next
+      - id: gh/gpt-4o-mini
+        name: gh/gpt-4o-mini
+      - id: gh/gpt-5.4-nano
+        name: gh/gpt-5.4-nano
+      - id: cx/gpt-5.5-xhigh
+        name: cx/gpt-5.5-xhigh
+      - id: ds-web/deepseek-v4-pro-think
+        name: ds-web/deepseek-v4-pro-think
+      - id: ds-web/deepseek-reasoner
+        name: ds-web/deepseek-reasoner
+      - id: ds-web/deepseek-v4-pro
+        name: ds-web/deepseek-v4-pro
+
