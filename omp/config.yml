@@ -1,0 +1,53 @@
+symbolPreset: unicode
+composer:
+  shape: band
+theme:
+  light: light
+  dark: dark-rose-pine
+setupVersion: 2
+modelRoles:
+  default: omniroute/cc/claude-sonnet-5:high
+defaultThinkingLevel: medium
+extendedContext: true
+branchSummary:
+  enabled: true
+contextPromotion:
+  enabled: true
+memory:
+  backend: local
+autolearn:
+  enabled: true
+  autoContinue: true
+readLineNumbers: true
+read:
+  renderMarkdown: false
+lsp:
+  diagnosticsOnEdit: true
+plan:
+  defaultOnStartup: true
+  autosave: true
+task:
+  enableLsp: true
+statusLine:
+  preset: default
+  separator: slash
+  transparent: true
+terminal:
+  showProgress: true
+tui:
+  textSizing: true
+  titleSpinner: braille
+  tight: true
+display:
+  shimmer: classic
+hideThinkingBlock: true
+tools:
+  approvalMode: yolo
+startup:
+  showSplash: true
+compaction:
+  thresholdPercent: 60
+  thresholdTokens: 150000
+  handoffSaveToDisk: true
+edit:
+  mode: hashline

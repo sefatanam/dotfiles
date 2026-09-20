@@ -96,9 +96,10 @@ POST <shell command>         # run with CWD set to the tool's own directory
 ```
 
 `setup.sh` discovers and applies every `*/install.conf` on each run (`apply_declared_installs`).
-`lazygit/install.conf` and `bat/install.conf` are the two real examples — read those before
-writing a new one. Run `./setup-validate.sh` after adding or editing one; it exercises the
-LINK/POST/PLATFORM machinery against a throwaway sandbox `$HOME`, not your real one.
+`lazygit/install.conf`, `bat/install.conf`, `providers/install.conf`, and `omp/install.conf`
+are the real examples — read those before writing a new one. Run `./setup-validate.sh` after
+adding or editing one; it exercises the LINK/POST/PLATFORM machinery against a throwaway
+sandbox `$HOME`, not your real one.
 
 ## Theme
 
@@ -142,11 +143,11 @@ stow -D shell editor git
 
 ## Also in this repo (manual)
 
-These aren't stowed or run by `setup.sh` — deliberately manual, invoke them yourself:
+These either aren't touched by `setup.sh` at all, or need a manual step it can't automate:
 
 | Path | What it is | Run it |
 |---|---|---|
 | `macos/system-override` | One-shot `defaults write` tweaks for a fresh Mac (mathiasbynens-style) | `zsh macos/system-override` |
 | `zsh-optimize.sh` | Recompiles and cleans the zsh config cache | `./zsh-optimize.sh` (after zsh config changes) |
 | `vscode/*.code-profile.json` | VS Code profile exports | VS Code → Profiles → Import Profile |
-| `providers/models.yml` | Model/provider list for an external AI tool config | point that tool's config at this file |
+| `omp/config.yml` | Snapshot of `~/.omp/agent/config.yml`; `setup.sh` auto-seeds it on a fresh machine but never re-exports it | after changing omp settings: `cp ~/.omp/agent/config.yml omp/config.yml` |
