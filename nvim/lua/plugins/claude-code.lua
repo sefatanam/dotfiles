@@ -1,6 +1,7 @@
 return {
   "coder/claudecode.nvim",
   dependencies = { "folke/snacks.nvim" },
+  enable  = false,
   lazy = true,
   opts = {
     -- No embedded terminal: this Neovim instance only runs the WebSocket/MCP
