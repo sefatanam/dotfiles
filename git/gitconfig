@@ -17,6 +17,12 @@
 [include]
   path = ~/.dotfiles/git/delta-rose-pine.gitconfig
 
+# Company GitLab repos: swap identity + signing key while inside this path.
+# A trailing slash matches the dir at any depth, so any repo cloned under it
+# picks this up automatically. See git/gitconfig.gitlab.
+[includeIf "gitdir:/Users/anam/Documents/repos/universal/"]
+  path = ~/.dotfiles/git/gitconfig.gitlab
+
 [delta]
   features = rose-pine
   navigate = true
