@@ -19,8 +19,11 @@
 
 # Company GitLab repos: swap identity + signing key while inside this path.
 # A trailing slash matches the dir at any depth, so any repo cloned under it
-# picks this up automatically. See git/gitconfig.gitlab.
-[includeIf "gitdir:/Users/anam/Documents/repos/universal/"]
+# picks this up automatically. Kept ~-relative rather than /Users/<name>/ so
+# it survives a different machine or username — a gitdir: path that doesn't
+# resolve fails silently, falling back to the default identity above.
+# See git/gitconfig.gitlab; setup.sh warns if this directory is missing.
+[includeIf "gitdir:~/Documents/repos/universal/"]
   path = ~/.dotfiles/git/gitconfig.gitlab
 
 [delta]
