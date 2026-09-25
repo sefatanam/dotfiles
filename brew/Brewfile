@@ -2,6 +2,7 @@ tap "agavra/tap"
 tap "anomalyco/tap"
 tap "brewforge/extras", trusted: true
 tap "can1357/tap"
+tap "giammarco-ferranti/deja"
 tap "nico81/icontainer", trusted: true
 tap "nikitabobko/tap", trusted: true
 tap "raine/workmux"
@@ -135,14 +136,14 @@ brew "xcodegen"
 brew "yt-dlp"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
-# Fish-like fast/unobtrusive autosuggestions for zsh
-brew "zsh-autosuggestions"
 # Fish shell like syntax highlighting for zsh
 brew "zsh-syntax-highlighting"
 # The AI coding agent built for the terminal.
 brew "anomalyco/tap/opencode", trusted: true
 # Coding agent with the IDE wired in
 brew "can1357/tap/omp", trusted: true
+# Fuzzy, directory-aware zsh autosuggestions daemon (replaces zsh-autosuggestions)
+brew "giammarco-ferranti/deja/deja", trusted: true
 # Opinionated workflow tool that orchestrates git worktrees and tmux
 brew "raine/workmux/workmux", trusted: true
 # Send and read iMessage / SMS from the terminal

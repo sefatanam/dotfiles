@@ -1,14 +1,7 @@
 #!/bin/zsh
-# .zshrc - Main zsh configuration (sources modular components)
 export LANG=en_US.UTF-8
 
 ZSH_CONFIG_DIR="$HOME/.local/share/zsh"
-
-# @DISABLED: Auto-compilation - use zsh-recompile manually if needed
-# _compile_zsh_file() {
-#     local file="$1"
-#     [[ -f "$file" && ( ! -f "${file}.zwc" || "$file" -nt "${file}.zwc" ) ]] && zcompile "$file"
-# }
 
 _source_if_exists() {
     [[ -f "$1" ]] && source "$1"
@@ -16,58 +9,27 @@ _source_if_exists() {
 
 _source_if_exists "$ZSH_CONFIG_DIR/exports.zsh"
 _source_if_exists "$ZSH_CONFIG_DIR/aliases.zsh"
-# work.zsh: job/project-specific aliases, not secret, committed.
-# local.zsh: gitignored — network details, client names, anything that
-# doesn't belong in a public repo. See local.zsh.example for the shape.
-_source_if_exists "$ZSH_CONFIG_DIR/work.zsh"
 _source_if_exists "$ZSH_CONFIG_DIR/local.zsh"
 _source_if_exists "$ZSH_CONFIG_DIR/functions.zsh"
 _source_if_exists "$ZSH_CONFIG_DIR/completions.zsh"
 
 [[ -f "$HOME/.dotfiles/zsh/private" ]] && source "$HOME/.dotfiles/zsh/private"
 
-# zsh plugins
-unset -f _source_if_exists
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-_load_syntax_highlighting() {
-    source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-    unset -f _load_syntax_highlighting
-}
-# Load after first prompt using precmd hook
-_first_prompt_hook() {
-    _load_syntax_highlighting
-    # Remove this hook after first run
-    add-zsh-hook -d precmd _first_prompt_hook
-    unset -f _first_prompt_hook
-}
-autoload -Uz add-zsh-hook
-add-zsh-hook precmd _first_prompt_hook
+# Added by OrbStack: command-line tools and integration
+source ~/.orbstack/shell/init.zsh 2>/dev/null || :
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /opt/homebrew/opt/zinit/zinit.zsh
 
-# OpenJDK 21
-# export JAVA_HOME="/opt/homebrew/opt/openjdk"
-export JAVA_HOME=/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home
-export PATH="$JAVA_HOME/bin:$PATH"
-
-# export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
-# export CPPFLAGS="-I/opt/homebrew/opt/openjdk@21/include"
-
-# @REVIEW: Cached starship init for faster startup (like zoxide/atuin)
-_starship_cache="$HOME/.cache/zsh-init/starship-init.zsh"
-if [[ ! -f "$_starship_cache" ]] || [[ "$_starship_cache" -ot $(command -v starship) ]]; then
-    mkdir -p "$HOME/.cache/zsh-init"
-    starship init zsh > "$_starship_cache"
+# deja setup start
+if [[ -r "$HOME/.local/share/deja/init.zsh" ]]; then
+  source "$HOME/.local/share/deja/init.zsh"
+else
+  eval "$(deja init zsh)"
 fi
-source "$_starship_cache"
-unset _starship_cache
 
-# Flutter SDK PATH
-export PATH="$HOME/.localdev/flutter/bin:$PATH"
+zinit ice wait"0" lucid depth=1 pick"deja.plugin.zsh"
+zinit light Giammarco-Ferranti/deja
+#deja setup end
 
-# Android SDK / NDK
-export ANDROID_HOME="$HOME/Library/Android/sdk"
-export ANDROID_SDK_ROOT="$ANDROID_HOME"
-export ANDROID_NDK_HOME="$ANDROID_HOME/ndk/29.0.13846066"
-export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
-
+eval "$(starship init zsh)"
