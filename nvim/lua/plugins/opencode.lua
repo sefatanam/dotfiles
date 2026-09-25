@@ -1,5 +1,6 @@
 return {
   "nickjvandyke/opencode.nvim",
+  enable = false,
   lazy = true,
   version = "*",
   config = function()

@@ -30,6 +30,11 @@ gui:
     defaultFgColor:
       - "#e0def4"
 git:
+  # SSH commit signing (not GPG) with the key held in the macOS keychain via
+  # ssh-agent, so there's never an interactive passphrase prompt. lazygit
+  # can't tell that apart from bare commit.gpgsign and blocks some features
+  # (e.g. inline commit/amend) unless told an agent is handling it.
+  overrideGpg: true
   diffRenderers:
     - colorArg: always
       command: delta --paging=never --features=rose-pine --syntax-theme=rose-pine

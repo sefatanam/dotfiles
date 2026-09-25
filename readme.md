@@ -27,6 +27,11 @@ cd ~/.dotfiles && ./setup.sh
 ./setup.sh --dry-run
 ```
 
+Every run ends with a **manual-steps check** — a read-only pass that reports what it
+couldn't do on this machine (missing SSH signing keys, an empty ssh-agent, an `includeIf`
+pointing at a directory that doesn't exist yet, ungitignored-but-absent local files). It
+runs in `--dry-run` too. See [Manual steps on a new machine](#manual-steps-on-a-new-machine).
+
 `setup.sh` refuses to sync Homebrew packages (the slow, external-reaching step) without an
 interactive confirmation — a non-interactive invocation (a script, a copy-pasted pipe, an
 agent) skips it rather than silently installing/upgrading packages. Pass `--yes` to confirm
@@ -96,9 +101,10 @@ POST <shell command>         # run with CWD set to the tool's own directory
 ```
 
 `setup.sh` discovers and applies every `*/install.conf` on each run (`apply_declared_installs`).
-`lazygit/install.conf` and `bat/install.conf` are the two real examples — read those before
-writing a new one. Run `./setup-validate.sh` after adding or editing one; it exercises the
-LINK/POST/PLATFORM machinery against a throwaway sandbox `$HOME`, not your real one.
+`lazygit/install.conf`, `bat/install.conf`, `providers/install.conf`, and `omp/install.conf`
+are the real examples — read those before writing a new one. Run `./setup-validate.sh` after
+adding or editing one; it exercises the LINK/POST/PLATFORM machinery against a throwaway
+sandbox `$HOME`, not your real one.
 
 ## Theme
 
@@ -139,14 +145,44 @@ stow -D shell editor git
    scrubs its values before every commit and a post-commit hook restores them, so the
    plaintext never reaches the repo. See [git/README.md §6](git/README.md#6-hooks).
 3. Configure AeroSpace workspace bindings as needed
+4. Work through whatever the manual-steps check printed (below)
+
+## Manual steps on a new machine
+
+Stow carries every tracked file, so the git identity setup — `git/gitconfig`, the
+`includeIf` in it, and `git/gitconfig.gitlab` — lands automatically. What can't be
+carried is anything **secret** (SSH keys are deliberately never committed) or anything
+tied to **one machine's paths**. `setup.sh` ends by checking for exactly those and
+printing only what's actually missing, so a fully set-up box prints a single ✔ line.
+
+| What it checks | Why it can't be automated | Fix |
+|---|---|---|
+| Every `signingkey` in `git/gitconfig*` exists, with its private half | Private keys must never be committed | Copy from the old machine (mode `600`), or `ssh-keygen -t ed25519 -f ~/.ssh/<name>` and register the `.pub` with GitHub/GitLab |
+| `~/.ssh/allowed_signers` | Same — contains public keys tied to your identities | One `email ssh-ed25519 AAAA...` line per signing key |
+| ssh-agent has identities loaded | Per-session, per-machine state | `ssh-add --apple-use-keychain ~/.ssh/id_ed25519` (once per key) |
+| Each `includeIf "gitdir:…"` directory exists | The paths are `~`-relative so they port across machines, but the directory itself still has to be there | Clone your work repos there, or repoint the `includeIf` in `git/gitconfig` |
+| `zsh/.local/share/zsh/local.zsh`, `zsh/private` | Gitignored on purpose (network details, tokens) | Copy from the template / recreate |
+
+The keys matter most: `commit.gpgsign = true` is **global** in `git/gitconfig`, so until the
+signing key named there exists on disk, *every* commit fails with `gpg failed to sign the
+data` — not just the GitLab ones.
+
+The `includeIf` check is the subtle one. A missing key is loud; a missing `includeIf`
+directory is **silent** — git just falls through to the default identity, and you find out
+when a work commit shows up under your personal email. Write those paths `~`-relative
+(`gitdir:~/Documents/repos/…`, not `gitdir:/Users/<name>/…`) so they don't break on a
+machine with a different username. Full SSH-signing background lives in
+[git/SIGNING.md](git/SIGNING.md).
 
 ## Also in this repo (manual)
 
-These aren't stowed or run by `setup.sh` — deliberately manual, invoke them yourself:
+These either aren't touched by `setup.sh` at all, or need a manual step it can't automate.
+For the secret/machine-specific ones it *does* check and remind you about, see
+[Manual steps on a new machine](#manual-steps-on-a-new-machine).
 
 | Path | What it is | Run it |
 |---|---|---|
 | `macos/system-override` | One-shot `defaults write` tweaks for a fresh Mac (mathiasbynens-style) | `zsh macos/system-override` |
 | `zsh-optimize.sh` | Recompiles and cleans the zsh config cache | `./zsh-optimize.sh` (after zsh config changes) |
 | `vscode/*.code-profile.json` | VS Code profile exports | VS Code → Profiles → Import Profile |
-| `providers/models.yml` | Model/provider list for an external AI tool config | point that tool's config at this file |
+| `omp/config.yml` | Snapshot of `~/.omp/agent/config.yml`; `setup.sh` auto-seeds it on a fresh machine but never re-exports it | after changing omp settings: `cp ~/.omp/agent/config.yml omp/config.yml` |

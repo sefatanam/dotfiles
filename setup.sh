@@ -217,6 +217,116 @@ apply_declared_installs() {
     done
 }
 
+# --- Post-setup reminders ---------------------------------------------------
+#
+# The steps setup.sh deliberately cannot do: anything that is a secret (SSH
+# keys are never committed) or a path that only exists on one machine. Rather
+# than a static checklist that rots, each check reads the *current* config and
+# reports only what is actually missing on THIS machine — so a fully set-up
+# box prints nothing but a clean bill of health.
+
+REMINDERS=()
+remind() { REMINDERS+=("$1"); }
+
+# Every signingkey referenced by the git configs (the global one plus any
+# conditional include, e.g. git/gitconfig.gitlab), with ~ expanded.
+_declared_signing_keys() {
+    local root="$1"
+    grep -h '^[[:space:]]*signingkey' "$root"/git/gitconfig "$root"/git/gitconfig.* 2>/dev/null \
+        | sed -e 's/.*=[[:space:]]*//' -e "s|^~|$HOME|" \
+        | sort -u
+}
+
+# Every gitdir: path a live (non-commented) includeIf is scoped to.
+_declared_includeif_dirs() {
+    local root="$1"
+    grep -h '^[[:space:]]*\[includeIf' "$root"/git/gitconfig 2>/dev/null \
+        | grep -o 'gitdir:[^"]*' \
+        | sed -e 's/^gitdir://' -e "s|^~|$HOME|" \
+        | sort -u
+}
+
+collect_reminders() {
+    local root="$1"
+    local key dir loaded=0
+
+    # SSH signing keys: referenced by gitconfig, never committed. Without
+    # them every commit fails outright, since commit.gpgsign is global.
+    while IFS= read -r key; do
+        [ -z "$key" ] && continue
+        if [ ! -f "$key" ]; then
+            remind "Missing SSH signing key: $key
+      Referenced by git/gitconfig*. commit.gpgsign is on globally, so commits
+      will fail until it exists. Copy it (and its private half) from the old
+      machine, or: ssh-keygen -t ed25519 -f ${key%.pub} && add the .pub to GitHub/GitLab"
+        elif [ ! -f "${key%.pub}" ]; then
+            remind "Public key present but private half missing: ${key%.pub}
+      Signing needs both. Copy the private key over with mode 600."
+        fi
+    done <<EOF
+$(_declared_signing_keys "$root")
+EOF
+
+    # allowed_signers: only affects verification, not signing, so it warns
+    # separately rather than as part of the key check above.
+    if [ ! -f "$HOME/.ssh/allowed_signers" ]; then
+        remind "Missing ~/.ssh/allowed_signers (gpg.ssh.allowedSignersFile)
+      Signing still works; 'git log --show-signature' can't verify without it.
+      One 'email ssh-ed25519 AAAA...' line per key you sign with."
+    fi
+
+    # An agent with no identities means a passphrase prompt on every commit,
+    # which is also what lazygit's overrideGpg assumes away.
+    if ssh-add -l >/dev/null 2>&1; then loaded=1; fi
+    if [ "$loaded" -eq 0 ] && [ -n "$(_declared_signing_keys "$root")" ]; then
+        remind "No keys loaded in ssh-agent
+      Load each signing key once so there's no passphrase prompt per commit:
+      ssh-add --apple-use-keychain ~/.ssh/id_ed25519"
+    fi
+
+    # A conditional identity scoped to a directory that doesn't exist here is
+    # the silent failure mode: no error, commits just use the wrong identity.
+    while IFS= read -r dir; do
+        [ -z "$dir" ] && continue
+        if [ ! -d "$dir" ]; then
+            remind "includeIf path does not exist: $dir
+      git/gitconfig switches identity for repos under it. Until it exists (or
+      you repoint the includeIf), repos there silently use the default identity."
+        fi
+    done <<EOF
+$(_declared_includeif_dirs "$root")
+EOF
+
+    # Gitignored files with committed templates.
+    if [ ! -f "$root/zsh/.local/share/zsh/local.zsh" ]; then
+        remind "Missing zsh/.local/share/zsh/local.zsh (gitignored: network/client details)
+      cp zsh/.local/share/zsh/local.zsh.example zsh/.local/share/zsh/local.zsh"
+    fi
+    if [ ! -f "$root/zsh/private" ]; then
+        remind "Missing zsh/private (secrets/API keys, scrubbed by the commit hooks)
+      Create it with 'export KEY=value' lines. See git/README.md §6."
+    fi
+}
+
+print_reminders() {
+    local root="$1"
+    collect_reminders "$root"
+
+    echo
+    if [ "${#REMINDERS[@]}" -eq 0 ]; then
+        success "Manual steps: nothing outstanding — keys, agent and local files all present."
+        return
+    fi
+
+    warn "Manual steps setup.sh can't do (secrets and machine-specific paths):"
+    local item
+    for item in "${REMINDERS[@]}"; do
+        echo -e "    ${YELLOW}•${NC} $item"
+        echo
+    done
+    info "See readme.md \"Manual steps on a new machine\" and git/SIGNING.md."
+}
+
 usage() {
     cat <<EOF
 Usage: setup.sh [--dry-run] [--yes]
@@ -255,6 +365,10 @@ main() {
         echo -e "\n${GREEN}✨ Setup complete!${NC}"
         info "Restart terminal or run 'source ~/.zshrc'"
     fi
+
+    # Read-only checks, so they run in dry-run too — this is the one part of
+    # setup.sh whose whole job is to tell you what it *didn't* do.
+    print_reminders "$root"
 }
 
 # Sourceable (see setup-validate.sh) without running main — only executes

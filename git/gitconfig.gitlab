@@ -1,0 +1,7 @@
+# Identity + signing key for company GitLab repos.
+# Included by gitconfig via includeIf "gitdir:" scoped to the repos path,
+# so commits there sign with the GitLab-registered key instead of the
+# GitHub one. See SIGNING.md for the underlying SSH-signing setup.
+[user]
+	email = msefat@saastaq.io
+	signingkey = ~/.ssh/id_ed25519_gitlab.pub
