@@ -45,3 +45,4 @@ unset _starship_cache
 
 
 
+if [[ -r "$HOME/.local/share/deja/init.zsh" ]]; then source "$HOME/.local/share/deja/init.zsh"; else eval "$(deja init zsh)"; fi
