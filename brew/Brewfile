@@ -1,13 +1,18 @@
-tap "agavra/tap"
+tap "alielsokary/tap", trusted: { casks: ["caskhub"] }
 tap "anomalyco/tap"
 tap "brewforge/extras", trusted: true
 tap "can1357/tap"
 tap "giammarco-ferranti/deja"
 tap "nico81/icontainer", trusted: true
 tap "nikitabobko/tap", trusted: true
+tap "oven-sh/bun", trusted: true
+tap "qltysh/tap", trusted: true
 tap "raine/workmux"
 tap "steipete/tap", trusted: true
+tap "tonhowtf/tap", trusted: { casks: ["omniget"] }
 tap "tw93/tap", trusted: true
+tap "zennotes/tap", trusted: { casks: ["zennotes"] }
+tap "zoispag/tap", trusted: { casks: ["omniroute-tray"] }
 # GNU internationalization (i18n) and localization (l10n) library
 brew "gettext"
 # Download with resuming and segmented downloading
@@ -16,6 +21,8 @@ brew "aria2"
 brew "atuin"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# Incredibly fast JavaScript runtime, bundler, test runner, and package manager
+brew "bun"
 # Core application library for C
 brew "glib"
 # Cross-platform make
@@ -134,6 +141,8 @@ brew "wimlib"
 brew "xcodegen"
 # Feature-rich command-line audio/video downloader
 brew "yt-dlp"
+# Flexible and fast Zsh plugin manager
+brew "zinit"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
 # Fish shell like syntax highlighting for zsh
@@ -142,7 +151,7 @@ brew "zsh-syntax-highlighting"
 brew "anomalyco/tap/opencode", trusted: true
 # Coding agent with the IDE wired in
 brew "can1357/tap/omp", trusted: true
-# Fuzzy, directory-aware zsh autosuggestions daemon (replaces zsh-autosuggestions)
+# Predictive inline shell autosuggestions for zsh.
 brew "giammarco-ferranti/deja/deja", trusted: true
 # Opinionated workflow tool that orchestrates git worktrees and tmux
 brew "raine/workmux/workmux", trusted: true
@@ -166,6 +175,8 @@ cask "basictex"
 cask "batfi"
 # Cross platform SQL editor and database management app
 cask "beekeeper-studio"
+# Display management tool
+cask "betterdisplay"
 # Desktop password and login vault
 cask "bitwarden"
 # Open source IDE for exploring and testing APIs
@@ -213,6 +224,8 @@ cask "motrix"
 cask "obs"
 # Verify system files structure, run miscellaneous maintenance and more
 cask "onyx"
+# AI usage tracker for Cursor, Claude Code, Codex, Copilot and more
+cask "openusage"
 # Replacement for Docker Desktop
 cask "orbstack"
 # Kubernetes and container management on the desktop
@@ -284,4 +297,5 @@ go "github.com/swaggo/swag/cmd/swag"
 go "github.com/Skardyy/ttyimg"
 go "github.com/wailsapp/wails/v2/cmd/wails"
 cargo "vtracer"
+uv "laya[mcp]"
 npm "corepack"
