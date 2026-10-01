@@ -1,0 +1,89 @@
+#!/bin/bash
+# sketchybar config for AeroSpace.
+#
+# Workspace items are created from `aerospace list-workspaces --all`, so the
+# set of chips follows aerospace.toml with no list duplicated here. Adding a
+# workspace there needs only a sketchybar restart.
+#
+# Redraws are driven by the custom aerospace_workspace_change event, which
+# aerospace.toml triggers via exec-on-workspace-change.
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+
+##### Bar Appearance #####
+
+sketchybar --bar position=top height=40 blur_radius=30 color=0x40000000
+
+##### Changing Defaults #####
+
+default=(
+  padding_left=5
+  padding_right=5
+  icon.font="Hack Nerd Font:Bold:17.0"
+  label.font="Hack Nerd Font:Bold:14.0"
+  icon.color=0xffffffff
+  label.color=0xffffffff
+  icon.padding_left=4
+  icon.padding_right=4
+  label.padding_left=4
+  label.padding_right=4
+)
+sketchybar --default "${default[@]}"
+
+##### AeroSpace Workspaces #####
+# Plain items, not `space` items: the latter bind to macOS mission-control
+# spaces, which AeroSpace does not use. Visibility is driven by the plugin
+# toggling `drawing`.
+
+sketchybar --add event aerospace_workspace_change
+
+for ws in $(aerospace list-workspaces --all 2>/dev/null); do
+  sketchybar --add item "space.$ws" left \
+             --set "space.$ws" \
+                   icon="$ws" \
+                   icon.padding_left=7 \
+                   icon.padding_right=7 \
+                   label.drawing=off \
+                   background.color=0x40ffffff \
+                   background.corner_radius=5 \
+                   background.height=25 \
+                   background.drawing=off \
+                   drawing=off \
+                   click_script="aerospace workspace $ws"
+done
+
+# One item owns the redraw for every chip, so the plugin runs once per event
+# rather than once per workspace.
+sketchybar --add item workspace_listener left \
+           --set workspace_listener \
+                 drawing=off \
+                 update_freq=5 \
+                 script="$PLUGIN_DIR/aerospace.sh" \
+           --subscribe workspace_listener \
+                 aerospace_workspace_change \
+                 front_app_switched \
+                 space_windows_change
+
+##### Adding Left Items #####
+
+# Separator between the workspace chips and the front-app name. The icon was
+# previously empty, which rendered as a bare gap.
+sketchybar --add item chevron left \
+           --set chevron icon=❯ label.drawing=off \
+           --add item front_app left \
+           --set front_app icon.drawing=off script="$PLUGIN_DIR/front_app.sh" \
+           --subscribe front_app front_app_switched
+
+##### Adding Right Items #####
+
+sketchybar --add item clock right \
+           --set clock update_freq=10 icon=  script="$PLUGIN_DIR/clock.sh" \
+           --add item volume right \
+           --set volume script="$PLUGIN_DIR/volume.sh" \
+           --subscribe volume volume_change \
+           --add item battery right \
+           --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
+           --subscribe battery system_woke power_source_change
+
+##### Force all scripts to run the first time #####
+sketchybar --update
