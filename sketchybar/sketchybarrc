@@ -12,10 +12,13 @@ PLUGIN_DIR="$CONFIG_DIR/plugins"
 
 ##### Bar Appearance #####
 
-# topmost=on keeps the bar above window layers. Needed because the macOS menu
-# bar is auto-hidden, so no display reserves the top strip; a tiled or
-# fullscreen window would otherwise draw straight over the bar.
-sketchybar --bar position=top height=40 blur_radius=30 color=0x40000000 topmost=on
+# topmost=window puts the bar at kCGFloatingWindowLevel (3): above every
+# AeroSpace-tiled window, but below the macOS menu bar
+# (kCGMainMenuWindowLevel, 24). Needed because the menu bar is auto-hidden
+# (_HIHideMenuBar=1), so when revealed it must draw over the bar -- otherwise
+# sketchybar swallows clicks on WiFi, Bluetooth, Control Center and the clock.
+# Do not use topmost=on (kCGStatusWindowLevel, 25): that inverts the ordering.
+sketchybar --bar position=top height=40 blur_radius=30 color=0x40000000 topmost=window
 
 ##### Changing Defaults #####
 
