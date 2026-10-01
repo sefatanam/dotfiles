@@ -58,15 +58,23 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 #                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
 #                 See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-inner.horizontal = 2
-inner.vertical =   2
-outer.left =       2
-outer.bottom =     2
-# Clears the 40px sketchybar. The macOS menu bar is auto-hidden
-# (_HIHideMenuBar=1), so no display reserves that strip for us -- without this
-# gap, tiled windows sit under the bar and hide it.
-outer.top =        42
-outer.right =      2
+inner.horizontal = 0
+inner.vertical =   0
+outer.left =       0
+outer.right =      0
+outer.bottom =     0
+# Top is the one gap that cannot be 0 everywhere, because it is not really a
+# gap -- it is clearance for the 40px sketchybar.
+#
+# The built-in display has a 38px notch safe area that macOS already excludes
+# from NSScreen.visibleFrame, so AeroSpace starts tiling below the bar on its
+# own and needs 0. The previous constant 42 stacked on top of that reserved
+# strip and pushed windows to y=80, twice the bar height.
+#
+# Any other monitor reserves nothing (the macOS menu bar is auto-hidden via
+# _HIHideMenuBar=1), so it needs the full 40px or tiled windows sit on top of
+# sketchybar and hide it.
+outer.top = [{ monitor."built-in" = 0 }, 40]
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
