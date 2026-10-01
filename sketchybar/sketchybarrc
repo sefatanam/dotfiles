@@ -12,7 +12,10 @@ PLUGIN_DIR="$CONFIG_DIR/plugins"
 
 ##### Bar Appearance #####
 
-sketchybar --bar position=top height=40 blur_radius=30 color=0x40000000
+# topmost=on keeps the bar above window layers. Needed because the macOS menu
+# bar is auto-hidden, so no display reserves the top strip; a tiled or
+# fullscreen window would otherwise draw straight over the bar.
+sketchybar --bar position=top height=40 blur_radius=30 color=0x40000000 topmost=on
 
 ##### Changing Defaults #####
 
@@ -50,6 +53,20 @@ for ws in $(aerospace list-workspaces --all 2>/dev/null); do
                    background.drawing=off \
                    drawing=off \
                    click_script="aerospace workspace $ws"
+
+  # Dot separator trailing each chip. Drawn by the plugin only when another
+  # visible chip follows, so there is never a leading or trailing dot.
+  sketchybar --add item "space.$ws.sep" left \
+             --set "space.$ws.sep" \
+                   icon=• \
+                   icon.font="Hack Nerd Font:Bold:12.0" \
+                   icon.color=0xa0ffffff \
+                   icon.padding_left=0 \
+                   icon.padding_right=0 \
+                   padding_left=4 \
+                   padding_right=4 \
+                   label.drawing=off \
+                   drawing=off
 done
 
 # One item owns the redraw for every chip, so the plugin runs once per event

@@ -101,8 +101,8 @@ POST <shell command>         # run with CWD set to the tool's own directory
 ```
 
 `setup.sh` discovers and applies every `*/install.conf` on each run (`apply_declared_installs`).
-`lazygit/install.conf`, `bat/install.conf`, `providers/install.conf`, and `omp/install.conf`
-are the real examples — read those before writing a new one. Run `./setup-validate.sh` after
+`lazygit/install.conf`, `bat/install.conf`, `providers/install.conf`, `omp/install.conf`, and
+`claude/install.conf` are the real examples — read those before writing a new one. Run `./setup-validate.sh` after
 adding or editing one; it exercises the LINK/POST/PLATFORM machinery against a throwaway
 sandbox `$HOME`, not your real one.
 

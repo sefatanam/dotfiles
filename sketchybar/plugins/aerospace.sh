@@ -28,6 +28,11 @@ WINDOWS=$(aerospace list-windows --all --format '%{workspace}|%{app-name}' 2>/de
 
 args=()
 
+# Workspaces that end up drawn, in bar order. Separators are decided from
+# this afterwards, since "is there a chip to my right" is not knowable
+# until every workspace has been classified.
+visible=()
+
 while IFS='|' read -r ws focused; do
   [ -z "$ws" ] && continue
 
@@ -41,6 +46,7 @@ while IFS='|' read -r ws focused; do
   fi
 
   if [ "$focused" = "true" ]; then
+    visible+=("$ws")
     args+=(--set "space.$ws"
       drawing=on
       background.drawing=on
@@ -51,6 +57,7 @@ while IFS='|' read -r ws focused; do
       args+=(label.drawing=off)
     fi
   elif [ -n "$apps" ]; then
+    visible+=("$ws")
     if [ "$NAMES_ON_ALL" = "1" ]; then
       args+=(--set "space.$ws"
         drawing=on
@@ -67,8 +74,20 @@ while IFS='|' read -r ws focused; do
     fi
   else
     args+=(--set "space.$ws" drawing=off)
+    args+=(--set "space.$ws.sep" drawing=off)
   fi
 done <<< "$WORKSPACES"
+
+# A chip's separator is drawn iff a visible chip follows it, which leaves the
+# last one bare. Hidden chips had theirs switched off in the loop above.
+last=$(( ${#visible[@]} - 1 ))
+for i in "${!visible[@]}"; do
+  if [ "$i" -lt "$last" ]; then
+    args+=(--set "space.${visible[$i]}.sep" drawing=on)
+  else
+    args+=(--set "space.${visible[$i]}.sep" drawing=off)
+  fi
+done
 
 # Single IPC roundtrip for all workspaces.
 [ ${#args[@]} -gt 0 ] && sketchybar "${args[@]}"

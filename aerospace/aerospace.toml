@@ -62,7 +62,10 @@ inner.horizontal = 2
 inner.vertical =   2
 outer.left =       2
 outer.bottom =     2
-outer.top =        2
+# Clears the 40px sketchybar. The macOS menu bar is auto-hidden
+# (_HIHideMenuBar=1), so no display reserves that strip for us -- without this
+# gap, tiled windows sit under the bar and hide it.
+outer.top =        42
 outer.right =      2
 
 # 'main' binding mode declaration
