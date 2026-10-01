@@ -46,6 +46,7 @@ for ws in $(aerospace list-workspaces --all 2>/dev/null); do
                    icon="$ws" \
                    icon.padding_left=7 \
                    icon.padding_right=7 \
+                   label.font="sketchybar-app-font:Regular:14.0" \
                    label.drawing=off \
                    background.color=0x40ffffff \
                    background.corner_radius=5 \

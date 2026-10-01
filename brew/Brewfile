@@ -198,6 +198,8 @@ cask "dotnet-sdk@9"
 cask "font-jetbrains-mono"
 cask "font-jetbrains-mono-nerd-font"
 cask "font-maple-mono-nf"
+# App-icon glyphs for the sketchybar workspace chips
+cask "font-sketchybar-app-font"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
 # Web browser

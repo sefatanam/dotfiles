@@ -2,21 +2,25 @@
 # Renders AeroSpace workspace chips into sketchybar.
 #
 # Three visual states per workspace:
-#   focused              -> chip highlighted, app names shown
-#   non-empty, unfocused -> chip drawn, app names shown (see NAMES_ON_ALL)
+#   focused              -> chip highlighted, app icons shown
+#   non-empty, unfocused -> chip drawn, app icons shown (see ICONS_ON_ALL)
 #   empty, unfocused     -> hidden entirely
 #
 # Uses exactly two `aerospace` calls and one batched `sketchybar --set`,
 # so cost is constant regardless of workspace count.
 
-# Max width of the app-name label before ellipsis. sketchybar's
-# label.max_chars is not reported by --query, so truncate here instead
-# to keep the rendered value inspectable.
-MAX_LABEL=30
+# Maps app names to glyph ligatures (":ghostty:" and friends) from
+# sketchybar-app-font, which the chip labels are rendered in. Sourced rather
+# than executed per app so the mapping costs no subprocesses.
+source "$(dirname "${BASH_SOURCE[0]}")/icon_map.sh"
 
-# Show app names on every non-empty workspace. Set to 0 to show them only
+# Max glyphs per chip before the rest are elided. A chip with more windows
+# than this would otherwise push the clock off a narrow display.
+MAX_ICONS=5
+
+# Show app icons on every non-empty workspace. Set to 0 to show them only
 # on the focused workspace.
-NAMES_ON_ALL=1
+ICONS_ON_ALL=1
 
 # workspace|true|false for every workspace, including empty ones.
 WORKSPACES=$(aerospace list-workspaces --all --format '%{workspace}|%{workspace-is-focused}' 2>/dev/null)
@@ -36,14 +40,27 @@ visible=()
 while IFS='|' read -r ws focused; do
   [ -z "$ws" ] && continue
 
-  # Dedupe app names while preserving window order, then join with ", ".
-  # sort -u would be wrong here: it reorders.
-  apps=$(printf '%s\n' "$WINDOWS" | awk -F'|' -v w="$ws" \
-    '$1 == w && !seen[$2]++ { printf "%s%s", (n++ ? ", " : ""), $2 }')
+  # Dedupe app names while preserving window order. sort -u would be wrong
+  # here: it reorders.
+  names=$(printf '%s\n' "$WINDOWS" | awk -F'|' -v w="$ws" \
+    '$1 == w && !seen[$2]++ { print $2 }')
 
-  if [ ${#apps} -gt $MAX_LABEL ]; then
-    apps="${apps:0:$((MAX_LABEL - 1))}…"
-  fi
+  # One glyph per distinct app, space-separated. Deduped on the glyph too:
+  # two apps can share an icon (and everything unknown shares :default:),
+  # which would otherwise render as a repeated glyph. Tracked in a string
+  # rather than an associative array -- macOS ships bash 3.2, which has none.
+  apps=""
+  seen=""
+  count=0
+  while IFS= read -r name; do
+    [ -z "$name" ] && continue
+    __icon_map "$name"
+    case "$seen" in *"$icon_result"*) continue ;; esac
+    seen="$seen$icon_result"
+    [ "$count" -ge "$MAX_ICONS" ] && break
+    apps="${apps:+$apps }$icon_result"
+    count=$((count + 1))
+  done <<< "$names"
 
   if [ "$focused" = "true" ]; then
     visible+=("$ws")
@@ -58,7 +75,7 @@ while IFS='|' read -r ws focused; do
     fi
   elif [ -n "$apps" ]; then
     visible+=("$ws")
-    if [ "$NAMES_ON_ALL" = "1" ]; then
+    if [ "$ICONS_ON_ALL" = "1" ]; then
       args+=(--set "space.$ws"
         drawing=on
         background.drawing=off
