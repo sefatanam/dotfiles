@@ -1,0 +1,1022 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dotfiles Wiki</title>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+<style>
+  /* ---- tool grid ---- */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(14.5rem, 1fr)); gap: 12px; }
+  .tile {
+    position: relative; display: flex; flex-direction: column; gap: .3rem;
+    padding: 1rem 1rem 1.1rem; aspect-ratio: 1 / 1; text-align: left; cursor: pointer;
+    font: inherit; color: var(--fg); background: var(--panel); border: 1px solid var(--line);
+    transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+  }
+  .tile::after {
+    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px;
+    background: var(--orange);
+  }
+  .tile:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--orange); border-color: var(--orange); }
+  .tile:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+  .tile[aria-expanded="true"] {
+    background: var(--orange);
+    color: var(--on-orange); border-color: var(--orange); box-shadow: 4px 4px 0 var(--fg);
+  }
+  .tile[aria-expanded="true"] .t-role, .tile[aria-expanded="true"] .t-keys { color: var(--on-orange); opacity: .85; }
+  .tile.dim { opacity: .35; }
+  .t-name { font-weight: 700; font-size: 1.1rem; }
+  .t-role { font-size: .78rem; text-transform: uppercase; letter-spacing: .09em; color: var(--orange); font-weight: 600; }
+  .t-desc { font-size: .92rem; }
+  .t-keys { margin-top: auto; font-size: .8rem; color: var(--muted); }
+
+  /* ---- detail panels ---- */
+  .panels { margin-top: 12px; }
+  .hint { color: var(--muted); font-size: .95rem; border: 1px dashed var(--line); padding: 1rem; margin: 0; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-top: 4px solid var(--orange); margin-bottom: 12px; scroll-margin-top: 5rem; }
+  .panel[hidden] { display: none; }
+  .p-head {
+    padding: 1.2rem 1.2rem 1rem;
+    background: var(--orange-soft);
+    border-bottom: 1px solid var(--line);
+  }
+  .p-head h3 { margin: 0; font-size: 1.5rem; letter-spacing: -.02em; }
+  .p-head p { margin: .3rem 0 0; color: var(--muted); }
+  .p-body { padding: .4rem 1.2rem 1.2rem; overflow-x: auto; }
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 12px; margin: 1rem 0; }
+  .fact { border: 1px solid var(--line); padding: .8rem .9rem; background: var(--bg); }
+  .fact h4 { margin: 0 0 .35rem; font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--orange); }
+  .fact ul { margin: 0; padding-left: 1.05rem; }
+  .fact li { margin: .15rem 0; }
+  .fact p { margin: 0; }
+  .nokeys { margin: 1rem 0 0; padding: .8rem .9rem; border-left: 4px solid var(--orange); background: var(--kbd-bg); }
+
+  .nomatch { display: none; }
+
+  /* ---- layer diagram ---- */
+  .layers { display: grid; grid-template-columns: 1fr 13rem; gap: 12px; }
+  .box { border: 2px solid var(--orange); padding: .6rem .7rem .7rem; background: var(--panel); }
+  .box > .lbl { display: flex; justify-content: space-between; gap: .5rem; font-weight: 700; font-size: .95rem; margin-bottom: .5rem; }
+  .box > .lbl a { color: inherit; text-decoration: none; }
+  .box > .lbl a:hover { color: var(--orange); }
+  .box > .lbl span { font-weight: 400; color: var(--muted); font-size: .8rem; }
+  .box .box { border-color: var(--orange); }
+  .box .box .box { border-color: var(--orange); }
+  .inner-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .inner-row .box { margin: 0; }
+  .side { display: flex; flex-direction: column; gap: 12px; }
+  .side .box { border-style: dashed; }
+  .side p { margin: 0; font-size: .88rem; color: var(--muted); }
+
+  /* ---- start here ---- */
+  .cmds { display: grid; gap: 8px; }
+  .cmd { display: grid; grid-template-columns: 1fr auto; align-items: stretch; border: 1px solid var(--line); background: var(--panel); }
+  .cmd > div { padding: .55rem .8rem; }
+  .cmd pre { margin: 0; font-size: .9rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .cmd .why { font-size: .85rem; color: var(--muted); margin-top: .15rem; }
+  .copy {
+    font: inherit; font-size: .8rem; font-weight: 600; cursor: pointer; padding: 0 1rem; border: 0; border-left: 1px solid var(--line);
+    color: var(--on-orange); background: var(--orange);
+  }
+  .copy:hover { filter: brightness(1.08); }
+  .copy.done { background: var(--declared); }
+
+  /* ---- gotchas ---- */
+  .gotchas { display: grid; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); gap: 12px; }
+  .gotcha { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--orange); padding: .8rem .95rem; }
+  .gotcha strong { display: block; margin-bottom: .2rem; }
+  .gotcha p { margin: 0; font-size: .93rem; color: var(--muted); }
+
+  footer { margin-top: 3rem; padding: 1.2rem 0 2rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; }
+
+  @media (max-width: 720px) {
+    header.hero { padding-top: 1.6rem; }
+    .layers { grid-template-columns: 1fr; }
+    .inner-row { grid-template-columns: 1fr; }
+    .grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .tile { padding: .8rem; }
+    .t-desc { display: none; }
+    .p-head, .p-body { padding-left: .9rem; padding-right: .9rem; }
+  }
+  @media (max-width: 380px) { .grid { grid-template-columns: 1fr; } .tile { aspect-ratio: auto; min-height: 7rem; } }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .tile { transition: none; } }
+
+</style>
+</head>
+<body>
+<a class="skip" href="#tools">Skip to tools</a>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <div>
+        <p class="eyebrow">~/.dotfiles &middot; wiki</p>
+        <h1>My macOS dev setup</h1>
+      </div>
+      <button class="theme-btn" id="theme" type="button" aria-label="Switch color theme">Theme: cream</button>
+    </div>
+    <p class="lede">The tools I use every day, where their configs live, and every key I set.
+    Pick a tool to see its keys. The key tables are generated from the real configs, so they
+    match what is installed.</p>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <input id="q" type="search" placeholder="Search tools and keys&hellip;" autocomplete="off" spellcheck="false" aria-label="Search tools and keys">
+    <label class="tog"><input type="checkbox" id="defaults"> Show defaults</label>
+    <span class="count" id="count" role="status" aria-live="polite"></span>
+    <a class="full" href="keybindings.html">All keys by layer &rarr;</a>
+  </div>
+</div>
+
+<main class="wrap" id="main">
+
+<section class="block" id="tools">
+  <h2>Tools</h2>
+  <div class="grid">
+    <button class="tile" type="button" data-tool="aerospace" aria-controls="aerospace" aria-expanded="false">
+      <span class="t-role">Window manager</span><span class="t-name">AeroSpace</span>
+      <span class="t-desc">Tiles windows and gives me numbered workspaces.</span>
+      <span class="t-keys">Alt + h j k l</span>
+    </button>
+    <button class="tile" type="button" data-tool="sketchybar" aria-controls="sketchybar" aria-expanded="false">
+      <span class="t-role">Status bar</span><span class="t-name">SketchyBar</span>
+      <span class="t-desc">Top bar with workspaces, app icons, battery, volume and time.</span>
+      <span class="t-keys">No custom keys</span>
+    </button>
+    <button class="tile" type="button" data-tool="ghostty" aria-controls="ghostty" aria-expanded="false">
+      <span class="t-role">Terminal</span><span class="t-name">Ghostty</span>
+      <span class="t-desc">Main terminal. Rose Pine theme, Nerd Font, sends shortcuts to tmux.</span>
+      <span class="t-keys">Cmd + B, Cmd + S</span>
+    </button>
+    <button class="tile" type="button" data-tool="tmux" aria-controls="tmux" aria-expanded="false">
+      <span class="t-role">Multiplexer</span><span class="t-name">tmux</span>
+      <span class="t-desc">Panes, windows, sessions and popups. Saves sessions across restarts.</span>
+      <span class="t-keys">Prefix: Ctrl + A</span>
+    </button>
+    <button class="tile" type="button" data-tool="nvim" aria-controls="nvim" aria-expanded="false">
+      <span class="t-role">Editor</span><span class="t-name">Neovim</span>
+      <span class="t-desc">LazyVim with my own keymaps, LSP and AI agents.</span>
+      <span class="t-keys">Leader: Space</span>
+    </button>
+    <button class="tile" type="button" data-tool="zsh" aria-controls="zsh" aria-expanded="false">
+      <span class="t-role">Shell</span><span class="t-name">zsh</span>
+      <span class="t-desc">zinit plugins, Starship prompt, and aliases split into public and private files.</span>
+      <span class="t-keys">Ctrl + F</span>
+    </button>
+    <button class="tile" type="button" data-tool="git" aria-controls="git" aria-expanded="false">
+      <span class="t-role">Version control</span><span class="t-name">git + lazygit</span>
+      <span class="t-desc">SSH-signed commits, delta diffs, and a lazygit popup in tmux.</span>
+      <span class="t-keys">No custom keys</span>
+    </button>
+    <button class="tile" type="button" data-tool="workmux" aria-controls="workmux" aria-expanded="false">
+      <span class="t-role">Worktrees</span><span class="t-name">workmux</span>
+      <span class="t-desc">One git worktree per task, each in its own tmux window.</span>
+      <span class="t-keys">No custom keys</span>
+    </button>
+  </div>
+
+  <div class="panels">
+    <p class="hint" id="hint">Pick a tool above to see what it does and all its keys.</p>
+
+    <article class="panel" id="aerospace" hidden>
+      <div class="p-head"><h3>AeroSpace</h3><p>Tiling window manager. These keys work in every app.</p></div>
+      <div class="p-body">
+        <div class="facts">
+          <div class="fact"><h4>What I set</h4><ul>
+            <li>Starts at login and tiles new windows.</li>
+            <li>No gaps, except 40px at the top of external screens for SketchyBar.</li>
+            <li>The mouse follows focus.</li>
+            <li>Tells SketchyBar when the workspace changes.</li>
+          </ul></div>
+          <div class="fact"><h4>Config</h4><p><a href="../aerospace/aerospace.toml"><code>aerospace/aerospace.toml</code></a></p></div>
+        </div>
+        <h4 class="keys-title">Keys</h4>
+<!-- BEGIN GENERATED:aerospace -->
+<section class="grp">
+<h3>Focus &amp; navigate <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Action</th><th scope="col">Mode</th></tr></thead>
+<tbody>
+<tr data-mode="main"><td class="k"><kbd>alt-h</kbd></td><td class="w">focus left</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-j</kbd></td><td class="w">focus down</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-k</kbd></td><td class="w">focus up</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-l</kbd></td><td class="w">focus right</td><td class="s">main</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Switch mode <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Action</th><th scope="col">Mode</th></tr></thead>
+<tbody>
+<tr data-mode="service"><td class="k"><kbd>alt-shift-h</kbd></td><td class="w">join-with left, mode main</td><td class="s">service</td></tr>
+<tr data-mode="service"><td class="k"><kbd>alt-shift-j</kbd></td><td class="w">join-with down, mode main</td><td class="s">service</td></tr>
+<tr data-mode="service"><td class="k"><kbd>alt-shift-k</kbd></td><td class="w">join-with up, mode main</td><td class="s">service</td></tr>
+<tr data-mode="service"><td class="k"><kbd>alt-shift-l</kbd></td><td class="w">join-with right, mode main</td><td class="s">service</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-r</kbd></td><td class="w">mode resize</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-semicolon</kbd></td><td class="w">mode service</td><td class="s">main</td></tr>
+<tr data-mode="service"><td class="k"><kbd>backspace</kbd></td><td class="w">close-all-windows-but-current, mode main</td><td class="s">service</td></tr>
+<tr data-mode="resize"><td class="k"><kbd>enter</kbd></td><td class="w">mode main</td><td class="s">resize</td></tr>
+<tr data-mode="resize"><td class="k"><kbd>esc</kbd></td><td class="w">mode main</td><td class="s">resize</td></tr>
+<tr data-mode="service"><td class="k"><kbd>esc</kbd></td><td class="w">reload-config, mode main</td><td class="s">service</td></tr>
+<tr data-mode="service"><td class="k"><kbd>f</kbd></td><td class="w">layout floating tiling, mode main</td><td class="s">service</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Move &amp; swap <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Action</th><th scope="col">Mode</th></tr></thead>
+<tbody>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-h</kbd></td><td class="w">move left</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-j</kbd></td><td class="w">move down</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-k</kbd></td><td class="w">move up</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-l</kbd></td><td class="w">move right</td><td class="s">main</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Layout <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Action</th><th scope="col">Mode</th></tr></thead>
+<tbody>
+<tr data-mode="main"><td class="k"><kbd>alt-comma</kbd></td><td class="w">layout accordion horizontal vertical</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-slash</kbd></td><td class="w">layout tiles horizontal vertical</td><td class="s">main</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Sessions &amp; workspaces <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Action</th><th scope="col">Mode</th></tr></thead>
+<tbody>
+<tr data-mode="main"><td class="k"><kbd>alt-1</kbd></td><td class="w">workspace 1</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-2</kbd></td><td class="w">workspace 2</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-3</kbd></td><td class="w">workspace 3</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-4</kbd></td><td class="w">workspace 4</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-5</kbd></td><td class="w">workspace 5</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-6</kbd></td><td class="w">workspace 6</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-7</kbd></td><td class="w">workspace 7</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-8</kbd></td><td class="w">workspace 8</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-9</kbd></td><td class="w">workspace 9</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-b</kbd></td><td class="w">workspace B</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-e</kbd></td><td class="w">workspace E</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-m</kbd></td><td class="w">workspace M</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-n</kbd></td><td class="w">workspace N</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-p</kbd></td><td class="w">workspace P</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-1</kbd></td><td class="w">move-node-to-workspace 1</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-2</kbd></td><td class="w">move-node-to-workspace 2</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-3</kbd></td><td class="w">move-node-to-workspace 3</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-4</kbd></td><td class="w">move-node-to-workspace 4</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-5</kbd></td><td class="w">move-node-to-workspace 5</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-6</kbd></td><td class="w">move-node-to-workspace 6</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-7</kbd></td><td class="w">move-node-to-workspace 7</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-8</kbd></td><td class="w">move-node-to-workspace 8</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-9</kbd></td><td class="w">move-node-to-workspace 9</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-b</kbd></td><td class="w">move-node-to-workspace B</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-e</kbd></td><td class="w">move-node-to-workspace E</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-m</kbd></td><td class="w">move-node-to-workspace M</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-n</kbd></td><td class="w">move-node-to-workspace N</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-p</kbd></td><td class="w">move-node-to-workspace P</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-t</kbd></td><td class="w">move-node-to-workspace T</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-tab</kbd></td><td class="w">move-workspace-to-monitor --wrap-around next</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-v</kbd></td><td class="w">move-node-to-workspace V</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-t</kbd></td><td class="w">workspace T</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-tab</kbd></td><td class="w">workspace-back-and-forth</td><td class="s">main</td></tr>
+<tr data-mode="main"><td class="k"><kbd>alt-v</kbd></td><td class="w">workspace V</td><td class="s">main</td></tr>
+<tr data-mode="service"><td class="k"><kbd>r</kbd></td><td class="w">flatten-workspace-tree, mode main</td><td class="s">service</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Other <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Action</th><th scope="col">Mode</th></tr></thead>
+<tbody>
+<tr data-mode="main"><td class="k"><kbd>alt-shift-f</kbd></td><td class="w">fullscreen</td><td class="s">main</td></tr>
+<tr data-mode="resize"><td class="k"><kbd>b</kbd></td><td class="w">balance-sizes</td><td class="s">resize</td></tr>
+<tr data-mode="resize"><td class="k"><kbd>equal</kbd></td><td class="w">resize smart +50</td><td class="s">resize</td></tr>
+<tr data-mode="resize"><td class="k"><kbd>h</kbd></td><td class="w">resize width -50</td><td class="s">resize</td></tr>
+<tr data-mode="resize"><td class="k"><kbd>j</kbd></td><td class="w">resize height +50</td><td class="s">resize</td></tr>
+<tr data-mode="resize"><td class="k"><kbd>k</kbd></td><td class="w">resize height -50</td><td class="s">resize</td></tr>
+<tr data-mode="resize"><td class="k"><kbd>l</kbd></td><td class="w">resize width +50</td><td class="s">resize</td></tr>
+<tr data-mode="resize"><td class="k"><kbd>minus</kbd></td><td class="w">resize smart -50</td><td class="s">resize</td></tr>
+</tbody>
+</table>
+</section>
+<!-- END GENERATED:aerospace -->
+      </div>
+    </article>
+
+    <article class="panel" id="sketchybar" hidden>
+      <div class="p-head"><h3>SketchyBar</h3><p>Custom menu bar at the top of the screen.</p></div>
+      <div class="p-body">
+        <div class="facts">
+          <div class="fact"><h4>What I set</h4><ul>
+            <li>40px bar, slightly see-through and blurred.</li>
+            <li>One chip per AeroSpace workspace, showing app icons instead of names.</li>
+            <li>Shows the focused app, battery, volume and clock.</li>
+            <li>Sits below the macOS menu bar, so Wi-Fi and Control Center stay clickable.</li>
+          </ul></div>
+          <div class="fact"><h4>Config</h4><p><a href="../sketchybar/sketchybarrc"><code>sketchybar/sketchybarrc</code></a><br>Item scripts in <code>sketchybar/plugins/</code>.</p></div>
+        </div>
+        <p class="nokeys">No custom keys, uses tool defaults. SketchyBar only shows information, and its workspace list comes from AeroSpace.</p>
+      </div>
+    </article>
+
+    <article class="panel" id="ghostty" hidden>
+      <div class="p-head"><h3>Ghostty</h3><p>Main terminal. Two keys are really tmux shortcuts.</p></div>
+      <div class="p-body">
+        <div class="facts">
+          <div class="fact"><h4>What I set</h4><ul>
+            <li>Rose Pine in dark mode, Zenbones in light mode.</li>
+            <li>ShureTechMono Nerd Font, size 16, no ligatures.</li>
+            <li>Hidden title bar. Copies text when you select it.</li>
+            <li>Transparent mode is turned on or off by the <code>transparency</code> command.</li>
+          </ul></div>
+          <div class="fact"><h4>Config</h4><p><a href="../ghostty/config"><code>ghostty/config</code></a><br>Plus <code>ghostty/transparent-mode.conf</code>.</p></div>
+        </div>
+        <h4 class="keys-title">Keys</h4>
+<!-- BEGIN GENERATED:ghostty -->
+<section class="grp">
+<h3>Multiplexer pass-through <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Value</th></tr></thead>
+<tbody>
+<tr><td class="k"><kbd>cmd+b</kbd></td><td class="w">text:\x01\x7a</td></tr>
+<tr><td class="k"><kbd>cmd+s</kbd></td><td class="w">text:\x01\x73</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Clipboard <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Value</th></tr></thead>
+<tbody>
+<tr><td class="k"><kbd>super+c</kbd></td><td class="w">copy_to_clipboard</td></tr>
+<tr><td class="k"><kbd>super+v</kbd></td><td class="w">paste_from_clipboard</td></tr>
+</tbody>
+</table>
+</section>
+<!-- END GENERATED:ghostty -->
+      </div>
+    </article>
+
+    <article class="panel" id="tmux" hidden>
+      <div class="p-head"><h3>tmux</h3><p>The prefix is <kbd>Ctrl</kbd>+<kbd>A</kbd>. Press it first, then the key in the table.</p></div>
+      <div class="p-body">
+        <div class="facts">
+          <div class="fact"><h4>What I set</h4><ul>
+            <li>Popups for new sessions, lazygit, a scratch shell and the session picker.</li>
+            <li>Same keys move between tmux panes and Neovim splits (vim-tmux-navigator).</li>
+            <li>Sessions are saved and restored after a reboot (resurrect + continuum).</li>
+            <li>Status bar turns green while the prefix is active.</li>
+          </ul></div>
+          <div class="fact"><h4>Config</h4><p><a href="../tmux/.tmux.conf"><code>tmux/.tmux.conf</code></a><br>Notes in <a href="../tmux/readme.md"><code>tmux/readme.md</code></a>.</p></div>
+        </div>
+        <h4 class="keys-title">Keys</h4>
+        <p class="note">Turn on <strong>Show defaults</strong> to also see the keys tmux ships with.</p>
+<!-- BEGIN GENERATED:tmux -->
+<section class="grp">
+<h3>Focus &amp; navigate <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Command</th><th scope="col">Source</th></tr></thead>
+<tbody>
+<tr data-decl="inherited"><td class="k"><kbd>(</kbd></td><td class="w">switch-client -p</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>)</kbd></td><td class="w">switch-client -n</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>0</kbd></td><td class="w">select-window -t :=0</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>1</kbd></td><td class="w">select-window -t :=1</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>2</kbd></td><td class="w">select-window -t :=2</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>3</kbd></td><td class="w">select-window -t :=3</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>4</kbd></td><td class="w">select-window -t :=4</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>5</kbd></td><td class="w">select-window -t :=5</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>6</kbd></td><td class="w">select-window -t :=6</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>7</kbd></td><td class="w">select-window -t :=7</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>8</kbd></td><td class="w">select-window -t :=8</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>9</kbd></td><td class="w">select-window -t :=9</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>Down</kbd></td><td class="w">select-pane -D</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>L</kbd></td><td class="w">switch-client -l</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>Left</kbd></td><td class="w">select-pane -L</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>M</kbd></td><td class="w">select-pane -M</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>M-n</kbd></td><td class="w">next-window -a</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>M-p</kbd></td><td class="w">previous-window -a</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>Right</kbd></td><td class="w">select-pane -R</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>Up</kbd></td><td class="w">select-pane -U</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>\'</kbd></td><td class="w">command-prompt -T window-target -p index { select-window -t ":%%" }</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>\;</kbd></td><td class="w">last-pane</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>h</kbd></td><td class="w">select-pane -L</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>k</kbd></td><td class="w">select-pane -U</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>l</kbd></td><td class="w">select-pane -R</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>m</kbd></td><td class="w">select-pane -m</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>n</kbd></td><td class="w">next-window</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>o</kbd></td><td class="w">select-pane -t :.+</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>p</kbd></td><td class="w">previous-window</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>w</kbd></td><td class="w">choose-tree -Zw</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Split <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Command</th><th scope="col">Source</th></tr></thead>
+<tbody>
+<tr data-decl="inherited"><td class="k"><kbd>*</kbd></td><td class="w">new-pane</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>\"</kbd></td><td class="w">split-window -v -c "#{pane_current_path}"</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>\%</kbd></td><td class="w">split-window -h -c "#{pane_current_path}"</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>s</kbd></td><td class="w">split-window -v -c "#{pane_current_path}"</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>v</kbd></td><td class="w">split-window -h -c "#{pane_current_path}"</td><td class="s"><span class="tag declared">declared</span></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Move &amp; swap <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Command</th><th scope="col">Source</th></tr></thead>
+<tbody>
+<tr data-decl="inherited"><td class="k"><kbd>!</kbd></td><td class="w">break-pane</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>.</kbd></td><td class="w">command-prompt -T target { move-window -t "%%" }</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>&lt;</kbd></td><td class="w">swap-window -t -1 \; select-window -t -1</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>&gt;</kbd></td><td class="w">swap-window -t +1 \; select-window -t +1</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>C-o</kbd></td><td class="w">rotate-window</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>J</kbd></td><td class="w">choose-tree -Z -F "#{E:@custom_choose_tree_format}" "join-pane -v -s %%"</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>M-o</kbd></td><td class="w">rotate-window -D</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>\{</kbd></td><td class="w">swap-pane -U</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>\}</kbd></td><td class="w">swap-pane -D</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>b</kbd></td><td class="w">if-shell " [ #{window_panes} -gt '1' ] " { break-pane -a }</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>j</kbd></td><td class="w">choose-tree -Z -F "#{E:@custom_choose_tree_format}" "join-pane -h -s %%"</td><td class="s"><span class="tag declared">declared</span></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Resize <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Command</th><th scope="col">Source</th></tr></thead>
+<tbody>
+<tr data-decl="declared"><td class="k"><kbd>C-Down</kbd></td><td class="w">resize-pane -D</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>C-Left</kbd></td><td class="w">resize-pane -L</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>C-Right</kbd></td><td class="w">resize-pane -R</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>C-Up</kbd></td><td class="w">resize-pane -U</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>M-Down</kbd></td><td class="w">resize-pane -D 5</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>M-Left</kbd></td><td class="w">resize-pane -L 5</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>M-Right</kbd></td><td class="w">resize-pane -R 5</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>M-Up</kbd></td><td class="w">resize-pane -U 5</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>S-Down</kbd></td><td class="w">resize-pane -D 5</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>S-Left</kbd></td><td class="w">resize-pane -L 5</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>S-Right</kbd></td><td class="w">resize-pane -R 5</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>S-Up</kbd></td><td class="w">resize-pane -U 5</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>z</kbd></td><td class="w">resize-pane -Z</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Layout <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Command</th><th scope="col">Source</th></tr></thead>
+<tbody>
+<tr data-decl="inherited"><td class="k"><kbd>M-1</kbd></td><td class="w">select-layout even-horizontal</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>M-2</kbd></td><td class="w">select-layout even-vertical</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>M-3</kbd></td><td class="w">select-layout main-horizontal</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>M-4</kbd></td><td class="w">select-layout main-vertical</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>M-5</kbd></td><td class="w">select-layout tiled</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>M-6</kbd></td><td class="w">select-layout main-horizontal-mirrored</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>M-7</kbd></td><td class="w">select-layout main-vertical-mirrored</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>Space</kbd></td><td class="w">select-layout -n</td><td class="s"><span class="tag declared">declared</span></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Popups &amp; launchers <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Command</th><th scope="col">Source</th></tr></thead>
+<tbody>
+<tr data-decl="declared"><td class="k"><kbd>C-j</kbd></td><td class="w">display-popup -E -T " Switch Session " -h "40%" -w "40%" "tmux list-sessions | sed -E 's/:.*$//' | grep -v \"^$(tmux display-message -p '#S')$\" | fzf --reverse | xargs tmux switch-client -t"</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>C-n</kbd></td><td class="w">display-popup -E -h "20%" -w "40%" "bash -c \"read -p \\\"New session name: \\\" name &amp;&amp; [ -n \\\"\\\$name\\\" ] &amp;&amp; tmux new-session -d -s \\\"\\\$name\\\" &amp;&amp; tmux switch-client -t \\\"\\\$name\\\"\""</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>C-t</kbd></td><td class="w">display-popup -E -d "#{pane_current_path}" -h "75%" -w "75%" zsh</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>C-y</kbd></td><td class="w">display-popup -E -d "#{pane_current_path}" -h "90%" -w "90%" lazygit</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>C-z</kbd></td><td class="w">display-popup -E -h "80%" -w "80%" "nvim ~/.zshrc"</td><td class="s"><span class="tag declared">declared</span></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Sessions &amp; workspaces <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Command</th><th scope="col">Source</th></tr></thead>
+<tbody>
+<tr data-decl="inherited"><td class="k"><kbd>\$</kbd></td><td class="w">command-prompt -I "#S" { rename-session "%%" }</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Files &amp; buffers <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Command</th><th scope="col">Source</th></tr></thead>
+<tbody>
+<tr data-decl="inherited"><td class="k"><kbd>-</kbd></td><td class="w">delete-buffer</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Copy mode &amp; buffers <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Command</th><th scope="col">Source</th></tr></thead>
+<tbody>
+<tr data-decl="inherited"><td class="k"><kbd>C-l</kbd></td><td class="w">send-keys C-l</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>PPage</kbd></td><td class="w">copy-mode -u</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>[</kbd></td><td class="w">copy-mode</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>]</kbd></td><td class="w">paste-buffer -p</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>d</kbd></td><td class="w">run-shell "tmux send-keys -t vpn C-c 2&gt;/dev/null; sleep 0.3; tmux send-keys -t vpn C-c 2&gt;/dev/null; tmux detach-client"</td><td class="s"><span class="tag declared">declared</span></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Reload &amp; session persistence <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Command</th><th scope="col">Source</th></tr></thead>
+<tbody>
+<tr data-decl="declared"><td class="k"><kbd>C-r</kbd></td><td class="w">run-shell ~/.tmux/plugins/tmux-resurrect/scripts/restore.sh</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>C-s</kbd></td><td class="w">run-shell ~/.tmux/plugins/tmux-resurrect/scripts/save.sh</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>r</kbd></td><td class="w">source-file ~/.tmux.conf \; display-message "🔄 tmux config reloaded!"</td><td class="s"><span class="tag declared">declared</span></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Command prompt <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Command</th><th scope="col">Source</th></tr></thead>
+<tbody>
+<tr data-decl="inherited"><td class="k"><kbd>,</kbd></td><td class="w">command-prompt -I "#W" { rename-window "%%" }</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>/</kbd></td><td class="w">command-prompt -k -p key { list-keys -1N "%%" }</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>:</kbd></td><td class="w">command-prompt</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>?</kbd></td><td class="w">list-keys -N</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>C</kbd></td><td class="w">customize-mode -Z</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>f</kbd></td><td class="w">command-prompt { find-window -Z "%%" }</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Detach &amp; buffers <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Command</th><th scope="col">Source</th></tr></thead>
+<tbody>
+<tr data-decl="inherited"><td class="k"><kbd>&amp;</kbd></td><td class="w">confirm-before -p "kill-window #W? (y/n)" kill-window</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>=</kbd></td><td class="w">choose-buffer -Z</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>\#</kbd></td><td class="w">list-buffers</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>x</kbd></td><td class="w">confirm-before -p "kill-pane #P? (y/n)" kill-pane</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Other <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Command</th><th scope="col">Source</th></tr></thead>
+<tbody>
+<tr data-decl="declared"><td class="k"><kbd>C-b</kbd></td><td class="w">run-shell "workmux sidebar"</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>D</kbd></td><td class="w">choose-client -Z</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>DC</kbd></td><td class="w">refresh-client -c</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>E</kbd></td><td class="w">run-shell "\"~/.tmux/plugins/tmux-agent-sidebar/bin/tmux-agent-sidebar\" toggle-all"</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>I</kbd></td><td class="w">run-shell ~/.tmux/plugins/tpm/bindings/install_plugins</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>M-u</kbd></td><td class="w">run-shell ~/.tmux/plugins/tpm/bindings/clean_plugins</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="declared"><td class="k"><kbd>R</kbd></td><td class="w">refresh-client \; display-message "🔄 Display refreshed!"</td><td class="s"><span class="tag declared">declared</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>U</kbd></td><td class="w">run-shell ~/.tmux/plugins/tpm/bindings/update_plugins</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>\~</kbd></td><td class="w">show-messages</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>c</kbd></td><td class="w">new-window</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>e</kbd></td><td class="w">run-shell "\"~/.tmux/plugins/tmux-agent-sidebar/bin/tmux-agent-sidebar\" toggle \"#{window_id}\" \"#{pane_current_path}\""</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>i</kbd></td><td class="w">display-message</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>q</kbd></td><td class="w">display-panes</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+<tr data-decl="inherited"><td class="k"><kbd>t</kbd></td><td class="w">clock-mode</td><td class="s"><span class="tag inherited">inherited</span></td></tr>
+</tbody>
+</table>
+</section>
+<!-- END GENERATED:tmux -->
+      </div>
+    </article>
+
+    <article class="panel" id="nvim" hidden>
+      <div class="p-head"><h3>Neovim</h3><p>The leader is <kbd>Space</kbd>, so <code>&lt;leader&gt;fs</code> means <kbd>Space</kbd> <kbd>f</kbd> <kbd>s</kbd>.</p></div>
+      <div class="p-body">
+        <div class="facts">
+          <div class="fact"><h4>What I set</h4><ul>
+            <li>Built on LazyVim, with my keymaps on top.</li>
+            <li>LSP, formatting and diagnostics keys.</li>
+            <li>Keys for AI coding agents.</li>
+            <li>Becomes see-through when transparent mode is on.</li>
+          </ul></div>
+          <div class="fact"><h4>Config</h4><p><a href="../nvim"><code>nvim/</code></a><br>Notes in <a href="../nvim/README.md"><code>nvim/README.md</code></a>.</p></div>
+        </div>
+        <h4 class="keys-title">Keys</h4>
+<!-- BEGIN GENERATED:nvim -->
+<section class="grp">
+<h3>Files &amp; buffers <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Action</th><th scope="col">Mode</th></tr></thead>
+<tbody>
+<tr data-mode="n"><td class="k"><kbd>&lt;S-Tab&gt;</kbd></td><td class="w">Previous buffer</td><td class="s">n</td></tr>
+<tr data-mode="n"><td class="k"><kbd>&lt;Tab&gt;</kbd></td><td class="w">Next buffer</td><td class="s">n</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Clipboard <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Action</th><th scope="col">Mode</th></tr></thead>
+<tbody>
+<tr data-mode="n, v"><td class="k"><kbd>SPACEp</kbd></td><td class="w">Paste without replacing the default register</td><td class="s">n, v</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Edit <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Action</th><th scope="col">Mode</th></tr></thead>
+<tbody>
+<tr data-mode="n"><td class="k"><kbd>D</kbd></td><td class="w">Delete to the vois register.</td><td class="s">n</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Jump &amp; project <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Action</th><th scope="col">Mode</th></tr></thead>
+<tbody>
+<tr data-mode="n"><td class="k"><kbd>SPACEjc</kbd></td><td class="w">Jump to component</td><td class="s">n</td></tr>
+<tr data-mode="n"><td class="k"><kbd>SPACEjs</kbd></td><td class="w">Jump to styles</td><td class="s">n</td></tr>
+<tr data-mode="n"><td class="k"><kbd>SPACEjt</kbd></td><td class="w">Jump to template</td><td class="s">n</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Folds <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Action</th><th scope="col">Mode</th></tr></thead>
+<tbody>
+<tr data-mode="n"><td class="k"><kbd>zM</kbd></td><td class="w">Close All Folds</td><td class="s">n</td></tr>
+<tr data-mode="n"><td class="k"><kbd>zR</kbd></td><td class="w">Open All Folds</td><td class="s">n</td></tr>
+<tr data-mode="n"><td class="k"><kbd>zm</kbd></td><td class="w">Close Folds With Level</td><td class="s">n</td></tr>
+<tr data-mode="n"><td class="k"><kbd>zr</kbd></td><td class="w">Open Folds Except Kinds</td><td class="s">n</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>LSP &amp; diagnostics <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Action</th><th scope="col">Mode</th></tr></thead>
+<tbody>
+<tr data-mode="n"><td class="k"><kbd>SPACEvr</kbd></td><td class="w">Rename variable (LSP)</td><td class="s">n</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>AI agents <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Action</th><th scope="col">Mode</th></tr></thead>
+<tbody>
+<tr data-mode="n, x"><td class="k"><kbd>&lt;C-a&gt;</kbd></td><td class="w">Ask OpenCode…</td><td class="s">n, x</td></tr>
+<tr data-mode="n, x"><td class="k"><kbd>&lt;C-x&gt;</kbd></td><td class="w">Select OpenCode…</td><td class="s">n, x</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="grp">
+<h3>Other <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Action</th><th scope="col">Mode</th></tr></thead>
+<tbody>
+<tr data-mode="i"><td class="k"><kbd>&lt;C-j&gt;</kbd></td><td class="w">&lt;Esc&gt;o</td><td class="s">i</td></tr>
+<tr data-mode="t"><td class="k"><kbd>&lt;Esc&gt;</kbd></td><td class="w">Exit terminal mode</td><td class="s">t</td></tr>
+<tr data-mode="n"><td class="k"><kbd>&lt;S-C-d&gt;</kbd></td><td class="w">inline function</td><td class="s">n</td></tr>
+<tr data-mode="n"><td class="k"><kbd>&lt;S-C-u&gt;</kbd></td><td class="w">inline function</td><td class="s">n</td></tr>
+<tr data-mode="n"><td class="k"><kbd>&lt;Space&gt;</kbd></td><td class="w">-</td><td class="s">n</td></tr>
+<tr data-mode="plugin"><td class="k"><kbd>&lt;c-h&gt;</kbd></td><td class="w">-</td><td class="s">plugin</td></tr>
+<tr data-mode="plugin"><td class="k"><kbd>&lt;c-j&gt;</kbd></td><td class="w">-</td><td class="s">plugin</td></tr>
+<tr data-mode="plugin"><td class="k"><kbd>&lt;c-k&gt;</kbd></td><td class="w">-</td><td class="s">plugin</td></tr>
+<tr data-mode="plugin"><td class="k"><kbd>&lt;c-l&gt;</kbd></td><td class="w">-</td><td class="s">plugin</td></tr>
+<tr data-mode="n"><td class="k"><kbd>F</kbd></td><td class="w">inline function</td><td class="s">n</td></tr>
+<tr data-mode="plugin"><td class="k"><kbd>SPACEa</kbd></td><td class="w">-</td><td class="s">plugin</td></tr>
+<tr data-mode="n, v"><td class="k"><kbd>SPACEa</kbd></td><td class="w">&lt;cmd&gt;lua require</td><td class="s">n, v</td></tr>
+<tr data-mode="plugin"><td class="k"><kbd>SPACEaa</kbd></td><td class="w">-</td><td class="s">plugin</td></tr>
+<tr data-mode="plugin"><td class="k"><kbd>SPACEab</kbd></td><td class="w">-</td><td class="s">plugin</td></tr>
+<tr data-mode="plugin"><td class="k"><kbd>SPACEac</kbd></td><td class="w">-</td><td class="s">plugin</td></tr>
+<tr data-mode="plugin"><td class="k"><kbd>SPACEad</kbd></td><td class="w">-</td><td class="s">plugin</td></tr>
+<tr data-mode="plugin"><td class="k"><kbd>SPACEas</kbd></td><td class="w">-</td><td class="s">plugin</td></tr>
+<tr data-mode="n, v"><td class="k"><kbd>SPACEb</kbd></td><td class="w">&lt;cmd&gt;lua require</td><td class="s">n, v</td></tr>
+<tr data-mode="n, v"><td class="k"><kbd>SPACEcn</kbd></td><td class="w">&lt;cmd&gt;lua require</td><td class="s">n, v</td></tr>
+<tr data-mode="n, v"><td class="k"><kbd>SPACEcp</kbd></td><td class="w">&lt;cmd&gt;lua require</td><td class="s">n, v</td></tr>
+<tr data-mode="n, v"><td class="k"><kbd>SPACEd</kbd></td><td class="w">&lt;cmd&gt;lua require</td><td class="s">n, v</td></tr>
+<tr data-mode="n, v"><td class="k"><kbd>SPACEfd</kbd></td><td class="w">&lt;cmd&gt;lua require</td><td class="s">n, v</td></tr>
+<tr data-mode="n, v"><td class="k"><kbd>SPACEff</kbd></td><td class="w">&lt;cmd&gt;lua require</td><td class="s">n, v</td></tr>
+<tr data-mode="n, v, i"><td class="k"><kbd>SPACEfs</kbd></td><td class="w">inline function</td><td class="s">n, v, i</td></tr>
+<tr data-mode="plugin"><td class="k"><kbd>SPACEoa</kbd></td><td class="w">-</td><td class="s">plugin</td></tr>
+<tr data-mode="n, v"><td class="k"><kbd>SPACEpr</kbd></td><td class="w">&lt;cmd&gt;lua require</td><td class="s">n, v</td></tr>
+<tr data-mode="n, v"><td class="k"><kbd>SPACEsp</kbd></td><td class="w">&lt;cmd&gt;lua require</td><td class="s">n, v</td></tr>
+<tr data-mode="n, v"><td class="k"><kbd>SPACEt</kbd></td><td class="w">&lt;cmd&gt;lua require</td><td class="s">n, v</td></tr>
+<tr data-mode="n"><td class="k"><kbd>SPACEup</kbd></td><td class="w">inline function</td><td class="s">n</td></tr>
+<tr data-mode="n, x"><td class="k"><kbd>go</kbd></td><td class="w">inline function</td><td class="s">n, x</td></tr>
+<tr data-mode="n"><td class="k"><kbd>goo</kbd></td><td class="w">inline function</td><td class="s">n</td></tr>
+<tr data-mode="n"><td class="k"><kbd>hs</kbd></td><td class="w">Horizontal Split</td><td class="s">n</td></tr>
+<tr data-mode="n"><td class="k"><kbd>te</kbd></td><td class="w">:tabedit")</td><td class="s">n</td></tr>
+<tr data-mode="n"><td class="k"><kbd>vs</kbd></td><td class="w">Verticle Split</td><td class="s">n</td></tr>
+<tr data-mode="n"><td class="k"><kbd>zM</kbd></td><td class="w">require</td><td class="s">n</td></tr>
+<tr data-mode="n"><td class="k"><kbd>zR</kbd></td><td class="w">require</td><td class="s">n</td></tr>
+</tbody>
+</table>
+</section>
+<!-- END GENERATED:nvim -->
+      </div>
+    </article>
+
+    <article class="panel" id="zsh" hidden>
+      <div class="p-head"><h3>zsh</h3><p>Shell with zinit for plugins and the Starship prompt.</p></div>
+      <div class="p-body">
+        <div class="facts">
+          <div class="fact"><h4>What I set</h4><ul>
+            <li><code>aliases.zsh</code> and <code>functions.zsh</code>: useful anywhere, committed.</li>
+            <li><code>local.zsh</code>: private addresses and names, never committed.</li>
+            <li>Syntax highlighting while you type.</li>
+            <li><kbd>Ctrl</kbd>+<kbd>F</kbd> suggests a folder with fzf.</li>
+          </ul></div>
+          <div class="fact"><h4>Config</h4><p><a href="../zsh/.zshrc"><code>zsh/.zshrc</code></a><br>Aliases in <code>zsh/.local/share/zsh/</code>.</p></div>
+        </div>
+        <h4 class="keys-title">Keys</h4>
+<!-- BEGIN GENERATED:zsh -->
+<section class="grp">
+<h3>Other <span class="grp-count"></span></h3>
+<p class="nomatch hidden">No matches.</p>
+<table class="kb" data-generated>
+<thead><tr><th scope="col">Key</th><th scope="col">Widget</th></tr></thead>
+<tbody>
+<tr><td class="k"><kbd>^F</kbd></td><td class="w">_directory_suggestion_widget</td></tr>
+</tbody>
+</table>
+</section>
+<!-- END GENERATED:zsh -->
+      </div>
+    </article>
+
+    <article class="panel" id="git" hidden>
+      <div class="p-head"><h3>git + lazygit</h3><p>Global git settings and the lazygit UI.</p></div>
+      <div class="p-body">
+        <div class="facts">
+          <div class="fact"><h4>git</h4><ul>
+            <li>Commits are signed with my SSH key.</li>
+            <li>Diffs go through delta with a Rose Pine theme.</li>
+            <li>Inside work folders, a different name and key are used.</li>
+          </ul></div>
+          <div class="fact"><h4>lazygit</h4><ul>
+            <li>Rose Pine colors.</li>
+            <li>Opens in a tmux popup: <kbd>prefix</kbd>+<kbd>Ctrl</kbd>+<kbd>y</kbd>.</li>
+          </ul></div>
+          <div class="fact"><h4>Config</h4><p><a href="../git/gitconfig"><code>git/gitconfig</code></a>, <a href="../lazygit/config.yml"><code>lazygit/config.yml</code></a><br>Every key explained in <a href="../git/README.md"><code>git/README.md</code></a>.</p></div>
+        </div>
+        <p class="nokeys">No custom keys, uses tool defaults. See lazygit&rsquo;s <a href="https://github.com/jesseduffield/lazygit/blob/master/docs/keybindings/Keybindings_en.md">default keys</a>.</p>
+      </div>
+    </article>
+
+    <article class="panel" id="workmux" hidden>
+      <div class="p-head"><h3>workmux</h3><p>Runs each task in its own git worktree and tmux window.</p></div>
+      <div class="p-body">
+        <div class="facts">
+          <div class="fact"><h4>What I set</h4><ul>
+            <li>Nerd Font icons on.</li>
+            <li>New worktrees link to the main <code>node_modules</code> folders, so you skip a reinstall.</li>
+            <li>New worktrees get a copy of the <code>.env</code> files.</li>
+          </ul></div>
+          <div class="fact"><h4>Config</h4><p><a href="../workmux/config.yaml"><code>workmux/config.yaml</code></a></p></div>
+        </div>
+        <p class="nokeys">No custom keys, uses tool defaults. You run workmux as a command.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="block" id="layers">
+  <h2>How the layers fit</h2>
+  <div class="layers">
+    <div class="box">
+      <div class="lbl"><a href="#aerospace">AeroSpace</a><span>windows, workspaces</span></div>
+      <div class="box">
+        <div class="lbl"><a href="#ghostty">Ghostty</a><span>terminal window</span></div>
+        <div class="box">
+          <div class="lbl"><a href="#tmux">tmux</a><span>panes, sessions</span></div>
+          <div class="inner-row">
+            <div class="box"><div class="lbl"><a href="#nvim">Neovim</a><span>editing</span></div></div>
+            <div class="box"><div class="lbl"><a href="#zsh">zsh</a><span>commands</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="side">
+      <div class="box"><div class="lbl"><a href="#sketchybar">SketchyBar</a></div><p>Shows what AeroSpace is doing.</p></div>
+      <div class="box"><div class="lbl"><a href="#git">lazygit</a></div><p>Opens as a tmux popup.</p></div>
+      <div class="box"><div class="lbl"><a href="#workmux">workmux</a></div><p>Makes tmux windows for worktrees.</p></div>
+    </div>
+  </div>
+  <p class="lede" style="margin-top:.8rem">A key goes to the outermost layer first. AeroSpace takes
+  <kbd>Alt</kbd> keys, Ghostty takes <kbd>Cmd</kbd> keys, tmux takes anything after its prefix,
+  and the rest reaches Neovim or zsh.</p>
+</section>
+
+<section class="block" id="start">
+  <h2>Start here</h2>
+  <div class="cmds">
+    <div class="cmd"><div><pre>git clone https://github.com/sefatanam/dotfiles ~/.dotfiles && cd ~/.dotfiles && ./setup.sh</pre><div class="why">Set up a new Mac. Add <code>--dry-run</code> to only preview.</div></div><button class="copy" type="button">Copy</button></div>
+    <div class="cmd"><div><pre>./setup-validate.sh</pre><div class="why">Check that links, configs and these pages are all correct.</div></div><button class="copy" type="button">Copy</button></div>
+    <div class="cmd"><div><pre>./update-keybindings.sh</pre><div class="why">Run after changing a key. Rebuilds the key tables on this page.</div></div><button class="copy" type="button">Copy</button></div>
+    <div class="cmd"><div><pre>transparency toggle</pre><div class="why">Turn transparent mode on or off for Ghostty, tmux and Neovim together. Restart Ghostty after.</div></div><button class="copy" type="button">Copy</button></div>
+  </div>
+</section>
+
+<section class="block" id="gotchas">
+  <h2>Gotchas</h2>
+  <div class="gotchas">
+    <div class="gotcha"><strong><kbd>Cmd</kbd>+<kbd>B</kbd> zoom relies on a tmux default</strong>
+      <p>It sends prefix + <kbd>z</kbd>. My config never sets <kbd>z</kbd>, so if tmux changes its defaults, the key stops working without any error.</p></div>
+    <div class="gotcha"><strong><kbd>Cmd</kbd>+<kbd>S</kbd> splits, it does not save</strong>
+      <p>It sends prefix + <kbd>s</kbd>, which splits the pane into a top and bottom half.</p></div>
+    <div class="gotcha"><strong>tmux split names look backwards</strong>
+      <p><code>split-window -h</code> puts panes side by side. <code>-v</code> stacks them.</p></div>
+    <div class="gotcha"><strong>Space does nothing alone in Neovim</strong>
+      <p>It is the leader key. A bare Space waits for the next key.</p></div>
+    <div class="gotcha"><strong>prefix + <kbd>Ctrl</kbd>+<kbd>r</kbd> restores a session</strong>
+      <p>The config also binds it to the yazi file manager, but tmux-resurrect loads later and takes the key, so yazi cannot be opened from any key.</p></div>
+    <div class="gotcha"><strong>Transparent mode is one switch</strong>
+      <p>Never turn it on in just one tool. Use <code>transparency</code> so Ghostty, tmux and Neovim stay in sync.</p></div>
+  </div>
+  <p style="margin-top:.8rem"><a href="keybindings.html#gotchas">Full explanations &rarr;</a></p>
+</section>
+
+<footer>
+  Key tables are generated by <code>update-keybindings.sh</code>. Everything else on this page is written by hand.
+  Words like prefix, leader and mode are defined in <a href="../CONTEXT.md">CONTEXT.md</a>.
+</footer>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var root = document.documentElement;
+  var q = document.getElementById("q");
+  var defaults = document.getElementById("defaults");
+  var countEl = document.getElementById("count");
+  var hint = document.getElementById("hint");
+  var tiles = [].slice.call(document.querySelectorAll(".tile"));
+  var panels = [].slice.call(document.querySelectorAll(".panel"));
+
+  // ---- tool selection: one open panel, kept in the URL hash ----
+  var selected = "";
+  function select(id, scroll) {
+    selected = panels.some(function (p) { return p.id === id; }) ? id : "";
+    render();
+    if (selected && scroll) {
+      document.getElementById(selected).scrollIntoView({ block: "start" });
+    }
+  }
+  tiles.forEach(function (tile) {
+    tile.addEventListener("click", function () {
+      var id = tile.getAttribute("data-tool");
+      var next = selected === id ? "" : id;
+      history.replaceState(null, "", next ? "#" + next : location.pathname + location.search);
+      select(next, !!next);
+    });
+  });
+  window.addEventListener("hashchange", function () {
+    var id = location.hash.slice(1);
+    if (panels.some(function (p) { return p.id === id; })) { q.value = ""; select(id, true); }
+  });
+
+  // ---- search + "show defaults" over the generated key rows ----
+  [].slice.call(document.querySelectorAll("table.kb tbody tr")).forEach(function (tr) { tr._hay = tr.textContent.toLowerCase().replace(/\s+/g, " "); });
+  panels.forEach(function (p) { p._hay = p.querySelector(".p-head").textContent.toLowerCase() + " " + p.id; });
+
+  function rowVisible(tr, terms, showDefaults) {
+    if (!showDefaults && tr.getAttribute("data-decl") === "inherited") { return false; }
+    return terms.every(function (t) { return tr._hay.indexOf(t) !== -1; });
+  }
+
+  function render() {
+    var terms = q.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    var showDefaults = defaults.checked;
+    var anyOpen = false, shown = 0, total = 0;
+
+    panels.forEach(function (p) {
+      var prows = [].slice.call(p.querySelectorAll("table.kb tbody tr"));
+      // A panel found by its name shows all its rows; otherwise rows must match.
+      var nameHit = terms.length > 0 && terms.every(function (t) { return p._hay.indexOf(t) !== -1; });
+      var hits = 0;
+      prows.forEach(function (tr) {
+        var ok = rowVisible(tr, nameHit ? [] : terms, showDefaults);
+        tr.classList.toggle("hidden", !ok);
+        if (rowVisible(tr, [], showDefaults)) { total++; }
+        if (ok) { hits++; }
+      });
+
+      // Hide a group whose rows are all filtered out, and keep its count honest.
+      [].slice.call(p.querySelectorAll("section.grp")).forEach(function (sec) {
+        var visible = sec.querySelectorAll("tbody tr:not(.hidden)").length;
+        sec.classList.toggle("hidden", visible === 0);
+        var c = sec.querySelector(".grp-count");
+        if (c) { c.textContent = " (" + visible + ")"; }
+      });
+
+      var open = terms.length ? (nameHit || hits > 0) : p.id === selected;
+      p.hidden = !open;
+      if (open) { anyOpen = true; shown += hits; }
+    });
+
+    tiles.forEach(function (tile) {
+      var id = tile.getAttribute("data-tool");
+      var panel = document.getElementById(id);
+      tile.setAttribute("aria-expanded", String(!terms.length && id === selected));
+      tile.classList.toggle("dim", terms.length > 0 && panel.hidden);
+    });
+
+    hint.hidden = anyOpen;
+    hint.textContent = terms.length ? "Nothing matches \u201c" + q.value.trim() + "\u201d." : "Pick a tool above to see what it does and all its keys.";
+    countEl.textContent = terms.length ? shown + " of " + total + " keys" : "";
+  }
+
+  q.addEventListener("input", render);
+  defaults.addEventListener("change", render);
+
+  // ---- copy buttons ----
+  [].slice.call(document.querySelectorAll(".copy")).forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var text = btn.parentNode.querySelector("pre").textContent;
+      var done = function () {
+        btn.textContent = "Copied"; btn.classList.add("done");
+        setTimeout(function () { btn.textContent = "Copy"; btn.classList.remove("done"); }, 1400);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { fallback(text); done(); });
+      } else { fallback(text); done(); }
+    });
+  });
+  function fallback(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  select(location.hash.slice(1), false);
+})();
+</script>
+</body>
+</html>

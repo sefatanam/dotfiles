@@ -15,7 +15,8 @@ mouse-hide-while-typing = true
 # ─── FONT (Performance + Readability) ───
 font-size = 16
 
-font-family = "Maple Mono NF"
+font-family = "ShureTechMono Nerd Font Propo"
+#font-family="Geist Mono"
 
 font-thicken = true
 font-thicken-strength = 1
@@ -41,6 +42,9 @@ background-blur-radius = 0
 background-opacity = 1.0
 custom-shader-animation = false
 unfocused-split-opacity = 1.0
+# Transparent mode: `transparency on|off` generates this (gitignored) and overrides
+# the opacity/blur above. Optional, so a fresh machine stays opaque.
+config-file = ?transparent-mode.conf
 
 # ─── INPUT LATENCY ───
 mouse-hide-while-typing = true

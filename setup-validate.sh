@@ -154,6 +154,58 @@ fi
 
 rm -rf "$stow_root" "$stow_target"
 
+# --- 5. The site/ pages are not stale w.r.t. the configs they document --------------
+# The generated regions of site/keybindings.html and site/wiki.html come from the tracked configs. --check
+# regenerates in memory and diffs, so this never modifies the repo. ----------------
+
+# `set -e` would abort on the failing command substitution, so capture the status
+# with an explicit `||` guard instead of a plain `; rc=$?`.
+keybindings_check_exit=0
+keybindings_check_out="$("$ROOT/update-keybindings.sh" --check 2>&1)" || keybindings_check_exit=$?
+
+if [ "$keybindings_check_exit" -eq 0 ]; then
+    ok "site/ pages match the configs they document"
+else
+    bad "site/ pages are stale - run ./update-keybindings.sh"
+    # grep exits 1 when the stale source printed no warning, which under `set -e`
+    # + pipefail would abort the run before the summary. Guard both ends.
+    printf '%s\n' "$keybindings_check_out" | { grep '⚠️' || true; } | sed 's/^/     /'
+fi
+
+# --- 6. Transparent mode is wired up (see CONTEXT.md) ------------------------------
+# Read-only: checks the Ghostty include, the command on PATH, and that the real state
+# file (if any) holds a valid value and Ghostty's generated include agrees with it.
+if grep -qx 'config-file = ?transparent-mode.conf' "$ROOT/ghostty/config"; then
+    ok "ghostty/config includes the transparent-mode file"
+else
+    bad "ghostty/config is missing 'config-file = ?transparent-mode.conf'"
+fi
+
+if [ "$(command -v transparency 2>/dev/null)" = "$HOME/.local/bin/transparency" ]; then
+    ok "transparency is on PATH"
+else
+    bad "transparency is not on PATH as ~/.local/bin/transparency - run ./setup.sh to stow it"
+fi
+
+state_file="$(TRANSPARENCY_TESTING=1; . "$ROOT/zsh/.local/bin/transparency"; transparency_state_file)"
+if [ ! -e "$state_file" ]; then
+    ok "transparent mode has no state yet (defaults to off)"
+else
+    state_now="$(head -n 1 "$state_file")"
+    case "$state_now" in
+        on|off)
+            expected_conf="$(TRANSPARENCY_TESTING=1; . "$ROOT/zsh/.local/bin/transparency"; transparency_render_ghostty "$state_now")"
+            ghostty_conf="$(TRANSPARENCY_TESTING=1; . "$ROOT/zsh/.local/bin/transparency"; transparency_ghostty_file)"
+            if [ "$(cat "$ghostty_conf" 2>/dev/null)" = "$expected_conf" ]; then
+                ok "transparent mode is '$state_now' and Ghostty's include agrees"
+            else
+                bad "Ghostty's include doesn't match transparent mode '$state_now' - run: transparency $state_now"
+            fi
+            ;;
+        *) bad "$state_file holds '$state_now' - expected on or off" ;;
+    esac
+fi
+
 echo
 if [ "$fail" -eq 0 ]; then
     echo "✨ setup-validate.sh: all checks passed."
