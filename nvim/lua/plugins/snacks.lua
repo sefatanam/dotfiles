@@ -26,6 +26,11 @@ return {
           layout = {
             layout = { position = "right" },
           },
+          -- Transparent mode: the explorer is the sidebar, so it follows the editor
+          -- background rather than the solid float panels (config/transparency.lua).
+          on_show = function(picker)
+            require("config.transparency").sidebar(picker)
+          end,
         },
       },
     },

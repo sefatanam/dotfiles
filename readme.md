@@ -2,6 +2,8 @@
 
 My development environment using GNU Stow.
 
+**Wiki:** open [site/wiki.html](site/wiki.html) in a browser — every tool, its config and its keys.
+
 ## Dependencies
 
 **Required:**
@@ -82,6 +84,24 @@ root, so editing e.g. `tuicr/config.toml` takes effect immediately — no restow
 
 ```bash
 cp zsh/.local/share/zsh/local.zsh.example zsh/.local/share/zsh/local.zsh
+```
+
+## Keybindings
+
+Every keybinding this repo configures, grouped by the layer that owns it — window
+manager → multiplexer → terminal → editor → shell — is in
+[site/keybindings.html](site/keybindings.html), a page you can open straight in a browser
+(no build step, filter box included). It shares its look with the wiki through
+`site/theme.css` and `site/theme.js`.
+[CONTEXT.md](CONTEXT.md) defines the vocabulary it uses (leader, prefix, mode, chord).
+
+Six of its tables are generated from the configs by `./update-keybindings.sh`, so they
+can't drift silently:
+
+```bash
+./update-keybindings.sh          # regenerate the tables
+./update-keybindings.sh --check  # exit 1 if the page is stale (setup-validate.sh runs this)
+./update-keybindings-test.sh     # test the extractors
 ```
 
 ## Adding a new tool
@@ -184,5 +204,9 @@ For the secret/machine-specific ones it *does* check and remind you about, see
 |---|---|---|
 | `macos/system-override` | One-shot `defaults write` tweaks for a fresh Mac (mathiasbynens-style) | `zsh macos/system-override` |
 | `zsh-optimize.sh` | Recompiles and cleans the zsh config cache | `./zsh-optimize.sh` (after zsh config changes) |
+| `update-keybindings.sh` | Regenerates the generated tables in [site/keybindings.html](site/keybindings.html) and [site/wiki.html](site/wiki.html) | `./update-keybindings.sh` (after changing a keybinding) |
+| `update-keybindings-test.sh` | Tests the keybinding extractors | `./update-keybindings-test.sh` |
+| `zsh/.local/bin/transparency` | The one switch for transparent mode (see [CONTEXT.md](CONTEXT.md)) across Ghostty, tmux and Neovim; stowed onto PATH | `transparency on\|off\|toggle` (restart Ghostty on macOS) |
+| `transparency-test.sh` | Tests the `transparency` command and its Neovim module | `./transparency-test.sh` |
 | `vscode/*.code-profile.json` | VS Code profile exports | VS Code → Profiles → Import Profile |
 | `omp/config.yml` | Snapshot of `~/.omp/agent/config.yml`; `setup.sh` auto-seeds it on a fresh machine but never re-exports it | after changing omp settings: `cp ~/.omp/agent/config.yml omp/config.yml` |
