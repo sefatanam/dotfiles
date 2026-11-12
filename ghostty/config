@@ -13,14 +13,16 @@ focus-follows-mouse = true
 mouse-hide-while-typing = true
 
 # ─── FONT (Performance + Readability) ───
-font-size = 16
+font-size = 15
 
-font-family = "ShureTechMono Nerd Font Propo"
+#font-family = "ShureTechMono Nerd Font Propo"
 #font-family="Geist Mono"
+font-family="Maple Mono NF"
+#font-family="BlexMono Nerd Font Propo"
 
 font-thicken = true
 font-thicken-strength = 1
-adjust-cell-height = 18
+adjust-cell-height = 4
 font-feature = -liga
 
 # ─── WINDOW (Maximize Screen Real Estate) ───

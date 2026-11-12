@@ -48,7 +48,7 @@ CLI: `rex ls` lists sessions, `rex new NAME` creates one, `rex session rename`, 
 | Balance splits | `Prefix Space` (approx.) | no key; palette |
 | Break pane to tab | `Prefix b` | no key; palette (Move Pane to New Tab) |
 | Join pane to another tab | `Prefix J` | no key; palette (Move Pane to Tab…) |
-
+Okay now I come to a conclusion, to a point. Here in Rex by default, I don't have any key binding for now to resize the Rex pane so do it in a way 
 ## Copy mode and misc
 
 | Task | tmux (yours) | Rex default |
