@@ -5,7 +5,7 @@ tap "can1357/tap"
 tap "felixkratz/formulae", "https://github.com/FelixKratz/homebrew-formulae"
 tap "giammarco-ferranti/deja"
 tap "lightpanda-io/browser"
-tap "lumarylabsllc/tap", trusted: { casks: ["hyperkeys", "lumary-cam"] }
+tap "lumarylabsllc/tap", trusted: { casks: ["hyperkeys", "lumary-audio", "lumary-cam"] }
 tap "nico81/icontainer", trusted: true
 tap "nikitabobko/tap", trusted: true
 tap "oven-sh/bun", trusted: true
@@ -111,12 +111,8 @@ brew "rtk"
 brew "rust"
 # 7-Zip is a file archiver with a high compression ratio
 brew "sevenzip"
-# Fast, collaborative live terminal sharing over the web
-brew "sshx"
 # Cross-shell prompt for astronauts
 brew "starship"
-# Organize software neatly under a single directory tree (e.g. /usr/local)
-brew "stow"
 # Easiest, most secure way to use WireGuard and 2FA
 brew "tailscale"
 # Official tldr client written in Rust
@@ -139,8 +135,6 @@ brew "volta"
 brew "watch"
 # Internet file retriever
 brew "wget"
-# LAN discovery tool with a modern TUI written in Go
-brew "whosthere"
 # Library to create, extract, and modify Windows Imaging files
 brew "wimlib"
 # Generate your Xcode project from a spec file and your folder structure
@@ -227,14 +221,10 @@ cask "iina"
 cask "iloader"
 # Open-source cross-platform alternative to AirDrop
 cask "localsend"
-# Real-time voice processor, virtual microphone and tape recorder
-cask "lumarylabsllc/tap/lumary-audio", trusted: true
 # Mouse utility to add gesture functions and smooth scrolling to 3rd party mice
 cask "mac-mouse-fix"
 # Screenshot and screen recording tool
 cask "macshot"
-# Recorder for meetings capturing mic and system audio
-cask "meetingrecorder"
 # Meet, chat, call, and collaborate in just one place
 cask "microsoft-teams", pin: true
 # Open-source download manager
@@ -265,22 +255,15 @@ cask "visual-studio-code", pin: true
 cask "whatsapp", pin: true
 # Keyboard-first, local-first Markdown notes with vim motions and live preview
 cask "zennotes/tap/zennotes", pin: true, trusted: true
-vscode "alexgreensh.token-optimizer-statusline"
 vscode "angular.ng-template"
-vscode "antfu.icons-carbon"
 vscode "anthropic.claude-code"
 vscode "dbaeumer.vscode-eslint"
-vscode "dracula-theme.theme-dracula"
 vscode "eamodio.gitlens"
 vscode "ecmel.vscode-html-css"
 vscode "esbenp.prettier-vscode"
-vscode "formulahendry.auto-rename-tag"
-vscode "google.gemini-cli-vscode-ide-companion"
-vscode "jdinhlife.gruvbox"
 vscode "mhutchie.git-graph"
 vscode "ms-vscode-remote.remote-containers"
 vscode "pkief.material-icon-theme"
-vscode "ritwickdey.liveserver"
 vscode "yy0931.go-to-next-error"
 go "github.com/air-verse/air"
 go "golang.org/x/tools/cmd/callgraph"

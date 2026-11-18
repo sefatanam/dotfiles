@@ -12,27 +12,15 @@ to the clipboard or push them to the forge.
 
 ## 1. How this is wired
 
-Same two-hop pattern as the rest of the repo. The `shell` package holds one symlink for the
-whole directory — not per file — so a future `themes/` folder comes along for free:
+`tuicr/install.conf` links the whole directory — not per file — so a future `themes/` folder
+comes along for free:
 
 ```
-~/.dotfiles/stow-packages/shell/.config/tuicr -> ../../../tuicr
+~/.config/tuicr -> ~/.dotfiles/tuicr/
 ```
 
-Stowing `shell` creates the outer hop:
-
-```
-~/.config/tuicr -> ~/.dotfiles/stow-packages/shell/.config/tuicr -> ~/.dotfiles/tuicr/
-```
-
-Editing `tuicr/config.toml` here takes effect on the next tuicr launch — no restow, no copy.
-
-```bash
-cd ~/.dotfiles/stow-packages
-stow -t ~ shell        # install
-stow -R -t ~ shell     # restow after adding/removing files in the package
-stow -D -t ~ shell     # remove
-```
+Editing `tuicr/config.toml` here takes effect on the next tuicr launch — no relink, no copy.
+`./setup.sh` creates the link.
 
 ## 2. Theme
 

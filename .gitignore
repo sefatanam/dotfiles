@@ -12,7 +12,7 @@ cache/
 /graphify-out
 
 # @REVIEW: pi machine-specific / secret / volatile state (never track)
-# Content lives in /pi and is exposed to ~/.pi via stow-packages/pi/.pi -> ../../pi
+# Content lives in /pi and is exposed to ~/.pi via pi/install.conf
 pi/agent/auth.json
 pi/agent/sessions/
 pi/agent/*.log

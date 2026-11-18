@@ -17,8 +17,9 @@ font-size = 15
 
 #font-family = "ShureTechMono Nerd Font Propo"
 #font-family="Geist Mono"
-font-family="Maple Mono NF"
+#font-family="Maple Mono NF"
 #font-family="BlexMono Nerd Font Propo"
+font-family='JetBrainsMono NFP'
 
 font-thicken = true
 font-thicken-strength = 1

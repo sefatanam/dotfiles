@@ -117,42 +117,34 @@ else
     bad "confirm_or_abort proceeded on a non-interactive stdin without --yes"
 fi
 
-# --- 4. apply_stow itself, both DRY_RUN paths — this is what actually
-#        crashed under bash 3.2's `set -u` + empty-array-expansion pitfall
-#        when the dry-run flag was first added; the fixtures above never
-#        called apply_stow, so that regression shipped undetected. ---------
-stow_root="$(mktemp -d)"
-stow_target="$(mktemp -d)"
-mkdir -p "$stow_root/pkg"
-echo "payload" > "$stow_root/pkg/.stowtest"
+# --- 4. `LINK . -> dest` links the tool directory itself, and an existing
+#        real file at dest is left alone (the shape every ~/.config/<app>
+#        entry now uses). -----------------------------------------------------
+dot_root="$(mktemp -d)"
+dot_target="$(mktemp -d)"
+mkdir -p "$dot_root/app"
+echo "payload" > "$dot_root/app/config"
+printf 'LINK . -> ~/.config/app\nLINK config -> ~/keepme\n' > "$dot_root/app/install.conf"
+echo "mine" > "$dot_target/keepme"
 
 DRY_RUN=0
-HOME="$stow_target"
-( apply_stow "$stow_root" "pkg" >/dev/null 2>&1 )
-apply_stow_exit=$?
+HOME="$dot_target"
+( apply_declared_installs "$dot_root" >/dev/null 2>&1 )
 HOME="$real_home"
 
-if [ "$apply_stow_exit" -eq 0 ] && [ -L "$stow_target/.stowtest" ]; then
-    ok "apply_stow (real run) links the package without crashing"
+if [ "$(readlink "$dot_target/.config/app")" = "$dot_root/app" ]; then
+    ok "LINK . links the tool directory itself"
 else
-    bad "apply_stow (real run) failed (exit $apply_stow_exit) or didn't link — this is the bash-3.2 empty-array regression if it recurs"
+    bad "LINK . did not link $dot_target/.config/app to the tool directory"
 fi
 
-rm -f "$stow_target/.stowtest"
-DRY_RUN=1
-HOME="$stow_target"
-( apply_stow "$stow_root" "pkg" >/dev/null 2>&1 )
-apply_stow_dry_exit=$?
-HOME="$real_home"
-DRY_RUN=0
-
-if [ "$apply_stow_dry_exit" -eq 0 ] && [ ! -e "$stow_target/.stowtest" ]; then
-    ok "apply_stow --dry-run doesn't crash and makes no real link"
+if [ ! -L "$dot_target/keepme" ] && [ "$(cat "$dot_target/keepme")" = "mine" ]; then
+    ok "LINK leaves an existing real file alone"
 else
-    bad "apply_stow --dry-run failed (exit $apply_stow_dry_exit) or linked for real"
+    bad "LINK clobbered an existing real file"
 fi
 
-rm -rf "$stow_root" "$stow_target"
+rm -rf "$dot_root" "$dot_target"
 
 # --- 5. The site/ pages are not stale w.r.t. the configs they document --------------
 # The generated regions of site/keybindings.html and site/wiki.html come from the tracked configs. --check
@@ -184,7 +176,7 @@ fi
 if [ "$(command -v transparency 2>/dev/null)" = "$HOME/.local/bin/transparency" ]; then
     ok "transparency is on PATH"
 else
-    bad "transparency is not on PATH as ~/.local/bin/transparency - run ./setup.sh to stow it"
+    bad "transparency is not on PATH as ~/.local/bin/transparency - run ./setup.sh to link it"
 fi
 
 state_file="$(TRANSPARENCY_TESTING=1; . "$ROOT/zsh/.local/bin/transparency"; transparency_state_file)"

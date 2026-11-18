@@ -12,50 +12,27 @@ Everything in this folder and what every single key in [`gitconfig`](gitconfig) 
 
 ## 1. How this is wired
 
-GNU Stow owns the symlinks. The `git` package contains nothing but two links back into this folder:
+`git/install.conf` declares two links from your home directory straight into this folder:
 
 ```
-~/.dotfiles/stow-packages/git/
-  .gitconfig        -> ../../git/gitconfig
-  .gitignore_global -> ../../git/gitignore
+~/.gitconfig        -> ~/.dotfiles/git/gitconfig
+~/.gitignore_global -> ~/.dotfiles/git/gitignore
 ```
 
-Stowing it creates the second hop, from your home directory into the package:
-
-```
-~/.gitconfig        -> .dotfiles/stow-packages/git/.gitconfig        -> ~/.dotfiles/git/gitconfig
-~/.gitignore_global -> .dotfiles/stow-packages/git/.gitignore_global -> ~/.dotfiles/git/gitignore
-```
-
-So editing `git/gitconfig` in this repo changes your global git config immediately — no restow,
-no copy step.
-
-### Install / update / remove
-
-```bash
-cd ~/.dotfiles/stow-packages
-
-stow -t ~ git        # install
-stow -R -t ~ git     # restow (after adding/removing files in the package)
-stow -D -t ~ git     # remove — deletes the symlinks, leaves this repo untouched
-```
-
-`./setup.sh` does this for you; `git` is listed in `STOW_PACKAGES` alongside `shell` and `editor`.
+So editing `git/gitconfig` in this repo changes your global git config immediately — no relink,
+no copy step. `./setup.sh` creates them.
 
 ### First install on a machine that already has a `~/.gitconfig`
 
-Stow refuses to overwrite a **regular file**, and `setup.sh` runs under `set -e`, so it will abort.
-Back the old one up and remove it first:
+`setup.sh` leaves a **regular file** alone and warns instead of replacing it. Back the old one up
+and remove it first, then re-run:
 
 ```bash
-cp ~/.gitconfig ~/.gitconfig.pre-stow.bak
+cp ~/.gitconfig ~/.gitconfig.pre-link.bak
 git config --global --list      # note anything worth keeping, add it to git/gitconfig
 rm ~/.gitconfig
-cd ~/.dotfiles/stow-packages && stow -t ~ git
+~/.dotfiles/setup.sh
 ```
-
-Do **not** reach for `stow --adopt` here. Adopt moves the *existing* `~/.gitconfig` into the
-package and overwrites the repo's version — the opposite of what you want.
 
 ### Writes through the symlink land in this repo
 
@@ -509,8 +486,8 @@ every repo you touch, and these hooks are written for this repo's layout (they h
 
 ## 7. Troubleshooting
 
-**`stow: WARNING! stowing git would cause conflicts` / "existing target is not owned by stow"**
-`~/.gitconfig` is a real file, not a stow symlink. Back it up and delete it (see
+**`setup.sh` warns "existing ~/.gitconfig left alone"**
+`~/.gitconfig` is a real file, not a symlink. Back it up and delete it (see
 [First install](#first-install-on-a-machine-that-already-has-a-gitconfig)).
 
 **A setting isn't taking effect**
@@ -524,8 +501,7 @@ git config --show-origin --get <key>       # just the winner
 
 **Changes to `git/gitconfig` seem to do nothing**
 Confirm the link chain is intact: `readlink -f ~/.gitconfig` must print
-`/Users/anam/.dotfiles/git/gitconfig`. If it prints something else, restow:
-`cd ~/.dotfiles/stow-packages && stow -R -t ~ git`.
+`/Users/anam/.dotfiles/git/gitconfig`. If it prints something else, re-run `~/.dotfiles/setup.sh`.
 
 **`git difftool` / `git mergetool` opens nothing**
 The configured tools must be installed: `code` (VS Code CLI) for diffs, `nvim` for merges.
@@ -539,9 +515,9 @@ the value should be `true`.
 Something ran `git config --global`. Git writes through the symlink into this repo — review the
 diff and either commit it or `git checkout git/gitconfig`.
 
-**Restore the pre-stow global config**
+**Restore the pre-link global config**
 
 ```bash
-cd ~/.dotfiles/stow-packages && stow -D -t ~ git
-cp ~/.gitconfig.pre-stow.bak ~/.gitconfig
+rm ~/.gitconfig
+cp ~/.gitconfig.pre-link.bak ~/.gitconfig
 ```
