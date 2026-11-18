@@ -9,6 +9,10 @@ Everything below is custom — for LazyVim's own defaults, see its
 Plugin-specific keys (e.g. `ufo.lua`, `opencode.lua`, `pi-nvim.lua`) are defined
 in their own plugin spec files under `lua/plugins/` and aren't listed here.
 
+The full cross-tool keybinding reference — including every plugin mapping, generated
+from the Lua — lives in [site/keybindings.html](../site/keybindings.html). This file keeps the
+per-mode narrative for the custom keymaps in `customize.lua`.
+
 ## Normal mode
 
 | Key | Action |

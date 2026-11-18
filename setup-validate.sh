@@ -117,42 +117,86 @@ else
     bad "confirm_or_abort proceeded on a non-interactive stdin without --yes"
 fi
 
-# --- 4. apply_stow itself, both DRY_RUN paths — this is what actually
-#        crashed under bash 3.2's `set -u` + empty-array-expansion pitfall
-#        when the dry-run flag was first added; the fixtures above never
-#        called apply_stow, so that regression shipped undetected. ---------
-stow_root="$(mktemp -d)"
-stow_target="$(mktemp -d)"
-mkdir -p "$stow_root/pkg"
-echo "payload" > "$stow_root/pkg/.stowtest"
+# --- 4. `LINK . -> dest` links the tool directory itself, and an existing
+#        real file at dest is left alone (the shape every ~/.config/<app>
+#        entry now uses). -----------------------------------------------------
+dot_root="$(mktemp -d)"
+dot_target="$(mktemp -d)"
+mkdir -p "$dot_root/app"
+echo "payload" > "$dot_root/app/config"
+printf 'LINK . -> ~/.config/app\nLINK config -> ~/keepme\n' > "$dot_root/app/install.conf"
+echo "mine" > "$dot_target/keepme"
 
 DRY_RUN=0
-HOME="$stow_target"
-( apply_stow "$stow_root" "pkg" >/dev/null 2>&1 )
-apply_stow_exit=$?
+HOME="$dot_target"
+( apply_declared_installs "$dot_root" >/dev/null 2>&1 )
 HOME="$real_home"
 
-if [ "$apply_stow_exit" -eq 0 ] && [ -L "$stow_target/.stowtest" ]; then
-    ok "apply_stow (real run) links the package without crashing"
+if [ "$(readlink "$dot_target/.config/app")" = "$dot_root/app" ]; then
+    ok "LINK . links the tool directory itself"
 else
-    bad "apply_stow (real run) failed (exit $apply_stow_exit) or didn't link — this is the bash-3.2 empty-array regression if it recurs"
+    bad "LINK . did not link $dot_target/.config/app to the tool directory"
 fi
 
-rm -f "$stow_target/.stowtest"
-DRY_RUN=1
-HOME="$stow_target"
-( apply_stow "$stow_root" "pkg" >/dev/null 2>&1 )
-apply_stow_dry_exit=$?
-HOME="$real_home"
-DRY_RUN=0
-
-if [ "$apply_stow_dry_exit" -eq 0 ] && [ ! -e "$stow_target/.stowtest" ]; then
-    ok "apply_stow --dry-run doesn't crash and makes no real link"
+if [ ! -L "$dot_target/keepme" ] && [ "$(cat "$dot_target/keepme")" = "mine" ]; then
+    ok "LINK leaves an existing real file alone"
 else
-    bad "apply_stow --dry-run failed (exit $apply_stow_dry_exit) or linked for real"
+    bad "LINK clobbered an existing real file"
 fi
 
-rm -rf "$stow_root" "$stow_target"
+rm -rf "$dot_root" "$dot_target"
+
+# --- 5. The site/ pages are not stale w.r.t. the configs they document --------------
+# The generated regions of site/keybindings.html and site/wiki.html come from the tracked configs. --check
+# regenerates in memory and diffs, so this never modifies the repo. ----------------
+
+# `set -e` would abort on the failing command substitution, so capture the status
+# with an explicit `||` guard instead of a plain `; rc=$?`.
+keybindings_check_exit=0
+keybindings_check_out="$("$ROOT/update-keybindings.sh" --check 2>&1)" || keybindings_check_exit=$?
+
+if [ "$keybindings_check_exit" -eq 0 ]; then
+    ok "site/ pages match the configs they document"
+else
+    bad "site/ pages are stale - run ./update-keybindings.sh"
+    # grep exits 1 when the stale source printed no warning, which under `set -e`
+    # + pipefail would abort the run before the summary. Guard both ends.
+    printf '%s\n' "$keybindings_check_out" | { grep '⚠️' || true; } | sed 's/^/     /'
+fi
+
+# --- 6. Transparent mode is wired up (see CONTEXT.md) ------------------------------
+# Read-only: checks the Ghostty include, the command on PATH, and that the real state
+# file (if any) holds a valid value and Ghostty's generated include agrees with it.
+if grep -qx 'config-file = ?transparent-mode.conf' "$ROOT/ghostty/config"; then
+    ok "ghostty/config includes the transparent-mode file"
+else
+    bad "ghostty/config is missing 'config-file = ?transparent-mode.conf'"
+fi
+
+if [ "$(command -v transparency 2>/dev/null)" = "$HOME/.local/bin/transparency" ]; then
+    ok "transparency is on PATH"
+else
+    bad "transparency is not on PATH as ~/.local/bin/transparency - run ./setup.sh to link it"
+fi
+
+state_file="$(TRANSPARENCY_TESTING=1; . "$ROOT/zsh/.local/bin/transparency"; transparency_state_file)"
+if [ ! -e "$state_file" ]; then
+    ok "transparent mode has no state yet (defaults to off)"
+else
+    state_now="$(head -n 1 "$state_file")"
+    case "$state_now" in
+        on|off)
+            expected_conf="$(TRANSPARENCY_TESTING=1; . "$ROOT/zsh/.local/bin/transparency"; transparency_render_ghostty "$state_now")"
+            ghostty_conf="$(TRANSPARENCY_TESTING=1; . "$ROOT/zsh/.local/bin/transparency"; transparency_ghostty_file)"
+            if [ "$(cat "$ghostty_conf" 2>/dev/null)" = "$expected_conf" ]; then
+                ok "transparent mode is '$state_now' and Ghostty's include agrees"
+            else
+                bad "Ghostty's include doesn't match transparent mode '$state_now' - run: transparency $state_now"
+            fi
+            ;;
+        *) bad "$state_file holds '$state_now' - expected on or off" ;;
+    esac
+fi
 
 echo
 if [ "$fail" -eq 0 ]; then

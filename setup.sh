@@ -3,8 +3,6 @@
 set -euo pipefail
 
 BREWFILE="brew/Brewfile"
-STOW_ROOT="stow-packages"
-STOW_PACKAGES=("shell" "editor" "git")
 GIT_HOOKS_DIR="git/hooks"
 
 DRY_RUN=0
@@ -64,35 +62,8 @@ apply_brew_bundle() {
     fi
 
     info "Syncing Brewfile: $path"
-    brew install stow
-    brew bundle --file="$path"
+    brew bundle --file="$path" --verbose
     success "Brew bundle synced."
-}
-
-apply_stow() {
-    local root="$1"
-    shift
-    local pkgs=("$@")
-
-    info "Syncing Symlinks..."
-    cd "$root"
-    for pkg in "${pkgs[@]}"; do
-        if [ -d "$pkg" ]; then
-            # An empty array expanded under `set -u` is an "unbound variable"
-            # error on bash 3.2 (macOS's /bin/bash, what the shebang runs) —
-            # branch explicitly instead of building a conditional flags array.
-            if [ "$DRY_RUN" -eq 1 ]; then
-                stow -n -t "$HOME" -D "$pkg" 2>/dev/null || true
-                stow -n -t "$HOME" "$pkg"
-                success "Would stow $pkg (dry-run)"
-            else
-                stow -t "$HOME" -D "$pkg" 2>/dev/null || true
-                stow -t "$HOME" "$pkg"
-                success "Stowed $pkg"
-            fi
-        fi
-    done
-    cd - > /dev/null
 }
 
 ensure_git_hooks() {
@@ -121,8 +92,8 @@ ensure_git_hooks() {
 
 # --- Declarative per-tool install recipes -----------------------------------
 #
-# A tool that needs more than a plain `stow` symlink (a link outside $HOME's
-# stowed tree, or a one-off command after linking) declares it in its own
+# Every tool declares how it reaches $HOME (and any one-off command to run
+# after linking) in its own
 # <tool>/install.conf instead of getting a bespoke ensure_<tool>() function
 # here. One line per directive:
 #
@@ -155,6 +126,7 @@ _apply_declared_link() {
     local dest="${spec#* -> }"
     dest="${dest/#\~/$HOME}"
     local abs_src="$dir/$src"
+    [ "$src" = "." ] && abs_src="$dir"
 
     if [ ! -e "$abs_src" ]; then
         warn "$tool: install.conf points at missing $abs_src"
@@ -332,7 +304,7 @@ usage() {
 Usage: setup.sh [--dry-run] [--yes]
 
   --dry-run, -n   Show what would change without changing anything
-                  (stow runs with -n; the Brewfile sync is replaced by
+                  (links are only reported; the Brewfile sync is replaced by
                   a read-only 'brew bundle check').
   --yes, -y       Skip the confirmation before installing/upgrading
                   Homebrew packages (for non-interactive runs).
@@ -355,7 +327,6 @@ main() {
 
     ensure_homebrew
     apply_brew_bundle "$root/$BREWFILE"
-    apply_stow "$root/$STOW_ROOT" "${STOW_PACKAGES[@]}"
     ensure_git_hooks "$root"
     apply_declared_installs "$root"
 

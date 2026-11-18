@@ -15,7 +15,6 @@ _source_if_exists "$ZSH_CONFIG_DIR/completions.zsh"
 
 [[ -f "$HOME/.dotfiles/zsh/private" ]] && source "$HOME/.dotfiles/zsh/private"
 
-
 # Added by OrbStack: command-line tools and integration
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -33,3 +32,7 @@ zinit light Giammarco-Ferranti/deja
 #deja setup end
 
 eval "$(starship init zsh)"
+
+export PATH=$PATH:/Users/anam/.spicetify
+
+case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac

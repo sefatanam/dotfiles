@@ -1,16 +1,17 @@
 # Dotfiles
 
-My development environment using GNU Stow.
+My development environment, linked into place by `setup.sh` from per-tool `install.conf` files.
+
+**Wiki:** open [site/wiki.html](site/wiki.html) in a browser — every tool, its config and its keys.
 
 ## Dependencies
 
 **Required:**
 - Homebrew
-- GNU Stow
 - Git
 
 **Auto-installed:**
-- Oh My Zsh + Powerlevel10k
+- Starship prompt
 - 80+ CLI tools (see Brewfile)
 - All configurations
 
@@ -35,7 +36,7 @@ runs in `--dry-run` too. See [Manual steps on a new machine](#manual-steps-on-a-
 `setup.sh` refuses to sync Homebrew packages (the slow, external-reaching step) without an
 interactive confirmation — a non-interactive invocation (a script, a copy-pasted pipe, an
 agent) skips it rather than silently installing/upgrading packages. Pass `--yes` to confirm
-non-interactively; everything else (stow, git hooks, `install.conf` links) is idempotent and
+non-interactively; everything else (git hooks, `install.conf` links) is idempotent and
 guarded against clobbering real files, so it always runs. See `./setup.sh --help`.
 
 ## Manual Setup
@@ -44,29 +45,20 @@ guarded against clobbering real files, so it always runs. See `./setup.sh --help
 # Install dependencies
 brew bundle --file=~/.dotfiles/brew/Brewfile
 
-# Install Oh My Zsh + Powerlevel10k
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-
-# Setup dotfiles
-cd ~/.dotfiles/stow-packages
-stow -t ~ shell editor git
+# Link everything (idempotent; --dry-run previews)
+~/.dotfiles/setup.sh
 ```
 
-> `stow -t ~ git` installs `git/gitconfig` as `~/.gitconfig` and `git/gitignore` as
+> `git/install.conf` links `git/gitconfig` as `~/.gitconfig` and `git/gitignore` as
 > `~/.gitignore_global`. If you already have a real `~/.gitconfig`, back it up and remove it
-> first — stow refuses to overwrite regular files. See [git/README.md](git/README.md).
+> first — `setup.sh` leaves real files alone and warns. See [git/README.md](git/README.md).
 
-## Packages
+## Links
 
-| Package | Links | Notable configs |
-|---|---|---|
-| `shell` | `~/.zshrc`, `~/.zprofile`, `~/.p10k.zsh`, [`~/.tmux.conf`](tmux/readme.md), `~/.wezterm.lua`, `~/.tuicrignore`, `~/.config/*` | alacritty, ghostty, aerospace, workmux, herdr, bat, lazygit, [tuicr](tuicr/README.md) |
-| `editor` | `~/.config/nvim` | Neovim |
-| `git` | `~/.gitconfig`, `~/.gitignore_global` | [git/README.md](git/README.md) |
-
-Each `~/.config/<app>` entry is a symlink back to a folder of the same name in this repo
-root, so editing e.g. `tuicr/config.toml` takes effect immediately — no restow.
+Each tool lists its own links in `<tool>/install.conf` (`LINK <src> -> <dest>`). Most
+`~/.config/<app>` entries are `LINK . -> ~/.config/<app>`: a symlink straight back to the
+folder of the same name in this repo root, so editing e.g. `tuicr/config.toml` takes effect
+immediately — no relink.
 
 ## Shell aliases: global, work, local
 
@@ -84,15 +76,28 @@ root, so editing e.g. `tuicr/config.toml` takes effect immediately — no restow
 cp zsh/.local/share/zsh/local.zsh.example zsh/.local/share/zsh/local.zsh
 ```
 
+## Keybindings
+
+Every keybinding this repo configures, grouped by the layer that owns it — window
+manager → multiplexer → terminal → editor → shell — is in
+[site/keybindings.html](site/keybindings.html), a page you can open straight in a browser
+(no build step, filter box included). It shares its look with the wiki through
+`site/theme.css` and `site/theme.js`.
+[CONTEXT.md](CONTEXT.md) defines the vocabulary it uses (leader, prefix, mode, chord).
+
+Six of its tables are generated from the configs by `./update-keybindings.sh`, so they
+can't drift silently:
+
+```bash
+./update-keybindings.sh          # regenerate the tables
+./update-keybindings.sh --check  # exit 1 if the page is stale (setup-validate.sh runs this)
+./update-keybindings-test.sh     # test the extractors
+```
+
 ## Adding a new tool
 
-Most tools only need a `~/.config/<app>` stub added under `stow-packages/shell/.config/`
-(a symlink back to `<app>/` at the repo root, same pattern as the existing ones) — `stow`
-handles the rest.
-
-If a tool needs more than that — a link outside the stowed tree, or a command to run after
-linking — declare it in `<app>/install.conf` instead of hand-editing `setup.sh`. One directive
-per line:
+Add `<app>/install.conf` and declare each link (and any command to run after linking) there
+instead of hand-editing `setup.sh`. One directive per line:
 
 ```
 PLATFORM darwin              # optional; restricts the whole file to one OS
@@ -128,28 +133,21 @@ available.
 ## Usage
 
 ```bash
-# Install/update configs
-stow -t ~ shell editor git
-
-# Update after changes  
-stow -R shell editor git
-
-# Remove configs
-stow -D shell editor git
+./setup.sh --dry-run   # preview
+./setup.sh             # link / re-link everything
 ```
 
 ## After Setup
 
-1. Run `p10k configure` for prompt customization
-2. Add secrets/API keys to `zsh/private` (`export KEY=value` lines) — a pre-commit hook
+1. Add secrets/API keys to `zsh/private` (`export KEY=value` lines) — a pre-commit hook
    scrubs its values before every commit and a post-commit hook restores them, so the
    plaintext never reaches the repo. See [git/README.md §6](git/README.md#6-hooks).
-3. Configure AeroSpace workspace bindings as needed
-4. Work through whatever the manual-steps check printed (below)
+2. Configure AeroSpace workspace bindings as needed
+3. Work through whatever the manual-steps check printed (below)
 
 ## Manual steps on a new machine
 
-Stow carries every tracked file, so the git identity setup — `git/gitconfig`, the
+`setup.sh` links every tracked file, so the git identity setup — `git/gitconfig`, the
 `includeIf` in it, and `git/gitconfig.gitlab` — lands automatically. What can't be
 carried is anything **secret** (SSH keys are deliberately never committed) or anything
 tied to **one machine's paths**. `setup.sh` ends by checking for exactly those and
@@ -184,5 +182,9 @@ For the secret/machine-specific ones it *does* check and remind you about, see
 |---|---|---|
 | `macos/system-override` | One-shot `defaults write` tweaks for a fresh Mac (mathiasbynens-style) | `zsh macos/system-override` |
 | `zsh-optimize.sh` | Recompiles and cleans the zsh config cache | `./zsh-optimize.sh` (after zsh config changes) |
+| `update-keybindings.sh` | Regenerates the generated tables in [site/keybindings.html](site/keybindings.html) and [site/wiki.html](site/wiki.html) | `./update-keybindings.sh` (after changing a keybinding) |
+| `update-keybindings-test.sh` | Tests the keybinding extractors | `./update-keybindings-test.sh` |
+| `zsh/.local/bin/transparency` | The one switch for transparent mode (see [CONTEXT.md](CONTEXT.md)) across Ghostty, tmux and Neovim; linked onto PATH | `transparency on\|off\|toggle` (restart Ghostty on macOS) |
+| `transparency-test.sh` | Tests the `transparency` command and its Neovim module | `./transparency-test.sh` |
 | `vscode/*.code-profile.json` | VS Code profile exports | VS Code → Profiles → Import Profile |
 | `omp/config.yml` | Snapshot of `~/.omp/agent/config.yml`; `setup.sh` auto-seeds it on a fresh machine but never re-exports it | after changing omp settings: `cp ~/.omp/agent/config.yml omp/config.yml` |

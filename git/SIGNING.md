@@ -18,11 +18,11 @@ Four things, all required. Three are already in this repo; only the last is per-
 | # | Requirement | Who provides it |
 |---|---|---|
 | 1 | Git ≥ 2.34 (SSH signing support) | the machine |
-| 2 | Signing config in `~/.gitconfig` | **this repo** — `stow` handles it |
+| 2 | Signing config in `~/.gitconfig` | **this repo** — `setup.sh` links it |
 | 3 | An SSH keypair on disk at `~/.ssh/id_ed25519` | you, per machine |
 | 4 | That public key registered on GitHub **as a Signing Key** | you, per machine |
 
-Steps 3 and 4 are the whole job. Everything else comes down the stow symlink.
+Steps 3 and 4 are the whole job. Everything else comes down the `setup.sh` symlink.
 
 ---
 
@@ -36,11 +36,10 @@ On macOS, if this is Apple's bundled git and too old: `brew install git`, then r
 
 ---
 
-## Step 2 — Stow the git package
+## Step 2 — Link the git config
 
 ```bash
-cd ~/.dotfiles/stow-packages
-stow -t ~ git
+~/.dotfiles/setup.sh
 ```
 
 This links `~/.gitconfig` into this repo, which brings the signing config with it:
@@ -232,7 +231,7 @@ at display time, so no rewrite or re-push is needed for those.
 
 ```bash
 # Full new-machine sequence, assuming the key already exists at ~/.ssh/id_ed25519
-cd ~/.dotfiles/stow-packages && stow -t ~ git
+~/.dotfiles/setup.sh
 printf '%s %s\n' "sefatanam@gmail.com" "$(cat ~/.ssh/id_ed25519.pub)" > ~/.ssh/allowed_signers
 chmod 600 ~/.ssh/allowed_signers
 gh auth refresh -h github.com -s admin:ssh_signing_key
